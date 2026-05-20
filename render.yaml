@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: bhavnagris-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    plan: free
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: DB_HOST
+        value: bqv6zhaewgm8mvtusoi1-mysql.services.clever-cloud.com
+      - key: DB_USER
+        value: u9a4s0c02loyqhbm
+      - key: DB_PASSWORD
+        value: xhn7nHlNAzcAiJxwUrKx
+      - key: DB_NAME
+        value: bqv6zhaewgm8mvtusoi1
+      - key: JWT_SECRET
+        value: bhavnagar_heritage_secret_key_123
