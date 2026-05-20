@@ -1,0 +1,208 @@
+<div class="min-h-screen bg-bhavdark text-bhavtext relative overflow-hidden pb-24">
+  
+  <!-- Premium Background Radial Gradients -->
+  <div class="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(197,160,89,0.15)_0%,transparent_70%)] pointer-events-none z-0"></div>
+  <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.05)_0%,transparent_60%)] pointer-events-none z-0"></div>
+  
+  <!-- HERO BANNER SECTION (Designed for Ads Traffic Conversion) -->
+  <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 z-10 max-w-7xl mx-auto px-6 lg:px-12 text-center">
+    <div class="flex flex-col items-center max-w-3xl mx-auto">
+      
+      <!-- Brand Trust Seal / Badge -->
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-bhavaccent/10 border border-bhavaccent/30 rounded-full text-[9px] font-bold uppercase tracking-[0.3em] text-bhavaccent mb-6 animate-pulse">
+        👑 {{t('brand')}}
+      </span>
+      
+      <!-- Translated Main Header -->
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-playfair font-bold text-bhavtext leading-[1.05] mb-6">
+        <span *ngIf="langService.getCurrentLanguage() === 'english'">Authentic <br class="sm:hidden"> <span class="text-gold-gradient italic">Bhavnagris</span> Taste</span>
+        <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">અસલી <br class="sm:hidden"> <span class="text-gold-gradient italic">ભાવનગરી</span> સ્વાદ</span>
+        <span *ngIf="langService.getCurrentLanguage() === 'hindi'">असली <br class="sm:hidden"> <span class="text-gold-gradient italic">भावनगरी</span> स्वाद</span>
+      </h1>
+      
+      <!-- Translated Sub description -->
+      <p class="text-sm md:text-base text-bhavtext/60 leading-relaxed font-sans max-w-2xl mb-10">
+        <span *ngIf="langService.getCurrentLanguage() === 'english'">Direct from our ancestral kitchens. Experience premium, hand-crafted Gujarati snacks and sweets made with pure groundnut oil, 100% natural ingredients, and generational recipes.</span>
+        <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">અમારા પૂર્વજોની રસોઈમાંથી સીધો સ્વાદ. શુદ્ધ સીંગતેલ, ૧૦૦% કુદરતી સામગ્રી અને પેઢીઓ જૂની વાનગીઓ સાથે બનાવેલ પ્રીમિયમ ગુજરાતી નાસ્તા અને મીઠાઈઓનો અનુભવ કરો.</span>
+        <span *ngIf="langService.getCurrentLanguage() === 'hindi'">हमारे पूर्वजों की रसोई से सीधा शाही स्वाद। शुद्ध मूंगफली तेल, १००% प्राकृतिक सामग्री और पीढ़ियों पुरानी रेसिपी से तैयार प्रीमियम गुजराती नमकीन और मिठाइयों का आनंद लें।</span>
+      </p>
+
+      <!-- Trust Badges Row -->
+      <div class="grid grid-cols-3 gap-6 md:gap-12 w-full max-w-2xl border-t border-b border-bhavtext/10 py-6 mb-12">
+        <div class="text-center">
+          <p class="text-2xl md:text-3xl font-playfair font-bold text-bhavaccent mb-1">100%</p>
+          <p class="text-[9px] uppercase tracking-widest text-bhavtext/40 font-bold">
+            {{langService.getCurrentLanguage() === 'english' ? 'Vegetarian' : (langService.getCurrentLanguage() === 'gujarati' ? 'શાકાહારી' : 'शाकाहारी')}}
+          </p>
+        </div>
+        <div class="text-center border-x border-bhavtext/10 px-4">
+          <p class="text-2xl md:text-3xl font-playfair font-bold text-bhavaccent mb-1">Pure</p>
+          <p class="text-[9px] uppercase tracking-widest text-bhavtext/40 font-bold">
+            {{langService.getCurrentLanguage() === 'english' ? 'Groundnut Oil' : (langService.getCurrentLanguage() === 'gujarati' ? 'શુદ્ધ સીંગતેલ' : 'शुद्ध मूंगफली तेल')}}
+          </p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl md:text-3xl font-playfair font-bold text-bhavaccent mb-1">0%</p>
+          <p class="text-[9px] uppercase tracking-widest text-bhavtext/40 font-bold">
+            {{langService.getCurrentLanguage() === 'english' ? 'Preservatives' : (langService.getCurrentLanguage() === 'gujarati' ? 'પ્રિઝર્વેટિવ્સ' : 'प्रिजर्वेटिव्स')}}
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Scroll Anchor Button -->
+      <a href="#collection-grid" class="px-8 py-4 bg-bhavaccent text-bhavdark rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:shadow-2xl hover:shadow-bhavaccent/20 hover:-translate-y-0.5 transition-all duration-300">
+        {{t('explore_heritage')}}
+      </a>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE FILTER BAR -->
+  <section id="collection-grid" class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 mb-12">
+    <div class="glass-card p-6 rounded-[2rem] border border-bhavtext/5 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6">
+      
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+        <button (click)="filterByCategory(null)" 
+                class="px-5 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shrink-0"
+                [ngClass]="selectedCategoryId === null ? 'bg-bhavaccent text-bhavdark font-black' : 'bg-bhavtext/5 text-bhavtext/60 hover:bg-bhavtext/10'">
+          {{t('all_products')}}
+        </button>
+        <button *ngFor="let cat of categories" 
+                (click)="filterByCategory(cat.id)" 
+                class="px-5 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shrink-0"
+                [ngClass]="selectedCategoryId === cat.id ? 'bg-bhavaccent text-bhavdark font-black' : 'bg-bhavtext/5 text-bhavtext/60 hover:bg-bhavtext/10'">
+          {{ cat.name === 'Snacks' ? t('snacks') : (cat.name === 'Sweets' ? t('sweets') : cat.name) }}
+        </button>
+      </div>
+
+      <!-- Spiciness & Sorting Filters -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <!-- Spiciness Slider -->
+        <div class="flex items-center gap-4 bg-bhavtext/5 px-5 py-2.5 rounded-full border border-bhavtext/5">
+          <span class="text-[9px] uppercase tracking-widest text-bhavtext/50 font-bold shrink-0">🌶️ {{t('spiciness')}}</span>
+          <input type="range" min="0" max="3" [(ngModel)]="selectedSpiciness" (input)="applyFilter()" 
+                 class="w-24 h-1 bg-bhavtext/15 rounded-lg appearance-none cursor-pointer accent-bhavaccent">
+          <span class="text-[10px] font-bold text-bhavaccent w-4 text-center">
+            {{selectedSpiciness === 0 ? 'All' : selectedSpiciness}}
+          </span>
+        </div>
+
+        <!-- Sorting -->
+        <select [(ngModel)]="sortOption" (change)="applyFilter()" 
+                class="bg-bhavtext/5 border border-bhavtext/5 rounded-full px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-bhavtext/80 focus:outline-none [color-scheme:dark] cursor-pointer">
+          <option value="Latest Arrivals">{{t('latest_arrivals')}}</option>
+          <option value="Price: Low to High">{{t('price_low_high')}}</option>
+          <option value="Price: High to Low">{{t('price_high_low')}}</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS GRID -->
+  <section class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+    
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center py-32">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bhavaccent"></div>
+      <p class="text-xs text-bhavtext/40 uppercase tracking-[0.2em] mt-6">Loading Royal Taste...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && filteredProducts.length === 0" class="text-center py-24 glass-card rounded-[2.5rem] border border-bhavtext/5">
+      <p class="text-3xl font-playfair font-bold text-bhavtext/30 mb-2">No Signature Products Found</p>
+      <p class="text-xs text-bhavtext/40 uppercase tracking-widest">Try adjusting your spicy levels or categories.</p>
+    </div>
+
+    <!-- Grid Container -->
+    <div *ngIf="!loading && filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 animate-fade-in">
+      <div *ngFor="let product of filteredProducts" 
+           class="glass-card rounded-[2rem] overflow-hidden border border-bhavtext/5 group hover:border-bhavaccent/30 transition-all duration-700 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl hover:shadow-bhavaccent/5">
+        
+        <!-- Image & Badges -->
+        <div class="relative aspect-square overflow-hidden bg-bhavdark/60 shrink-0 cursor-pointer" [routerLink]="['/product', product.slug]">
+          <img [src]="api.getMediaUrl(product.image)" 
+               (error)="handleImageError($event)" 
+               class="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000">
+          
+          <!-- Gradient overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-bhavdark via-transparent to-transparent opacity-80 z-10"></div>
+          
+          <!-- Discount / Own Brand Badge -->
+          <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+            <span *ngIf="product.discount_percentage > 0" class="px-3 py-1 bg-red-500/90 text-bhavtext text-[9px] font-bold uppercase tracking-widest rounded-full">
+              {{product.discount_percentage}}% Off
+            </span>
+            <span class="px-3 py-1 bg-bhavaccent/90 text-bhavdark text-[9px] font-extrabold uppercase tracking-widest rounded-full shadow-lg">
+              👑 {{t('brand')}}
+            </span>
+          </div>
+
+          <!-- Spiciness Indicator -->
+          <div class="absolute top-4 right-4 z-20 flex gap-0.5" *ngIf="product.spiciness > 0">
+            <span *ngFor="let s of [].constructor(product.spiciness)" class="text-xs">🌶️</span>
+          </div>
+        </div>
+
+        <!-- Info & Cart Button -->
+        <div class="p-6 flex flex-col flex-1 relative z-20">
+          <div class="flex-1 mb-6">
+            <h3 class="text-lg font-playfair font-bold text-bhavtext truncate group-hover:text-bhavaccent transition-colors mb-2" [routerLink]="['/product', product.slug]">
+              <!-- Handle Gujarati and Hindi name translation if possible, or fallback to product.name -->
+              <span *ngIf="langService.getCurrentLanguage() === 'english'">{{product.name}}</span>
+              <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">
+                {{ product.name.includes('Cheesewala') ? 'ભાવનગરી ચીઝવાલા સિંગ' : (product.name.includes('Sweet') ? 'ભાવનગરી સ્વીટ એન્ડ ચટપટા સિંગ' : (product.name.includes('Roasted') ? 'ભાવનગરી રોસ્ટેડ સિંગ' : product.name)) }}
+              </span>
+              <span *ngIf="langService.getCurrentLanguage() === 'hindi'">
+                {{ product.name.includes('Cheesewala') ? 'भावनगरी ची़जवाला मूंगफली' : (product.name.includes('Sweet') ? 'भावनगरी स्वीट एंड चटपटा मूंगफली' : (product.name.includes('Roasted') ? 'भावनगरी रोस्टेड मूंगफली' : product.name)) }}
+              </span>
+            </h3>
+            <p class="text-[10px] text-bhavtext/40 uppercase tracking-widest font-bold mb-3">
+              {{t('weight')}}: {{product.weight || '250g'}}
+            </p>
+            <p class="text-xs text-bhavtext/50 line-clamp-2 leading-relaxed">
+              <span *ngIf="langService.getCurrentLanguage() === 'english'">{{product.description}}</span>
+              <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">અસલી ભાવનગરી સ્વાદ સાથે તૈયાર કરેલ ઉત્તમ ગુણવત્તાવાળા સિંગદાણા.</span>
+              <span *ngIf="langService.getCurrentLanguage() === 'hindi'">भावनगरी के प्रामाणिक और लाजवाब स्वाद से भरपूर प्रीमियम गुणवत्ता वाली मूंगफली।</span>
+            </p>
+          </div>
+
+          <!-- Price & CTA -->
+          <div class="flex items-center justify-between border-t border-bhavtext/5 pt-4">
+            <div>
+              <p class="text-[8px] uppercase tracking-widest text-bhavtext/30 font-bold">{{langService.getCurrentLanguage() === 'english' ? 'Price' : (langService.getCurrentLanguage() === 'gujarati' ? 'કિંમત' : 'कीमत')}}</p>
+              <div class="flex items-baseline gap-2">
+                <span class="text-xl font-bold text-bhavaccent">₹{{product.selling_price}}</span>
+                <span *ngIf="product.discount_percentage > 0" class="text-xs text-bhavtext/30 line-through">₹{{product.original_price}}</span>
+              </div>
+            </div>
+            
+            <button (click)="addToCart(product)" 
+                    class="px-5 py-3 bg-bhavaccent/10 hover:bg-bhavaccent text-bhavaccent hover:text-bhavdark rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border border-bhavaccent/20">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {{t('add_to_basket')}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- TRUST FOOTER FOR AD TRAFFIC -->
+  <section class="relative z-10 max-w-4xl mx-auto px-6 mt-24 text-center">
+    <div class="glass-card p-10 rounded-[3rem] border border-bhavaccent/20 bg-bhavaccent/[0.02]">
+      <h3 class="text-2xl font-playfair font-bold text-bhavtext mb-4">{{t('royal_guarantee')}}</h3>
+      <p class="text-xs text-bhavtext/50 leading-relaxed max-w-2xl mx-auto mb-6">
+        {{t('royal_guarantee_desc')}}
+      </p>
+      <div class="flex items-center justify-center gap-6 text-[10px] text-bhavaccent font-bold uppercase tracking-widest">
+        <span>🚚 {{t('fast_delivery')}}</span>
+        <span>•</span>
+        <span>🔒 {{t('secure_payments')}}</span>
+        <span>•</span>
+        <span>💬 {{t('concierge_support')}}</span>
+      </div>
+    </div>
+  </section>
+</div>

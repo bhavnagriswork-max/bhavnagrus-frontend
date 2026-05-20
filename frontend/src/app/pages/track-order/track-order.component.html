@@ -1,0 +1,101 @@
+<div class="pt-40 pb-32 bg-bhavdark min-h-screen relative overflow-hidden flex items-center justify-center">
+  <!-- Dynamic Glow Background -->
+  <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-bhavaccent/5 blur-[120px] rounded-full"></div>
+  <div class="grain-overlay"></div>
+
+  <div class="max-w-5xl w-full px-6 relative z-10">
+    
+    <div class="text-center mb-20">
+      <h3 class="text-bhavaccent uppercase tracking-[0.5em] text-[10px] font-bold mb-6">Live Updates</h3>
+      <h1 class="text-5xl md:text-8xl font-playfair font-bold text-bhavtext uppercase tracking-tight leading-none">Track <br/> <span class="text-bhavtext/20">Order</span></h1>
+      <div class="h-px w-24 bg-bhavaccent/30 mx-auto mt-12"></div>
+    </div>
+
+    <!-- Tracking Input -->
+    <div class="glass-card p-10 md:p-12 rounded-[3rem] mb-16">
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex-1">
+          <label class="text-[10px] uppercase tracking-[0.3em] text-bhavtext/30 mb-4 block font-bold">Order Reference Number</label>
+          <input type="text" [(ngModel)]="orderNumber" placeholder="e.g. ORD-123456" class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-2xl font-bold text-bhavaccent tracking-widest focus:outline-none focus:border-bhavaccent/50 transition-all uppercase placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-bhavtext/10">
+        </div>
+        <button (click)="track()" [disabled]="loading || !orderNumber" class="btn-premium btn-gold self-end h-[74px] px-12">
+          {{ loading ? 'Searching...' : 'Track Now' }}
+        </button>
+      </div>
+      <p *ngIf="error" class="text-red-400 text-[10px] mt-6 font-bold uppercase tracking-[0.2em]">{{error}}</p>
+    </div>
+
+    <!-- Tracking Result -->
+    <div *ngIf="order" class="glass-card p-12 md:p-20 rounded-[4rem] relative overflow-hidden border-bhavaccent/10">
+      <div class="absolute top-0 right-0 p-12">
+         <div class="px-6 py-2 bg-bhavaccent/10 border border-bhavaccent/20 text-bhavaccent rounded-full text-[10px] font-bold uppercase tracking-[0.3em] animate-pulse">
+            {{order.order_status}}
+         </div>
+      </div>
+
+      <div class="mb-20">
+        <h2 class="text-3xl md:text-4xl font-playfair font-bold text-bhavtext mb-4">Namaste, {{order.customer_name}}</h2>
+        <p class="text-bhavtext/40 text-sm md:text-lg font-light">Your heritage snacks are on the way to <span class="text-bhavtext font-bold border-b border-bhavaccent/30">{{order.city}}</span>.</p>
+      </div>
+
+      <!-- Progress Stepper -->
+      <div class="relative flex flex-col md:flex-row justify-between gap-16 md:gap-0 mt-32">
+        <!-- Progress Line -->
+        <div class="absolute top-6 left-6 md:left-0 right-0 md:h-[1px] w-[1px] md:w-full bg-white/5 -z-0"></div>
+
+        <!-- Step 1 -->
+        <div class="relative z-10 flex flex-row md:flex-col items-center gap-8 md:gap-6 md:w-1/5 group">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition-all duration-700" [ngClass]="getStepStatus('pending') !== 'pending' ? 'bg-bhavaccent border-bhavaccent text-bhavdark shadow-[0_0_20px_rgba(197,160,89,0.4)]' : 'bg-bhavdark border-white/10 text-bhavtext/20'">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] font-bold transition-colors" [ngClass]="getStepStatus('pending') !== 'pending' ? 'text-bhavtext' : 'text-bhavtext/20'">Placed</p>
+            <p class="text-[8px] text-bhavtext/20 uppercase tracking-widest mt-2">{{order.created_at | date:'shortTime'}}</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative z-10 flex flex-row md:flex-col items-center gap-8 md:gap-6 md:w-1/5">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition-all duration-700" [ngClass]="getStepStatus('confirmed') !== 'pending' ? 'bg-bhavaccent border-bhavaccent text-bhavdark shadow-[0_0_20px_rgba(197,160,89,0.4)]' : 'bg-bhavdark border-white/10 text-bhavtext/20'">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] font-bold transition-colors" [ngClass]="getStepStatus('confirmed') !== 'pending' ? 'text-bhavtext' : 'text-bhavtext/20'">Confirmed</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative z-10 flex flex-row md:flex-col items-center gap-8 md:gap-6 md:w-1/5">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition-all duration-700" [ngClass]="getStepStatus('shipped') !== 'pending' ? 'bg-bhavaccent border-bhavaccent text-bhavdark shadow-[0_0_20px_rgba(197,160,89,0.4)]' : 'bg-bhavdark border-white/10 text-bhavtext/20'">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] font-bold transition-colors" [ngClass]="getStepStatus('shipped') !== 'pending' ? 'text-bhavtext' : 'text-bhavtext/20'">Shipped</p>
+          </div>
+        </div>
+
+        <div class="relative z-10 flex flex-row md:flex-col items-center gap-8 md:gap-6 md:w-1/5">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition-all duration-700" [ngClass]="getStepStatus('out for delivery') !== 'pending' ? 'bg-bhavaccent border-bhavaccent text-bhavdark shadow-[0_0_20px_rgba(197,160,89,0.4)]' : 'bg-bhavdark border-white/10 text-bhavtext/20'">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] font-bold transition-colors" [ngClass]="getStepStatus('out for delivery') !== 'pending' ? 'text-bhavtext' : 'text-bhavtext/20'">Out for Delivery</p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="relative z-10 flex flex-row md:flex-col items-center gap-8 md:gap-6 md:w-1/5">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition-all duration-700" [ngClass]="getStepStatus('delivered') !== 'pending' ? 'bg-bhavaccent border-bhavaccent text-bhavdark shadow-[0_0_20px_rgba(197,160,89,0.4)]' : 'bg-bhavdark border-white/10 text-bhavtext/20'">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] font-bold transition-colors" [ngClass]="getStepStatus('delivered') !== 'pending' ? 'text-bhavtext' : 'text-bhavtext/20'">Delivered</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

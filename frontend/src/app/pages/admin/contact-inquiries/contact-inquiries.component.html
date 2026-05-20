@@ -1,0 +1,139 @@
+<div class="p-4 md:p-8">
+  <header class="mb-12">
+    <h3 class="text-bhavaccent uppercase tracking-[0.4em] text-[10px] font-bold mb-3">Communication</h3>
+    <h1 class="text-3xl lg:text-4xl font-playfair font-bold text-bhavtext uppercase tracking-tight">
+      Customer <span class="text-bhavtext/30 italic">Inquiries</span>
+    </h1>
+  </header>
+
+  <!-- Inquiries Table -->
+  <div class="bg-bhavdark/40 border border-bhavtext/5 rounded-[2.5rem] overflow-hidden shadow-2xl reveal-up">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-bhavtext/5 bg-bhavtext/[0.02]">
+            <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30">Sender Details</th>
+            <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30">Subject & Snippet</th>
+            <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30">Received At</th>
+            <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30">Status</th>
+            <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-bhavtext/5">
+          <tr *ngFor="let inquiry of inquiries; let i = index" class="group hover:bg-bhavtext/[0.02] transition-all duration-500 reveal-up" [style.transition-delay]="(i * 0.05) + 's'">
+            <td class="px-8 py-7">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-bhavaccent/10 border border-bhavaccent/20 flex items-center justify-center text-bhavaccent font-bold group-hover:scale-110 transition-all duration-500">
+                  {{inquiry.name.charAt(0).toUpperCase()}}
+                </div>
+                <div>
+                  <p class="text-bhavtext font-bold text-sm tracking-wide">{{inquiry.name}}</p>
+                  <p class="text-[10px] text-bhavtext/30 mt-0.5 truncate max-w-[150px]">{{inquiry.email}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-8 py-7">
+              <p class="text-bhavtext/80 text-xs font-bold truncate max-w-[200px] mb-1">{{inquiry.subject}}</p>
+              <p class="text-[10px] text-bhavtext/30 line-clamp-1 italic">"{{inquiry.message}}"</p>
+            </td>
+            <td class="px-8 py-7">
+              <div class="text-[11px] text-bhavtext/40 tracking-wider">
+                {{inquiry.created_at | date:'mediumDate'}}
+                <span class="block text-[9px] text-bhavtext/20 mt-0.5">{{inquiry.created_at | date:'shortTime'}}</span>
+              </div>
+            </td>
+            <td class="px-8 py-7">
+              <span class="px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest transition-all"
+                [ngClass]="{
+                  'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 shadow-[0_0_10px_rgba(234,179,8,0.1)]': inquiry.status === 'Pending',
+                  'bg-bhavaccent/10 text-bhavaccent border border-bhavaccent/20': inquiry.status === 'Replied',
+                  'bg-bhavtext/5 text-bhavtext/20 border border-bhavtext/10': inquiry.status === 'Closed'
+                }">
+                {{inquiry.status}}
+              </span>
+            </td>
+            <td class="px-8 py-7 text-right">
+              <button (click)="viewInquiry(inquiry)" class="text-[9px] uppercase tracking-[0.2em] font-bold text-bhavtext/20 hover:text-bhavaccent transition-all hover:tracking-[0.3em]">
+                View Full Message
+              </button>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="inquiries.length === 0 && !loading">
+            <td colspan="5" class="px-8 py-24 text-center">
+              <div class="text-bhavtext/20 text-xs uppercase tracking-[0.4em] font-bold">No customer inquiries found</div>
+            </td>
+          </tr>
+
+          <!-- Loading State -->
+          <tr *ngIf="loading">
+            <td colspan="5" class="px-8 py-24 text-center">
+              <div class="inline-block w-8 h-8 border-2 border-bhavaccent/30 border-t-bhavaccent rounded-full animate-spin"></div>
+              <div class="mt-4 text-[10px] text-bhavaccent uppercase tracking-widest animate-pulse">Accessing Secure Records...</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Detailed View Modal -->
+  <div *ngIf="selectedInquiry" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-bhavdark/95 backdrop-blur-xl">
+    <div class="bg-bhavdark border border-bhavtext/10 w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col animate-fade-in">
+      <div class="p-10 border-b border-bhavtext/5 flex justify-between items-center bg-bhavtext/[0.02]">
+        <div>
+          <h3 class="text-bhavaccent uppercase tracking-[0.4em] text-[10px] font-bold mb-2">Message Analysis</h3>
+          <h2 class="text-2xl font-playfair font-bold text-bhavtext leading-tight">{{selectedInquiry.subject}}</h2>
+        </div>
+        <button (click)="selectedInquiry = null" class="w-10 h-10 rounded-full bg-bhavtext/5 flex items-center justify-center text-bhavtext/20 hover:text-bhavtext transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <div class="p-10 overflow-y-auto custom-scrollbar flex-1 max-h-[60vh]">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-3">Sender Identity</p>
+            <p class="text-bhavtext font-bold text-lg mb-1">{{selectedInquiry.name}}</p>
+            <p class="text-bhavtext/50 text-xs">{{selectedInquiry.email}}</p>
+          </div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-3">Contact Reference</p>
+            <p class="text-bhavtext font-bold text-lg mb-1">{{selectedInquiry.mobile}}</p>
+            <p class="text-bhavtext/50 text-xs italic">Mobile Verification: Active</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-4">Transmission Content</p>
+          <div class="p-8 bg-bhavtext/[0.03] border border-bhavtext/5 rounded-[2rem] text-bhavtext/70 text-sm leading-[1.8] font-light">
+            {{selectedInquiry.message}}
+          </div>
+        </div>
+      </div>
+
+      <div class="p-10 bg-bhavtext/[0.02] border-t border-bhavtext/5">
+        <div class="flex flex-col md:flex-row items-end gap-8">
+          <div class="flex-1 w-full">
+            <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-4 font-bold">Operational Status</p>
+            <div class="flex gap-3">
+              <button *ngFor="let s of ['Pending', 'Replied', 'Closed']" 
+                (click)="updateStatus(selectedInquiry.id, s)"
+                [ngClass]="selectedInquiry.status === s ? 'bg-bhavaccent text-bhavdark shadow-lg shadow-bhavaccent/20' : 'bg-bhavtext/5 text-bhavtext/30 hover:bg-bhavtext/10 hover:text-bhavtext'"
+                class="flex-1 py-4 rounded-2xl text-[9px] uppercase tracking-widest font-bold transition-all duration-500">
+                {{s}}
+              </button>
+            </div>
+          </div>
+          <a [href]="'mailto:' + selectedInquiry.email" class="w-full md:w-auto px-10 py-5 bg-bhavtext text-bhavdark font-bold uppercase tracking-[0.2em] text-[10px] rounded-2xl hover:bg-bhavaccent transition-all duration-500 flex items-center justify-center gap-3 group">
+            Respond
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

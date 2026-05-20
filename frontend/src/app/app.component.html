@@ -1,0 +1,204 @@
+<!-- Navbar (Hidden on Admin Pages) -->
+<nav *ngIf="!isAdminPage" class="fixed w-full z-50 transition-all duration-500"
+  [ngClass]="{'bg-bhavbg/95 backdrop-blur-md border-b border-bhavtext/10 py-3': isScrolled, 'bg-transparent py-5': !isScrolled}">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
+    <div class="flex justify-between items-center">
+      
+      <!-- Mobile Menu Button (Left on Mobile) -->
+      <div class="md:hidden flex items-center w-1/3">
+        <button class="text-bhavtext hover:text-bhavaccent transition-colors p-2" (click)="toggleMobileMenu()">
+          <svg *ngIf="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg *ngIf="mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Desktop Menu (Left) -->
+      <div class="hidden md:flex space-x-8 items-center w-1/3">
+        <a routerLink="/products" class="text-[13px] uppercase tracking-widest font-medium text-bhavtext/70 hover:text-bhavaccent transition-colors">{{t('catalog')}}</a>
+        <a routerLink="/heritage" class="text-[13px] uppercase tracking-widest font-medium text-bhavtext/70 hover:text-bhavaccent transition-colors">{{t('heritage')}}</a>
+        <a routerLink="/brand" class="text-[13px] uppercase tracking-widest font-medium text-bhavtext/70 hover:text-bhavaccent transition-colors">{{t('brand')}}</a>
+      </div>
+
+      <!-- Logo (Center) -->
+      <div routerLink="/" class="flex-shrink-0 flex items-center justify-center w-1/3 md:w-1/3 cursor-pointer">
+        <span class="font-playfair text-2xl md:text-3xl tracking-wide font-bold text-bhavtext uppercase">
+          Bhavnagris
+        </span>
+      </div>
+
+      <!-- Icons (Right) -->
+      <div class="flex items-center justify-end space-x-4 md:space-x-6 w-1/3">
+        <!-- Search -->
+        <button class="hidden sm:block text-bhavtext/80 hover:text-bhavaccent transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+        <!-- User / Logout -->
+        <div class="flex items-center gap-4">
+          <div *ngIf="user" class="hidden sm:flex flex-col items-end">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-bhavtext/40 uppercase tracking-widest font-bold">{{websiteGreeting}},</span>
+              <span *ngIf="user.dog_score > 0" class="px-2 py-0.5 bg-bhavaccent/20 border border-bhavaccent/30 rounded-full text-[8px] text-bhavaccent font-bold animate-pulse">🐾 {{user.dog_score}}</span>
+            </div>
+            <span class="text-[12px] text-bhavtext font-medium">{{user.name}}</span>
+          </div>
+          
+          <div class="group relative">
+            <a [routerLink]="user ? (user.role === 'admin' ? '/admin/dashboard' : '/my-orders') : '/login'" class="text-bhavtext/80 hover:text-bhavaccent transition-colors cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </a>
+            
+            <!-- User Dropdown -->
+            <div *ngIf="user" class="absolute right-0 top-full mt-4 w-48 bg-bhavbg border border-bhavtext/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[60] py-2 overflow-hidden">
+              <div class="px-6 py-3 border-b border-bhavtext/5 sm:hidden">
+                <p class="text-[10px] text-bhavtext/40 uppercase tracking-widest font-bold">{{websiteGreeting}},</p>
+                <p class="text-xs text-bhavtext font-medium truncate">{{user.name}}</p>
+              </div>
+              <a *ngIf="user.role === 'admin'" routerLink="/admin/dashboard" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Admin Panel</a>
+              <a routerLink="/my-orders" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">My Orders</a>
+              <button (click)="logout()" class="w-full text-left block px-6 py-3 text-xs text-red-400 hover:text-red-500 hover:bg-red-500/5 transition-all border-t border-bhavtext/5 mt-2">Sign Out</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button (click)="toggleTheme()" class="text-bhavtext/80 hover:text-bhavaccent transition-colors p-2">
+          <svg *ngIf="!(theme.isDark$ | async)" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+          <svg *ngIf="(theme.isDark$ | async)" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        </button>
+
+        <!-- Cart -->
+        <a routerLink="/cart" class="relative text-bhavtext/80 hover:text-bhavaccent transition-colors cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span *ngIf="cartCount > 0" class="absolute -top-2 -right-2 bg-bhavaccent text-bhavdark text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{{cartCount}}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Menu -->
+  <div class="md:hidden absolute top-full left-0 w-full bg-bhavbg/95 backdrop-blur-2xl border-b border-bhavtext/10 transition-all duration-500 z-50"
+       [ngClass]="{'max-h-screen opacity-100 py-10 visible pointer-events-auto': mobileMenuOpen, 'max-h-0 opacity-0 overflow-hidden invisible pointer-events-none': !mobileMenuOpen}">
+    <div class="flex flex-col px-10 space-y-10">
+      <a routerLink="/" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('home')}}</a>
+      <a routerLink="/products" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('catalog')}}</a>
+      <a routerLink="/brand" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('brand')}}</a>
+      <a *ngIf="user" routerLink="/my-orders" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('my_orders')}}</a>
+      <a *ngIf="!user" routerLink="/login" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('login')}}</a>
+      <button *ngIf="user" (click)="logout(); toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavaccent uppercase text-left">{{t('sign_out')}}</button>
+    </div>
+  </div>
+</nav>
+
+<main [ngClass]="{'admin-view': isAdminPage}">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Dedicated Notification System -->
+<app-notification></app-notification>
+
+<!-- Footer (Hidden on Admin Pages) -->
+<footer *ngIf="!isAdminPage" class="bg-bhavbg text-bhavtext pt-16 md:pt-24 pb-12 border-t border-bhavtext/5 relative overflow-hidden">
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(197,160,89,0.05)_0%,var(--bhavbg)_70%)] pointer-events-none"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+    <div class="flex flex-col items-center justify-center mb-16 md:mb-20 text-center">
+      <h3 class="font-playfair text-3xl md:text-5xl tracking-wide text-bhavtext mb-6">{{t('experience_premium')}}</h3>
+      <p class="text-bhavtext/50 text-sm max-w-md mx-auto mb-8">{{t('newsletter_desc')}}</p>
+      <div class="flex w-full max-w-md mx-auto flex-col sm:flex-row gap-3 sm:gap-0">
+        <input type="email" [placeholder]="langService.getCurrentLanguage() === 'english' ? 'Email Address' : (langService.getCurrentLanguage() === 'gujarati' ? 'ઈમેલ આઈડી' : 'ईमेल पता')" [(ngModel)]="subscriberEmail" name="subscriberEmail"
+          class="px-6 py-4 w-full bg-bhavtext/5 border border-bhavtext/10 text-bhavtext focus:outline-none focus:border-bhavaccent transition-colors sm:rounded-l-sm text-sm">
+        <button (click)="subscribeNewsletter()" class="bg-bhavaccent text-bhavdark font-medium px-8 py-4 sm:rounded-r-sm hover:bg-white transition-colors text-sm uppercase tracking-wider">
+          {{t('subscribe')}}
+        </button>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 border-t border-bhavtext/10 pt-12">
+      <div class="col-span-2 md:col-span-1">
+        <span class="font-playfair text-2xl tracking-wide font-bold text-bhavtext block mb-4 uppercase">Bhavnagris</span>
+        <p class="text-bhavtext/40 text-sm">{{t('logo_sub')}}</p>
+      </div>
+      <div>
+        <h4 class="font-medium text-xs mb-6 text-bhavtext/40 uppercase tracking-[0.2em]">{{t('shop')}}</h4>
+        <ul class="space-y-4 text-sm text-bhavtext/80">
+          <li><a routerLink="/products" class="hover:text-bhavaccent transition-colors">{{t('snacks')}}</a></li>
+          <li><a routerLink="/products" class="hover:text-bhavaccent transition-colors">{{t('sweets')}}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-medium text-xs mb-6 text-bhavtext/40 uppercase tracking-[0.2em]">{{t('about')}}</h4>
+        <ul class="space-y-4 text-sm text-bhavtext/80">
+          <li><a routerLink="/heritage" class="hover:text-bhavaccent transition-colors">{{t('our_story')}}</a></li>
+          <li><a routerLink="/contact" class="hover:text-bhavaccent transition-colors">{{t('contact')}}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-medium text-xs mb-6 text-bhavtext/40 uppercase tracking-[0.2em]">{{t('social')}}</h4>
+        <ul class="space-y-4 text-sm text-bhavtext/80">
+          <li><a href="#" class="hover:text-bhavaccent transition-colors">Instagram</a></li>
+          <li><a href="#" class="hover:text-bhavaccent transition-colors">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Stylish Brand Language Selector Popup Modal -->
+<div *ngIf="showLanguagePopup" class="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6 animate-fade-in">
+  <!-- Solid backing backdrop blur -->
+  <div class="absolute inset-0 bg-bhavdark/90 backdrop-blur-2xl"></div>
+  
+  <!-- Royal Glass Modal -->
+  <div class="glass-card w-full max-w-md rounded-[3rem] border border-bhavaccent/30 shadow-[0_0_100px_rgba(197,160,89,0.25)] p-8 md:p-12 relative z-10 text-center flex flex-col items-center">
+    
+    <!-- Decorative Royal Seal -->
+    <div class="w-16 h-16 rounded-full bg-bhavaccent/10 border border-bhavaccent/30 flex items-center justify-center text-2xl mb-6 shadow-lg shadow-bhavaccent/10 animate-bounce">
+      👑
+    </div>
+    
+    <h2 class="text-[10px] uppercase tracking-[0.4em] text-bhavaccent font-bold mb-2">Heritage Experience</h2>
+    <h1 class="text-3xl font-playfair font-bold text-bhavtext mb-3">Choose Language</h1>
+    <p class="text-xs text-bhavtext/40 mb-8 max-w-xs leading-relaxed">Please select your preferred language to experience the royal Gujarati taste.</p>
+    
+    <!-- Language Options Grid -->
+    <div class="space-y-4 w-full">
+      <!-- Gujarati -->
+      <button (click)="selectLanguage('gujarati')" 
+              class="w-full p-4 rounded-2xl bg-bhavaccent/5 hover:bg-bhavaccent hover:text-bhavdark border border-bhavaccent/20 hover:border-bhavaccent transition-all duration-500 group flex items-center justify-between text-left cursor-pointer">
+        <div>
+          <span class="block text-lg font-playfair font-bold text-bhavtext group-hover:text-bhavdark transition-colors">ગુજરાતી</span>
+          <span class="text-[9px] uppercase tracking-widest text-bhavtext/40 group-hover:text-bhavdark/60 transition-colors font-bold">અસલી ગુજરાતી સ્વાદ</span>
+        </div>
+        <span class="text-xl group-hover:scale-125 transition-transform">🦁</span>
+      </button>
+
+      <!-- Hindi -->
+      <button (click)="selectLanguage('hindi')" 
+              class="w-full p-4 rounded-2xl bg-bhavaccent/5 hover:bg-bhavaccent hover:text-bhavdark border border-bhavaccent/20 hover:border-bhavaccent transition-all duration-500 group flex items-center justify-between text-left cursor-pointer">
+        <div>
+          <span class="block text-lg font-playfair font-bold text-bhavtext group-hover:text-bhavdark transition-colors">हिंदी</span>
+          <span class="text-[9px] uppercase tracking-widest text-bhavtext/40 group-hover:text-bhavdark/60 transition-colors font-bold">શાહી ગુજરાતી સ્વાદ</span>
+        </div>
+        <span class="text-xl group-hover:scale-125 transition-transform">✨</span>
+      </button>
+
+      <!-- English -->
+      <button (click)="selectLanguage('english')" 
+              class="w-full p-4 rounded-2xl bg-bhavaccent/5 hover:bg-bhavaccent hover:text-bhavdark border border-bhavaccent/20 hover:border-bhavaccent transition-all duration-500 group flex items-center justify-between text-left cursor-pointer">
+        <div>
+          <span class="block text-lg font-playfair font-bold text-bhavtext group-hover:text-bhavdark transition-colors">English</span>
+          <span class="text-[9px] uppercase tracking-widest text-bhavtext/40 group-hover:text-bhavdark/60 transition-colors font-bold">A Royal Heritage of Snacks</span>
+        </div>
+        <span class="text-xl group-hover:scale-125 transition-transform">👑</span>
+      </button>
+    </div>
+  </div>
+</div>

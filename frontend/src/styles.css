@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Farsan&family=Hind+Vadodara:wght@300;400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+
+  --bhavaccent: #c5a059;
+  --bhavaccent-rgb: 197, 160, 89;
+  --bhavgold-soft: #b28c46;
+  --bhavgold-bright: #eec98a;
+
+  /* Dark Theme Variables (Default) */
+  --bhavbg: #080808;
+  --bhavbg-rgb: 8, 8, 8;
+  --bhavtext: #ffffff;
+  --bhavtext-rgb: 255, 255, 255;
+  --bhavtext-muted: rgba(255, 255, 255, 0.4);
+  --bhavglass: rgba(255, 255, 255, 0.03);
+  --bhavglass-hover: rgba(255, 255, 255, 0.06);
+  --bhavborder: rgba(255, 255, 255, 0.08);
+  --bhavshadow: rgba(0, 0, 0, 0.8);
+  --bhavcard: rgba(0, 0, 0, 0.4);
+  --bhavpanel: #111111;
+}
+
+body.lang-gujarati {
+  --font-serif: 'Farsan', cursive;
+  --font-sans: 'Hind Vadodara', sans-serif;
+}
+
+body.lang-hindi {
+  --font-serif: 'Rozha One', serif;
+  --font-sans: 'Yatra One', cursive;
+}
+
+body.light-theme {
+  --bhavbg: #fcfcfc;
+  --bhavbg-rgb: 252, 252, 252;
+  --bhavtext: #111111;
+  --bhavtext-rgb: 17, 17, 17;
+  --bhavaccent: #b28c46;
+  --bhavaccent-rgb: 178, 140, 70;
+  --bhavtext-muted: rgba(0, 0, 0, 0.85);
+  --bhavglass: rgba(0, 0, 0, 0.03);
+  --bhavglass-hover: rgba(0, 0, 0, 0.06);
+  --bhavborder: rgba(0, 0, 0, 0.08);
+  --bhavshadow: rgba(0, 0, 0, 0.05);
+  --bhavcard: rgba(255, 255, 255, 0.95);
+  --bhavpanel: #ffffff;
+}
+
+@layer base {
+  body {
+    background-color: var(--bhavbg);
+    color: var(--bhavtext);
+    @apply font-sans antialiased overflow-x-hidden selection:bg-bhavaccent selection:text-bhavdark transition-colors duration-500;
+    background-image: 
+      radial-gradient(circle at 50% -20%, rgba(197,160,89,0.12) 0%, transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(197,160,89,0.05) 0%, transparent 40%),
+      radial-gradient(circle at 100% 50%, rgba(197,160,89,0.03) 0%, transparent 30%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, .font-playfair {
+    font-family: var(--font-serif), 'Playfair Display', serif;
+    @apply tracking-tight;
+  }
+
+  p, span, a, button, .font-sans {
+    font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background-color: var(--bhavglass);
+    border-color: var(--bhavborder);
+    @apply backdrop-blur-2xl border transition-all duration-700 hover:border-bhavaccent;
+  }
+
+  .heritage-shadow {
+    box-shadow: 0 40px 100px -20px var(--bhavshadow), 0 20px 40px -10px rgba(197, 160, 89, 0.1);
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden px-10 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[9px] transition-all duration-700 shadow-2xl flex items-center justify-center gap-3;
+  }
+
+  .btn-gold {
+    @apply bg-bhavaccent text-bhavdark hover:brightness-110 hover:shadow-[0_25px_50px_-12px_rgba(197,160,89,0.5)] hover:scale-[1.05] active:scale-95;
+    box-shadow: 0 15px 35px -12px rgba(197, 160, 89, 0.4);
+  }
+
+  .btn-outline {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.4);
+    @apply hover:border-bhavaccent/30 hover:text-bhavaccent hover:bg-bhavaccent/5 hover:scale-[1.05] active:scale-95;
+    backdrop-filter: blur(10px);
+  }
+
+  .light-theme .btn-outline {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: var(--bhavtext) !important;
+  }
+  .light-theme .btn-outline:hover {
+    border-color: #b28c46 !important;
+    color: #b28c46 !important;
+    background-color: rgba(178, 140, 70, 0.05) !important;
+  }
+}
+
+/* 🌓 Light Theme Global Overrides */
+.light-theme .text-white, 
+.light-theme .text-white\/90, 
+.light-theme .text-white\/80, 
+.light-theme .text-white\/70 {
+  color: var(--bhavtext) !important;
+}
+
+.light-theme .text-white\/60, 
+.light-theme .text-white\/50, 
+.light-theme .text-white\/40, 
+.light-theme .text-white\/30, 
+.light-theme .text-white\/20 {
+  color: var(--bhavtext-muted) !important;
+}
+
+.light-theme .bg-black\/20, 
+.light-theme .bg-black\/40, 
+.light-theme .bg-black\/50, 
+.light-theme .bg-black\/60, 
+.light-theme .bg-black\/80 {
+  background-color: var(--bhavpanel) !important;
+}
+
+.light-theme .bg-white\/5, 
+.light-theme .bg-white\/10 {
+  background-color: var(--bhavglass-hover) !important;
+}
+
+.light-theme .border-white\/5, 
+.light-theme .border-white\/10, 
+.light-theme .border-white\/20 {
+  border-color: var(--bhavborder) !important;
+}
+
+.light-theme .text-bhavtext\/40,
+.light-theme .text-bhavtext\/30,
+.light-theme .text-bhavtext\/20 {
+  color: var(--bhavtext-muted) !important;
+}
+
+/* Nav Specific */
+.light-theme nav .text-white\/70,
+.light-theme nav .text-white\/80 {
+  color: var(--bhavtext) !important;
+}
+
+.light-theme .bg-bhavdark\/80 {
+  background-color: rgba(252, 252, 252, 0.8) !important;
+}
+
+/* Admin Specific */
+.light-theme aside {
+  background-color: #ffffff !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme .nav-link {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.light-theme .nav-link:hover {
+  background-color: rgba(178, 140, 70, 0.08) !important;
+  color: #b28c46 !important;
+}
+
+.light-theme .active-nav {
+  background-color: rgba(178, 140, 70, 0.1) !important;
+  border-left-color: #b28c46 !important;
+  color: #b28c46 !important;
+}
+
+.light-theme .bg-bhavtext\/5 {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+.light-theme .border-bhavtext\/5 {
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme header.lg\:hidden {
+  background-color: #ffffff !important;
+  border-bottom-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme nav a.text-white\/50 {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.light-theme button.bg-red-500\/5 {
+  background-color: rgba(239, 68, 68, 0.05) !important;
+  border-color: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+}
+
+.light-theme button.bg-red-500\/5:hover {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* Form Controls */
+select option {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+.light-theme select option {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+.light-theme .text-bhavtext\/40 {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.light-theme .text-bhavaccent {
+  color: #b28c46 !important;
+}
+
+.light-theme .bg-bhavaccent\/20 {
+  background-color: rgba(178, 140, 70, 0.15) !important;
+}
+
+/* Custom Scrollbar */
+.light-theme ::-webkit-scrollbar-track {
+  background: #fcfcfc;
+}
+.light-theme ::-webkit-scrollbar-thumb {
+  background: rgba(178, 140, 70, 0.2);
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s infinite ease-in-out;
+}
+
+.animate-float {
+  animation: float 6s infinite ease-in-out;
+}
+
+.bg-mesh-pattern {
+  background-image: radial-gradient(var(--bhavaccent) 0.5px, transparent 0.5px);
+  background-size: 30px 30px;
+}
+
+/* Mobile Polish */
+@media (max-width: 640px) {
+  .glass-card {
+    border-radius: 2rem !important;
+  }
+  
+  h1 {
+    font-size: 3rem !important;
+    line-height: 1.1 !important;
+  }
+}

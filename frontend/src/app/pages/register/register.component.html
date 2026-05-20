@@ -1,0 +1,63 @@
+<div class="min-h-screen relative flex items-center justify-center bg-bhavdark overflow-hidden py-20">
+  
+  <div class="absolute inset-0 bg-glow-gradient pointer-events-none opacity-40"></div>
+
+  <div class="relative z-10 w-full max-w-xl px-6 py-12 md:px-10 bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl">
+    
+    <div class="text-center mb-10">
+      <h1 class="font-playfair text-4xl font-bold text-bhavtext tracking-widest uppercase mb-2">Bhavnagris</h1>
+      <div class="h-px w-20 bg-bhavaccent mx-auto mb-6"></div>
+      <h2 class="text-bhavtext/40 font-light tracking-[0.2em] uppercase text-[10px]">Create Your Heritage Account</h2>
+    </div>
+
+    <div *ngIf="errorMessage" class="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-lg mb-8 text-xs">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onRegister()" #regForm="ngForm" class="space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="relative group">
+          <label class="text-[9px] uppercase tracking-[0.2em] text-bhavtext/30 mb-2 block font-medium">Your Name</label>
+          <input type="text" name="name" [(ngModel)]="userData.name" required class="w-full bg-white/5 border-b border-white/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-light">
+        </div>
+
+        <div class="relative group">
+          <label class="text-[9px] uppercase tracking-[0.2em] text-bhavtext/30 mb-2 block font-medium">Mobile Number</label>
+          <input type="text" name="mobile" [(ngModel)]="userData.mobile" required class="w-full bg-white/5 border-b border-white/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-light">
+        </div>
+      </div>
+
+      <div class="relative group">
+        <label class="text-[9px] uppercase tracking-[0.2em] text-bhavtext/30 mb-2 block font-medium">Email Address</label>
+        <input type="email" name="email" [(ngModel)]="userData.email" required class="w-full bg-white/5 border-b border-white/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-light">
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="relative group">
+          <label class="text-[9px] uppercase tracking-[0.2em] text-bhavtext/30 mb-2 block font-medium">Password</label>
+          <input type="password" name="password" [(ngModel)]="userData.password" required class="w-full bg-white/5 border-b border-white/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-light">
+        </div>
+
+        <div class="relative group">
+          <label class="text-[9px] uppercase tracking-[0.2em] text-bhavtext/30 mb-2 block font-medium">Confirm</label>
+          <input type="password" name="confirm" [(ngModel)]="userData.confirmPassword" required class="w-full bg-white/5 border-b border-white/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-light">
+        </div>
+      </div>
+
+      <div class="pt-6">
+        <button type="submit" [disabled]="!regForm.form.valid" class="w-full bg-bhavaccent py-4 px-8 rounded-full text-bhavdark font-bold uppercase tracking-widest text-[10px] transition-all hover:bg-white shadow-xl disabled:opacity-20">
+          Create Account
+        </button>
+      </div>
+
+      <div class="text-center pt-6">
+        <p class="text-[10px] text-bhavtext/20 uppercase tracking-widest">
+          Already a member? 
+          <a routerLink="/login" class="text-bhavaccent hover:text-bhavtext transition-colors ml-2 font-bold cursor-pointer">Login Here</a>
+        </p>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="pt-40 pb-32 bg-bhavdark relative overflow-hidden min-h-screen">
+  <!-- Subtle Background Glows -->
+  <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-bhavaccent/5 blur-[120px] rounded-full"></div>
+  <div class="grain-overlay"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+    
+    <div class="mb-20">
+      <h3 class="text-bhavaccent uppercase tracking-[0.5em] text-[10px] font-bold mb-6">Your Heritage Journey</h3>
+      <h1 class="text-5xl md:text-8xl font-playfair font-bold text-bhavtext uppercase tracking-tight leading-none">Order <br/> <span class="text-bhavtext/20">History</span></h1>
+      <div class="h-px w-24 bg-bhavaccent/30 mt-12"></div>
+    </div>
+
+    <div *ngIf="loading" class="flex justify-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-bhavaccent"></div>
+    </div>
+
+    <div *ngIf="!loading && orders.length === 0" class="text-center py-32 glass-card rounded-[3rem]">
+      <div class="w-20 h-20 bg-white/5 border border-white/5 rounded-full flex items-center justify-center mx-auto mb-10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-bhavaccent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-playfair font-bold text-bhavtext mb-6">No orders found</h2>
+      <p class="text-bhavtext/40 mb-12 max-w-sm mx-auto font-light">You haven't placed any orders yet. Experience the royal tradition today!</p>
+      <button routerLink="/products" class="btn-premium btn-gold">
+        Explore Collection
+      </button>
+    </div>
+
+    <div *ngIf="!loading && orders.length > 0" class="space-y-12">
+      <div *ngFor="let order of orders" class="glass-card rounded-[2.5rem] overflow-hidden group">
+        <div class="p-10 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 border-b border-white/5">
+          <div class="flex items-center gap-6">
+            <div class="w-12 h-12 rounded-2xl bg-bhavaccent/10 flex items-center justify-center border border-bhavaccent/20">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bhavaccent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+            </div>
+            <div>
+              <p class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-1 font-bold">Order Reference</p>
+              <h3 class="text-xl font-bold text-bhavtext tracking-widest">#{{order.order_number}}</h3>
+            </div>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-1 font-bold">Date Placed</p>
+            <p class="text-sm font-bold text-bhavtext/80">{{order.created_at | date:'mediumDate'}}</p>
+          </div>
+          <div class="text-left md:text-center">
+            <p class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-1 font-bold">Current Status</p>
+            <div class="flex items-center gap-2">
+               <div class="w-1.5 h-1.5 rounded-full" [ngClass]="order.order_status === 'Delivered' ? 'bg-green-500' : 'bg-bhavaccent animate-pulse'"></div>
+               <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext" [ngClass]="getStatusColor(order.order_status)">{{order.order_status}}</p>
+            </div>
+          </div>
+          <div class="text-left md:text-right">
+            <p class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-1 font-bold">Total Amount</p>
+            <p class="text-2xl font-bold text-bhavaccent">₹{{order.total_amount}}</p>
+          </div>
+          <button [routerLink]="['/track-order', order.order_number]" class="btn-premium btn-outline py-3 px-6">
+            Track Details
+          </button>
+        </div>
+        
+        <!-- Order Items Preview -->
+        <div class="bg-white/5 px-12 py-8 flex gap-6 overflow-x-auto custom-scrollbar">
+           <div *ngFor="let item of order.items" class="flex-shrink-0 flex items-center gap-6 glass-card p-4 rounded-2xl border border-white/5 group/item">
+             <div class="w-14 h-14 rounded-xl overflow-hidden bg-black/40 border border-white/5 relative">
+               <img [src]="item.image" class="w-full h-full object-cover transform transition-transform group-hover/item:scale-110">
+               <div class="absolute inset-0 bg-gradient-to-t from-bhavdark/40 to-transparent"></div>
+             </div>
+             <div class="pr-6">
+               <p class="text-[10px] font-bold text-bhavtext uppercase tracking-tight truncate w-32 group-hover/item:text-bhavaccent transition-colors">{{item.name}}</p>
+               <p class="text-[8px] text-bhavtext/30 uppercase tracking-[0.2em] font-bold mt-1">Quantity: {{item.quantity}}</p>
+             </div>
+           </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

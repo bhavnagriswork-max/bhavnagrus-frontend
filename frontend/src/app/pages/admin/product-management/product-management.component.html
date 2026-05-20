@@ -1,0 +1,301 @@
+<div class="p-4 md:p-8">
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+    <div>
+      <h1 class="text-3xl lg:text-4xl font-playfair font-bold text-bhavtext mb-2">Inventory</h1>
+      <p class="text-bhavtext/40 text-[10px] uppercase tracking-[0.4em]">Product Control Panel</p>
+    </div>
+    <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
+      <!-- Search Input -->
+      <div class="relative w-full md:w-64">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-bhavtext/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </span>
+        <input type="text" 
+               [(ngModel)]="searchTerm" 
+               placeholder="SEARCH INVENTORY..." 
+               class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext focus:outline-none focus:border-bhavaccent focus:bg-white/10 transition-all placeholder:text-bhavtext/20">
+      </div>
+
+      <!-- Column Visibility Toggle -->
+      <div class="relative group pb-4 -mb-4">
+        <button class="w-full md:w-auto px-6 py-3 bg-white/5 border border-white/10 text-bhavtext text-[10px] font-bold rounded-full uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+          Display Columns
+        </button>
+        <div class="absolute right-0 top-full pt-3 w-64 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all z-50">
+          <div class="bg-bhavdark border border-white/10 rounded-[2rem] shadow-2xl p-6 backdrop-blur-xl">
+            <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-4 font-bold">Configure View</p>
+            <div class="space-y-3">
+              <label *ngFor="let col of visibleColumns | keyvalue" class="flex items-center gap-3 cursor-pointer group/item">
+                <input type="checkbox" [checked]="col.value" (change)="toggleColumn($any(col.key))" class="hidden">
+                <div class="w-5 h-5 rounded-lg border border-white/10 flex items-center justify-center transition-all" [ngClass]="col.value ? 'bg-bhavaccent border-bhavaccent' : 'bg-transparent'">
+                  <svg *ngIf="col.value" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-bhavdark" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                </div>
+                <span class="text-[10px] uppercase tracking-widest font-bold transition-all" [ngClass]="col.value ? 'text-bhavtext' : 'text-bhavtext/20 group-hover/item:text-bhavtext/40'">{{col.key}}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button (click)="openAddModal()" class="w-full md:w-auto px-8 py-3 bg-bhavaccent text-bhavdark font-bold rounded-full text-xs uppercase tracking-widest hover:opacity-90 transition-all shadow-lg">
+        Add Product
+      </button>
+    </div>
+  </header>
+
+  <!-- Products List (Mobile Cards & Desktop Table) -->
+  <div class="glass-card heritage-shadow rounded-[3rem] overflow-hidden reveal-up">
+    
+    <!-- Desktop Table -->
+    <table class="w-full text-left hidden md:table">
+      <thead class="bg-bhavtext/5 text-[10px] uppercase tracking-[0.3em] text-bhavtext/40 font-bold">
+        <tr>
+          <th *ngIf="visibleColumns.image || visibleColumns.name" class="px-8 py-7">Heritage Item</th>
+          <th *ngIf="visibleColumns.category" class="px-8 py-7">Classification</th>
+          <th *ngIf="visibleColumns.spiciness" class="px-8 py-7">Spiciness Heat</th>
+          <th *ngIf="visibleColumns.valuation" class="px-8 py-7">Valuation</th>
+          <th *ngIf="visibleColumns.stock" class="px-8 py-7">Availability</th>
+          <th *ngIf="visibleColumns.status" class="px-8 py-7">Status</th>
+          <th class="px-8 py-7 text-right">Administrative Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-bhavtext/5">
+        <tr *ngFor="let p of filteredProducts; let i = index" class="hover:bg-bhavtext/[0.02] transition-all duration-500 group reveal-up" [style.transition-delay]="(i * 0.03) + 's'">
+          <td *ngIf="visibleColumns.image || visibleColumns.name" class="px-8 py-7 flex items-center gap-6">
+            <div *ngIf="visibleColumns.image" class="w-16 h-16 shrink-0 aspect-square rounded-2xl overflow-hidden bg-bhavdark/40 border border-bhavtext/10 group-hover:border-bhavaccent/30 transition-all duration-700 shadow-xl group/img">
+              <img [src]="api.getMediaUrl(p.image)" (error)="handleImageError($event)" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-125">
+            </div>
+            <div *ngIf="visibleColumns.name">
+              <div class="flex items-center gap-3">
+                <p class="font-bold text-sm text-bhavtext group-hover:text-gold-gradient transition-all">{{p.name}}</p>
+                <span *ngIf="p.is_featured" class="px-2 py-0.5 bg-yellow-500/10 text-yellow-500 text-[7px] uppercase font-bold rounded-full border border-yellow-500/20">Featured</span>
+              </div>
+              <p *ngIf="visibleColumns.weight" class="text-[9px] text-bhavtext/30 tracking-[0.3em] uppercase mt-1">{{p.weight}}</p>
+            </div>
+          </td>
+          <td *ngIf="visibleColumns.category" class="px-8 py-7 text-[10px] uppercase tracking-widest text-bhavtext/50">{{p.category_name}}</td>
+          <td *ngIf="visibleColumns.spiciness" class="px-8 py-7">
+            <div class="flex items-center gap-3 bg-bhavtext/5 px-4 py-2 rounded-full border border-bhavtext/5 w-fit">
+              <input type="range" 
+                     [value]="p.spiciness" 
+                     (change)="quickUpdateSpiciness(p, $any($event.target).value)"
+                     min="0" max="5" step="1" 
+                     class="w-16 accent-bhavaccent h-1 cursor-pointer">
+              <span class="text-sm">🌶️</span>
+              <span class="text-[9px] font-bold text-bhavaccent">{{p.spiciness}}</span>
+            </div>
+          </td>
+          <td *ngIf="visibleColumns.valuation" class="px-8 py-7 text-sm font-bold text-gold-gradient">₹{{p.selling_price}}</td>
+          <td *ngIf="visibleColumns.stock" class="px-8 py-7">
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-bhavtext">{{p.stock_quantity}} in stock</span>
+              <div class="w-16 h-1 bg-white/5 rounded-full mt-2 overflow-hidden">
+                <div class="h-full bg-bhavaccent transition-all duration-1000" [style.width.%]="p.stock_quantity > 100 ? 100 : p.stock_quantity"></div>
+              </div>
+            </div>
+          </td>
+          <td *ngIf="visibleColumns.status" class="px-8 py-7">
+            <span [ngClass]="p.is_active ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'" 
+                  class="px-3 py-1 text-[8px] uppercase font-bold rounded-full border">
+              {{p.is_active ? 'Active' : 'Archived'}}
+            </span>
+          </td>
+          <td class="px-8 py-7 text-right space-x-6">
+            <button (click)="openEditModal(p)" class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 hover:text-bhavtext transition-all font-bold">Refine</button>
+            <button (click)="deleteProduct(p.id)" class="text-[9px] uppercase tracking-[0.3em] text-red-400/50 hover:text-red-500 transition-all font-bold">Deaccession</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden divide-y divide-bhavtext/5">
+      <div *ngFor="let p of filteredProducts" class="p-8 space-y-6">
+        <div class="flex items-center gap-6">
+          <div class="w-24 h-24 shrink-0 aspect-square rounded-2xl overflow-hidden bg-bhavdark/40 border border-bhavtext/10 group/img">
+            <img [src]="api.getMediaUrl(p.image)" (error)="handleImageError($event)" class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110">
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <p class="font-bold text-bhavtext text-lg">{{p.name}}</p>
+              <span *ngIf="p.is_active === 0" class="px-2 py-0.5 bg-red-500/10 text-red-400 text-[7px] uppercase font-bold rounded-full">Archived</span>
+            </div>
+            <p class="text-[9px] text-bhavtext/30 uppercase tracking-[0.3em] mt-1">{{p.category_name}} • {{p.weight}}</p>
+            <div class="flex items-center gap-3 bg-bhavtext/5 px-4 py-2 rounded-xl border border-bhavtext/5 w-fit mt-3">
+              <input type="range" 
+                     [value]="p.spiciness" 
+                     (change)="quickUpdateSpiciness(p, $any($event.target).value)"
+                     min="0" max="5" step="1" 
+                     class="w-20 accent-bhavaccent h-1 cursor-pointer">
+              <span class="text-sm">🌶️</span>
+              <span class="text-[10px] font-bold text-bhavaccent">{{p.spiciness}}</span>
+            </div>
+            <p class="text-lg font-bold text-gold-gradient mt-2">₹{{p.selling_price}}</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <button (click)="openEditModal(p)" class="flex-1 py-4 bg-bhavtext/[0.03] rounded-2xl text-[9px] uppercase tracking-widest font-bold border border-bhavtext/5">Refine</button>
+          <button (click)="deleteProduct(p.id)" class="flex-1 py-4 bg-red-500/5 text-red-400/60 rounded-2xl text-[9px] uppercase tracking-widest font-bold border border-red-500/10">Deaccession</button>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="loading" class="p-24 flex flex-col items-center justify-center">
+      <div class="w-12 h-12 border-2 border-bhavaccent/30 border-t-bhavaccent rounded-full animate-spin"></div>
+      <p class="mt-6 text-[9px] uppercase tracking-[0.5em] text-bhavaccent animate-pulse">Scanning Inventory...</p>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal (Responsive) -->
+  <div *ngIf="showModal" class="fixed inset-0 bg-bhavdark/90 backdrop-blur-xl z-[60] flex items-center justify-center p-4">
+    <div class="bg-bhavdark border border-bhavtext/10 w-full max-w-4xl rounded-[2rem] shadow-2xl overflow-hidden max-h-[95vh] overflow-y-auto custom-scrollbar flex flex-col">
+      <div class="p-8 border-b border-bhavtext/5 flex justify-between items-center bg-bhavdark/20">
+        <div>
+          <h2 class="text-2xl font-playfair font-bold text-bhavtext">{{isEdit ? 'Edit Product' : 'Add Heritage Item'}}</h2>
+        </div>
+        <button (click)="closeModal()" class="w-10 h-10 rounded-full bg-bhavtext/5 flex items-center justify-center text-bhavtext/20 hover:text-bhavtext transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <form (ngSubmit)="saveProduct()" #prodForm="ngForm" class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-6">
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Name</label>
+            <input type="text" name="name" [(ngModel)]="currentProduct.name" required class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+          </div>
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Category</label>
+            <select name="category" [(ngModel)]="currentProduct.category_id" required class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all appearance-none">
+              <option *ngFor="let cat of categories" [value]="cat.id" class="bg-bhavdark">{{cat.name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Original Price (₹)</label>
+            <input type="number" name="orig_price" [(ngModel)]="currentProduct.original_price" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Selling Price (₹)</label>
+            <input type="number" name="sell_price" [(ngModel)]="currentProduct.selling_price" required class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+          </div>
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Stock</label>
+            <input type="number" name="stock" [(ngModel)]="currentProduct.stock" required class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+          </div>
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Weight</label>
+            <input type="text" name="weight" [(ngModel)]="currentProduct.weight" placeholder="e.g. 500g" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+          </div>
+        </div>
+
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 block font-bold">Visibility & Features</label>
+            <div class="flex flex-wrap gap-4">
+              <label class="flex items-center gap-3 cursor-pointer group bg-bhavtext/5 px-6 py-4 rounded-2xl border border-white/5 hover:border-bhavaccent/30 transition-all">
+                <input type="checkbox" name="is_featured" [(ngModel)]="currentProduct.is_featured" class="hidden">
+                <div class="w-6 h-6 rounded-lg border border-white/10 flex items-center justify-center transition-all" [ngClass]="currentProduct.is_featured ? 'bg-bhavaccent border-bhavaccent' : 'bg-transparent'">
+                  <svg *ngIf="currentProduct.is_featured" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-bhavdark" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                </div>
+                <span class="text-[10px] uppercase tracking-widest font-bold" [ngClass]="currentProduct.is_featured ? 'text-bhavtext' : 'text-bhavtext/20'">Featured Product</span>
+              </label>
+
+              <label class="flex items-center gap-3 cursor-pointer group bg-bhavtext/5 px-6 py-4 rounded-2xl border border-white/5 hover:border-bhavaccent/30 transition-all">
+                <input type="checkbox" name="is_active" [(ngModel)]="currentProduct.is_active" class="hidden">
+                <div class="w-6 h-6 rounded-lg border border-white/10 flex items-center justify-center transition-all" [ngClass]="currentProduct.is_active ? 'bg-green-500 border-green-500' : 'bg-transparent'">
+                  <svg *ngIf="currentProduct.is_active" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-bhavtext" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                </div>
+                <span class="text-[10px] uppercase tracking-widest font-bold" [ngClass]="currentProduct.is_active ? 'text-bhavtext' : 'text-bhavtext/20'">Active Status</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-4 block font-bold">Spiciness Level ({{currentProduct.spiciness}})</label>
+            <div class="flex items-center gap-6 bg-bhavtext/5 p-6 rounded-3xl border border-bhavtext/5">
+              <span class="text-2xl opacity-30">😋</span>
+              <input type="range" name="spiciness" [(ngModel)]="currentProduct.spiciness" min="0" max="5" step="1" class="flex-1 accent-bhavaccent h-1.5 rounded-full cursor-pointer appearance-none bg-bhavtext/10">
+              <div class="flex gap-1">
+                <span *ngFor="let i of [1,2,3,4,5]" 
+                      class="text-xl transition-all duration-500"
+                      [class.grayscale]="i > currentProduct.spiciness"
+                      [class.scale-125]="i <= currentProduct.spiciness"
+                      [class.opacity-30]="i > currentProduct.spiciness">
+                  🌶️
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-2 space-y-8">
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavaccent mb-4 block font-bold">Main Product Image (Banner)</label>
+            <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
+              <div class="flex-1 w-full">
+                <input type="text" name="image" [(ngModel)]="currentProduct.image" placeholder="Main Image URL" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-xs">
+              </div>
+              <div class="relative overflow-hidden inline-block w-full md:w-auto">
+                <button type="button" class="w-full bg-bhavaccent text-bhavdark py-3 px-6 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all">
+                  Upload Main
+                </button>
+                <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer">
+              </div>
+            </div>
+            <div *ngIf="currentProduct.image" class="mt-4 w-40 h-40 shrink-0 aspect-square rounded-2xl overflow-hidden border-2 border-bhavaccent/30 shadow-2xl">
+              <img [src]="api.getMediaUrl(currentProduct.image)" (error)="handleImageError($event)" class="w-full h-full object-cover">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavaccent mb-4 block font-bold">Heritage Gallery (Additional Images)</label>
+            <div class="relative overflow-hidden inline-block w-full mb-6">
+              <button type="button" class="w-full border-2 border-dashed border-bhavtext/10 py-8 rounded-[2rem] text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30 hover:border-bhavaccent/50 hover:text-bhavtext transition-all flex flex-col items-center gap-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" /></svg>
+                Select Multiple Images
+              </button>
+              <input type="file" multiple (change)="onMultipleFilesSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer">
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div *ngFor="let img of currentProduct.additional_images; let i = index" class="relative group aspect-square rounded-2xl overflow-hidden border border-bhavtext/5 bg-bhavdark/40 shadow-xl reveal-up" [style.transition-delay]="(i * 0.05) + 's'">
+                <img [src]="api.getMediaUrl(img)" (error)="handleImageError($event)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s]">
+                
+                <!-- Overlay Controls -->
+                <div class="absolute inset-0 bg-bhavdark/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-between p-3">
+                  <div class="flex justify-between items-start">
+                    <span class="bg-bhavaccent text-bhavdark text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-tighter shadow-lg">#{{i + 1}}</span>
+                    <button type="button" (click)="removeImage(i)" class="w-7 h-7 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-bhavtext flex items-center justify-center transition-all">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  </div>
+                  
+                  <div class="flex justify-center gap-2 pb-2">
+                    <button type="button" (click)="moveImage(i, 'up')" [disabled]="i === 0" class="w-9 h-9 rounded-full bg-bhavtext/10 text-bhavtext hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-20 flex items-center justify-center transition-all">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button type="button" (click)="moveImage(i, 'down')" [disabled]="i === currentProduct.additional_images.length - 1" class="w-9 h-9 rounded-full bg-bhavtext/10 text-bhavtext hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-20 flex items-center justify-center transition-all">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-2 pt-8">
+          <button type="submit" class="w-full bg-bhavaccent text-bhavdark py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] hover:opacity-90 transition-all shadow-xl">
+            {{isEdit ? 'Save Changes' : 'Confirm & Add Item'}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

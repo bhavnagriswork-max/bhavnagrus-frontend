@@ -1,0 +1,68 @@
+/* Premium Printing Rules */
+@media print {
+  /* Hide everything on the page */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Show only the report modal and its children */
+  #heritage-report-modal, #heritage-report-modal * {
+    visibility: visible;
+  }
+  
+  /* Positioning for print */
+  #heritage-report-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: white !important;
+    color: black !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Force white background and black text for clarity */
+  .glass-card {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #eee !important;
+    box-shadow: none !important;
+  }
+
+  .text-bhavtext { color: black !important; }
+  .text-bhavaccent { color: #c5a059 !important; }
+  .text-bhavtext\/40 { color: #666 !important; }
+  .bg-bhavaccent\/5 { background: #fdfaf3 !important; }
+  .bg-bhavdark\/40 { background: #f9f9f9 !important; border: 1px solid #eee !important; }
+
+  /* Hide buttons */
+  button {
+    display: none !important;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(197,160,89,0.3);
+  border-radius: 10px;
+}

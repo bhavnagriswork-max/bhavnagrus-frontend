@@ -1,0 +1,129 @@
+<div class="p-8 md:p-12 animate-fade-in">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+    <div>
+      <h3 class="text-bhavaccent uppercase tracking-[0.5em] text-[10px] font-bold mb-3">Manage Categories</h3>
+      <h1 class="text-4xl font-playfair font-bold text-bhavtext tracking-tight">Product <span class="text-bhavtext/20">Categories</span></h1>
+      <p class="text-bhavtext/40 text-xs mt-4 max-w-md leading-relaxed">Add and manage your product categories here.</p>
+    </div>
+    <button (click)="openModal()" class="group relative px-8 py-4 bg-bhavaccent text-bhavdark font-bold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
+      <div class="relative z-10 flex items-center gap-3 text-[10px] uppercase tracking-widest">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        Add New Category
+      </div>
+      <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div *ngFor="let i of [1,2,3]" class="glass-card p-8 rounded-[2.5rem] animate-pulse">
+      <div class="w-20 h-20 rounded-2xl bg-bhavtext/5 mb-6"></div>
+      <div class="h-6 w-1/2 bg-bhavtext/5 rounded-lg mb-4"></div>
+      <div class="h-4 w-full bg-bhavtext/5 rounded-lg"></div>
+    </div>
+  </div>
+
+  <!-- Categories Grid -->
+  <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div *ngFor="let cat of categories" class="glass-card p-8 rounded-[2.5rem] group hover:-translate-y-2 transition-all duration-700">
+      <div class="flex justify-between items-start mb-8">
+        <div class="w-20 h-20 rounded-2xl bg-bhavdark/40 border border-bhavtext/5 overflow-hidden shadow-2xl group-hover:border-bhavaccent/30 transition-colors">
+          <img [src]="api.getMediaUrl(cat.image) || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+        </div>
+        <div class="flex items-center gap-2">
+           <button (click)="editCategory(cat)" class="p-2.5 bg-bhavtext/5 border border-bhavtext/5 rounded-xl text-bhavtext/40 hover:text-bhavaccent hover:border-bhavaccent/20 transition-all">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+             </svg>
+           </button>
+           <button (click)="deleteCategory(cat.id)" class="p-2.5 bg-red-500/5 border border-red-500/10 rounded-xl text-red-400 hover:bg-red-500 hover:text-bhavtext transition-all">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+             </svg>
+           </button>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="w-1.5 h-1.5 rounded-full" [ngClass]="cat.is_active ? 'bg-green-500' : 'bg-red-500'"></span>
+          <p class="text-[9px] uppercase tracking-widest font-bold" [ngClass]="cat.is_active ? 'text-green-500/60' : 'text-red-500/60'">
+            {{cat.is_active ? 'Active' : 'Inactive'}}
+          </p>
+        </div>
+        <h2 class="text-2xl font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors">{{cat.name}}</h2>
+        <p class="text-bhavtext/40 text-xs leading-relaxed line-clamp-2">{{cat.description || 'No descriptive metadata available for this category.'}}</p>
+        <div class="pt-4 border-t border-bhavtext/5 flex items-center justify-between">
+           <span class="text-[9px] text-bhavtext/20 uppercase tracking-[0.2em]">Slug: {{cat.slug}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && categories.length === 0" class="text-center py-40 glass-card rounded-[4rem]">
+     <p class="text-bhavtext/20 uppercase tracking-widest text-xs">No Categories Documented</p>
+  </div>
+</div>
+
+<!-- Refinement Modal -->
+<div *ngIf="isModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-6">
+  <div class="absolute inset-0 bg-bhavdark/90 backdrop-blur-md" (click)="closeModal()"></div>
+  <div class="relative w-full max-w-xl bg-bhavdark border border-bhavtext/10 rounded-[3rem] shadow-2xl overflow-hidden animate-notification">
+    <div class="px-10 py-8 border-b border-bhavtext/5 flex justify-between items-center bg-bhavtext/[0.02]">
+      <div>
+        <h2 class="text-2xl font-playfair font-bold text-bhavtext">{{editingCategory ? 'Edit' : 'Add'}} Category</h2>
+        <p class="text-bhavtext/40 text-[10px] uppercase tracking-widest mt-1">Category Details</p>
+      </div>
+      <button (click)="closeModal()" class="p-3 bg-bhavtext/5 rounded-full text-bhavtext/40 hover:text-bhavtext transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    
+    <form (ngSubmit)="saveCategory()" class="p-10 space-y-8">
+      <div class="grid grid-cols-2 gap-8">
+        <div class="relative group">
+          <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-3 block font-bold">Category Name</label>
+          <input type="text" [(ngModel)]="categoryData.name" name="cat_name" required
+            class="w-full bg-bhavtext/[0.03] border-b border-bhavtext/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+        </div>
+        
+        <div class="relative group">
+          <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-3 block font-bold">Slug (URL Name)</label>
+          <input type="text" [(ngModel)]="categoryData.slug" name="cat_slug" placeholder="e.g. signature-namkeen"
+            class="w-full bg-bhavtext/[0.03] border-b border-bhavtext/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+        </div>
+      </div>
+
+      <div class="relative group">
+        <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-3 block font-bold">Description</label>
+        <textarea [(ngModel)]="categoryData.description" name="cat_desc" rows="3"
+          class="w-full bg-bhavtext/[0.03] border-b border-bhavtext/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all resize-none"></textarea>
+      </div>
+
+      <div class="space-y-4">
+        <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-3 block font-bold">Visual Asset</label>
+        <div class="flex items-center gap-8 p-6 bg-bhavtext/[0.02] border border-bhavtext/5 rounded-2xl">
+          <div class="w-20 h-20 rounded-2xl bg-bhavdark/40 border border-bhavtext/10 overflow-hidden shadow-xl shrink-0">
+            <img [src]="api.getMediaUrl(categoryData.image) || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover">
+          </div>
+          <div class="relative flex-1">
+            <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+            <div class="w-full px-6 py-4 bg-bhavtext/5 border border-bhavtext/10 rounded-xl text-bhavtext/40 text-[10px] uppercase tracking-widest font-bold text-center group-hover:bg-bhavtext/10 transition-all">
+              Update Asset
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-6">
+        <button type="submit" class="w-full py-6 bg-bhavaccent text-bhavdark font-bold uppercase tracking-[0.2em] text-[10px] rounded-full shadow-2xl hover:bg-white transition-all transform active:scale-95">
+          {{editingCategory ? 'Save Changes' : 'Create Category'}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<div class="min-h-screen w-full flex relative overflow-hidden bg-bhavdark">
+  
+  <!-- Full Screen Cinematic Background -->
+  <div class="absolute inset-0 z-0">
+    <!-- Image with a slow scale/pan animation for premium feel -->
+    <img [src]="api.getMediaUrl(loginImage)" 
+         class="w-full h-full object-cover transform scale-105 transition-transform duration-[20s] ease-out hover:scale-110" 
+         alt="Bhavnagris Heritage">
+    
+    <!-- Sophisticated Overlay Gradients -->
+    <!-- Darkens the left side for the massive text, and the top for the header -->
+    <div class="absolute inset-0 bg-gradient-to-r from-bhavdark via-bhavdark/70 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-bhavdark via-transparent to-bhavdark/80 opacity-90"></div>
+    <div class="absolute inset-0 bg-bhavaccent/10 mix-blend-overlay"></div>
+  </div>
+
+  <!-- Left Side: Massive Typography (Hidden on smaller screens) -->
+  <div class="hidden lg:flex flex-col justify-center relative z-10 w-[55%] pl-20 xl:pl-32 pr-10 pt-20">
+    <h1 class="text-[6rem] xl:text-[8rem] font-playfair font-bold text-bhavtext leading-[0.95] drop-shadow-2xl tracking-tight">
+      Taste <br>The <span class="text-bhavaccent italic drop-shadow-[0_0_30px_rgba(197,160,89,0.5)]">Legacy</span>
+    </h1>
+    <div class="w-32 h-1 bg-bhavaccent mt-12 mb-8 shadow-[0_0_15px_rgba(197,160,89,0.6)]"></div>
+    <p class="text-2xl text-bhavtext/70 font-light max-w-xl leading-relaxed">
+      Step into the royal courts of Bhavnagar. Unlock your access to exclusive collections and seamless order management.
+    </p>
+  </div>
+
+  <!-- Right Side: The Ultra-Sleek Login Panel -->
+  <div class="w-full lg:w-[45%] min-h-screen flex items-center justify-center relative z-10 pt-20">
+    
+    <!-- Full Height Frosted Glass Backdrop for the right panel -->
+    <div class="absolute inset-0 bg-bhavdark/80 backdrop-blur-3xl border-l border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"></div>
+    
+    <!-- Form Content -->
+    <div class="w-full max-w-md relative z-20 px-8 sm:px-12 py-12 animate-fade-in">
+      
+      <div class="mb-14 text-center lg:text-left">
+        <h2 class="font-playfair text-4xl font-bold text-bhavtext mb-3">Welcome Back</h2>
+        <h3 class="text-bhavaccent font-bold tracking-[0.4em] uppercase text-[10px]">Your Royal Account</h3>
+      </div>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="space-y-8">
+        
+        <!-- Minimalist Email Input -->
+        <div class="relative group">
+          <input 
+            type="text" 
+            id="email" 
+            name="email"
+            [(ngModel)]="credentials.email" 
+            required 
+            class="w-full bg-transparent border-b border-white/20 px-0 py-4 text-bhavtext placeholder-transparent focus:outline-none focus:border-bhavaccent transition-all duration-300 text-lg peer"
+            placeholder="Email or Mobile">
+          <label for="email" class="absolute left-0 top-4 text-bhavtext/40 text-lg cursor-text transition-all duration-300 peer-focus:-top-4 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-bhavaccent peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest peer-valid:text-bhavtext/60">
+            Email or Mobile
+          </label>
+        </div>
+
+        <!-- Minimalist Password Input -->
+        <div class="relative group">
+          <input 
+            type="password" 
+            id="password" 
+            name="password"
+            [(ngModel)]="credentials.password" 
+            required 
+            class="w-full bg-transparent border-b border-white/20 px-0 py-4 text-bhavtext placeholder-transparent focus:outline-none focus:border-bhavaccent transition-all duration-300 text-lg peer"
+            placeholder="Password">
+          <label for="password" class="absolute left-0 top-4 text-bhavtext/40 text-lg cursor-text transition-all duration-300 peer-focus:-top-4 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-bhavaccent peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest peer-valid:text-bhavtext/60">
+            Secret Key
+          </label>
+          <a href="#" class="absolute right-0 top-6 text-[9px] uppercase tracking-widest text-bhavtext/30 hover:text-bhavaccent transition-colors">Forgot?</a>
+        </div>
+
+        <!-- Login Button -->
+        <div class="pt-8">
+          <button 
+            type="submit" 
+            [disabled]="!loginForm.form.valid"
+            class="w-full relative group overflow-hidden border border-bhavaccent bg-bhavaccent/10 py-5 rounded-none text-bhavaccent font-bold uppercase tracking-[0.3em] text-xs transition-all duration-500 hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-30 disabled:cursor-not-allowed">
+            <span class="relative z-10 hover:text-black transition-colors duration-500">Enter The Court</span>
+            <div class="absolute inset-0 bg-bhavaccent translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-0"></div>
+          </button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center pt-8">
+          <p class="text-[10px] uppercase tracking-widest text-bhavtext/30">
+            New to the family? 
+            <button type="button" (click)="showRegisterModal = true" class="text-bhavtext hover:text-bhavaccent transition-colors ml-2 font-bold cursor-pointer bg-transparent border-none p-0 uppercase tracking-widest border-b border-white/30 hover:border-bhavaccent">Create Account</button>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal (Ultra Minimal) -->
+  <div *ngIf="showRegisterModal" class="fixed inset-0 z-[70] flex items-stretch justify-end">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-bhavdark/60 backdrop-blur-sm" (click)="showRegisterModal = false"></div>
+    
+    <!-- Sliding Panel -->
+    <div class="w-full max-w-lg bg-bhavdark/90 backdrop-blur-3xl border-l border-white/10 relative z-10 animate-slide-in-right p-8 md:p-16 h-full overflow-y-auto">
+      
+      <button (click)="showRegisterModal = false" class="absolute top-8 right-8 text-bhavtext/30 hover:text-bhavtext transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+
+      <div class="mt-12 mb-16">
+        <h2 class="font-playfair text-4xl font-bold text-bhavtext mb-2">Join Us</h2>
+        <p class="text-bhavaccent font-bold tracking-[0.3em] uppercase text-[10px]">Begin your royal journey</p>
+      </div>
+
+      <form (ngSubmit)="onRegister()" #regForm="ngForm" class="space-y-8">
+        
+        <div class="relative group">
+          <input type="text" name="regName" [(ngModel)]="regData.name" required class="w-full bg-transparent border-b border-white/20 px-0 py-3 text-bhavtext placeholder-transparent focus:outline-none focus:border-bhavaccent transition-all duration-300 text-lg peer" placeholder="Full Name">
+          <label class="absolute left-0 top-3 text-bhavtext/40 text-lg transition-all duration-300 peer-focus:-top-4 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-bhavaccent peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest peer-valid:text-bhavtext/60">Full Name</label>
+        </div>
+
+        <div class="relative group">
+          <input type="text" name="regMobile" [(ngModel)]="regData.mobile" required class="w-full bg-transparent border-b border-white/20 px-0 py-3 text-bhavtext placeholder-transparent focus:outline-none focus:border-bhavaccent transition-all duration-300 text-lg peer" placeholder="Mobile">
+          <label class="absolute left-0 top-3 text-bhavtext/40 text-lg transition-all duration-300 peer-focus:-top-4 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-bhavaccent peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest peer-valid:text-bhavtext/60">Mobile Number</label>
+        </div>
+
+        <div class="relative group">
+          <input type="email" name="regEmail" [(ngModel)]="regData.email" required class="w-full bg-transparent border-b border-white/20 px-0 py-3 text-bhavtext placeholder-transparent focus:outline-none focus:border-bhavaccent transition-all duration-300 text-lg peer" placeholder="Email">
+          <label class="absolute left-0 top-3 text-bhavtext/40 text-lg transition-all duration-300 peer-focus:-top-4 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-bhavaccent peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest peer-valid:text-bhavtext/60">Email Address</label>
+        </div>
+
+        <div class="relative group">
+          <input type="password" name="regPass" [(ngModel)]="regData.password" required class="w-full bg-transparent border-b border-white/20 px-0 py-3 text-bhavtext placeholder-transparent focus:outline-none focus:border-bhavaccent transition-all duration-300 text-lg peer" placeholder="Password">
+          <label class="absolute left-0 top-3 text-bhavtext/40 text-lg transition-all duration-300 peer-focus:-top-4 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-bhavaccent peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest peer-valid:text-bhavtext/60">Secret Key</label>
+        </div>
+        
+        <div class="pt-8">
+          <button type="submit" [disabled]="!regForm.form.valid" class="w-full bg-bhavtext text-bhavdark py-5 font-bold uppercase tracking-[0.3em] text-[10px] hover:bg-bhavaccent hover:text-black transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed">
+            Create Account
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

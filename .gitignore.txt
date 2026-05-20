@@ -1,0 +1,12 @@
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+.angular/
+frontend/.angular/
+
+dist/
+temp-frontend/dist/
+
+*.log
+.env

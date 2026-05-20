@@ -1,0 +1,123 @@
+<div class="p-4 md:p-8">
+  <header class="mb-12">
+      <h3 class="text-bhavaccent uppercase tracking-[0.4em] text-[10px] font-bold mb-3">Administration</h3>
+      <h1 class="text-3xl lg:text-4xl font-playfair font-bold text-bhavtext uppercase tracking-tight">
+          User <span class="text-bhavtext/30 italic">Registry</span>
+      </h1>
+  </header>
+
+  <!-- Users Table -->
+  <div class="bg-bhavdark/40 border border-bhavtext/5 rounded-3xl overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+              <thead>
+                  <tr class="border-b border-bhavtext/5 bg-bhavtext/[0.02]">
+                      <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext/30">User Details</th>
+                      <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext/30">Contact</th>
+                      <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext/30">Role</th>
+                      <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext/30">Joined</th>
+                      <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext/30">Activity</th>
+                      <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] text-bhavtext/30 text-right">Status & Actions</th>
+                  </tr>
+              </thead>
+              <tbody class="divide-y divide-bhavtext/5">
+                  <tr *ngFor="let user of users; let i = index" class="group hover:bg-bhavtext/[0.02] transition-all duration-300 reveal-up" [style.transition-delay]="(i * 0.05) + 's'">
+                      <td class="px-8 py-7">
+                          <div class="flex items-center gap-4">
+                              <div class="w-10 h-10 rounded-full bg-bhavaccent/10 flex items-center justify-center border border-bhavaccent/20 text-bhavaccent font-bold group-hover:scale-110 transition-transform">
+                                  {{user.name.charAt(0).toUpperCase()}}
+                              </div>
+                              <div>
+                                  <div class="text-bhavtext font-bold tracking-wide group-hover:text-bhavaccent transition-colors text-sm">{{user.name}}</div>
+                                  <div class="text-[10px] text-bhavtext/30 mt-0.5 truncate max-w-[200px]">{{user.email}}</div>
+                              </div>
+                          </div>
+                      </td>
+                      <td class="px-8 py-7">
+                          <div class="text-[11px] text-bhavtext/60 tracking-wider group-hover:text-bhavtext transition-colors">{{user.mobile}}</div>
+                          <div class="text-[9px] text-bhavtext/20 mt-1 uppercase tracking-widest truncate max-w-[150px]">{{user.address || 'No address'}}</div>
+                      </td>
+                      <td class="px-8 py-7">
+                          <span class="px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all"
+                              [ngClass]="user.role === 'admin' ? 'bg-bhavaccent text-bhavdark shadow-[0_0_15px_rgba(197,160,89,0.3)]' : 'bg-bhavtext/[0.03] text-bhavtext/40 border border-bhavtext/[0.08]'">
+                              {{user.role}}
+                          </span>
+                      </td>
+                      <td class="px-8 py-7 text-[11px] text-bhavtext/40 tracking-wider">
+                          {{formatDate(user.created_at)}}
+                      </td>
+                      <td class="px-8 py-7 text-[10px] tracking-wider">
+                          <div class="flex flex-col gap-1.5">
+                              <div class="flex items-center gap-2">
+                                  <span class="text-bhavtext/30 uppercase text-[8px] font-bold w-12">Login</span>
+                                  <span class="text-bhavtext/60">{{user.last_login ? formatDate(user.last_login) : 'Never'}}</span>
+                              </div>
+                              <div class="flex items-center gap-2">
+                                  <span class="text-bhavtext/30 uppercase text-[8px] font-bold w-12">Visit</span>
+                                  <span class="text-bhavtext/60">{{user.last_visited ? formatDate(user.last_visited) : 'No Record'}}</span>
+                              </div>
+                          </div>
+                      </td>
+                      <td class="px-8 py-7 text-right">
+                          <div class="flex flex-col items-end gap-3">
+                              <div class="flex items-center gap-2">
+                                  <span class="w-1.5 h-1.5 rounded-full animate-pulse" [ngClass]="user.status ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,44,44,0.5)]'"></span>
+                                  <span class="text-[10px] font-bold uppercase tracking-widest" [ngClass]="user.status ? 'text-green-500/60' : 'text-red-500/60'">
+                                      {{user.status ? 'Active' : 'Suspended'}}
+                                  </span>
+                              </div>
+                              <button (click)="openResetModal(user)" class="text-[9px] uppercase tracking-[0.2em] font-bold text-bhavtext/20 hover:text-bhavaccent transition-all hover:tracking-[0.3em]">
+                                  Reset Key
+                              </button>
+                          </div>
+                      </td>
+                  </tr>
+
+                  <!-- Empty State -->
+                  <tr *ngIf="users.length === 0 && !loading">
+                      <td colspan="6" class="px-8 py-20 text-center">
+                          <div class="text-bhavtext/20 text-xs uppercase tracking-[0.3em]">No users found in the database</div>
+                      </td>
+                  </tr>
+
+                  <!-- Loading State -->
+                  <tr *ngIf="loading">
+                      <td colspan="6" class="px-8 py-20 text-center">
+                          <div class="inline-block w-8 h-8 border-2 border-bhavaccent border-t-transparent rounded-full animate-spin"></div>
+                          <div class="mt-4 text-[10px] text-bhavaccent uppercase tracking-widest animate-pulse">Loading Registry...</div>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+
+  <!-- Reset Password Modal -->
+  <div *ngIf="showResetModal" class="fixed inset-0 bg-bhavdark/90 backdrop-blur-2xl z-[60] flex items-center justify-center p-6">
+    <div class="bg-bhavdark border border-bhavtext/10 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden relative p-12">
+      <button (click)="showResetModal = false" class="absolute top-8 right-8 text-bhavtext/20 hover:text-bhavtext transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+
+      <div class="text-center mb-10">
+        <h3 class="text-bhavaccent uppercase tracking-[0.3em] text-[9px] font-bold mb-3">Security Override</h3>
+        <h2 class="font-playfair text-2xl font-bold text-bhavtext tracking-widest uppercase">Reset <span class="text-bhavtext/30">{{selectedUser?.name}}'s</span> Key</h2>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">New Secret Key</label>
+          <input type="password" [(ngModel)]="resetPasswordData.newPassword" placeholder="••••••••" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm">
+        </div>
+        <div>
+          <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Confirm Secret Key</label>
+          <input type="password" [(ngModel)]="resetPasswordData.confirmPassword" placeholder="••••••••" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm">
+        </div>
+        
+        <button (click)="confirmResetPassword()" class="w-full bg-bhavtext text-bhavdark py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-bhavaccent transition-all shadow-xl mt-4">
+          Update User Access
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

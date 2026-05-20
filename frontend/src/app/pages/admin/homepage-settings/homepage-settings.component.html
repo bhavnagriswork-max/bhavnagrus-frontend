@@ -1,0 +1,132 @@
+<div class="p-4 md:p-8">
+  <header class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div>
+      <h1 class="text-3xl lg:text-4xl font-playfair font-bold text-bhavtext mb-2">Storefront Customization</h1>
+      <p class="text-bhavtext/40 text-[10px] uppercase tracking-[0.4em]">Curate the Premium Digital Experience</p>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="px-4 py-2 bg-bhavaccent/10 border border-bhavaccent/20 rounded-full flex items-center gap-2">
+        <div class="w-1.5 h-1.5 bg-bhavaccent rounded-full"></div>
+        <span class="text-[9px] text-bhavaccent uppercase tracking-widest font-bold">Live Preview Mode</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-5xl space-y-12 pb-20">
+    
+    <!-- HERO ORCHESTRATION -->
+    <section>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-bhavaccent/10 border border-bhavaccent/20 flex items-center justify-center text-bhavaccent shadow-2xl shadow-bhavaccent/10">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
+        </div>
+        <h2 class="text-xl font-playfair font-bold text-bhavtext">Hero Orchestration</h2>
+      </div>
+
+      <div class="glass-card p-8 md:p-12 rounded-[2.5rem] border border-bhavtext/5">
+        <div class="space-y-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-3 block font-bold">Heritage Badge</label>
+              <input type="text" [ngModel]="getVal('hero_badge')" (ngModelChange)="setVal('hero_badge', $event)" placeholder="ESTD. 1948" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-3 block font-bold">Call to Action Label</label>
+              <input type="text" [ngModel]="getVal('hero_cta_text')" (ngModelChange)="setVal('hero_cta_text', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-3 block font-bold">Epic Heading (HTML Supported)</label>
+            <input type="text" [ngModel]="getVal('hero_title')" (ngModelChange)="setVal('hero_title', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-lg font-playfair font-bold">
+            <p class="text-[9px] text-bhavtext/20 mt-3 uppercase tracking-widest font-bold italic">Inject &lt;br/&gt; for dramatic line breaks.</p>
+          </div>
+
+          <div>
+            <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-3 block font-bold">Supporting Narrative</label>
+            <textarea [ngModel]="getVal('hero_subtitle')" (ngModelChange)="setVal('hero_subtitle', $event)" rows="3" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium resize-none leading-relaxed"></textarea>
+          </div>
+
+          <div class="pt-6 border-t border-bhavtext/5">
+            <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-6 block font-bold">Hero Cinematic Asset</label>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              <div class="lg:col-span-2 space-y-4">
+                <div class="relative">
+                  <input type="file" (change)="uploadHeroImage($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                  <div class="w-full bg-bhavtext/5 border-2 border-dashed border-bhavtext/10 rounded-2xl px-8 py-10 text-center hover:border-bhavaccent/40 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-bhavaccent/40 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <p class="text-[10px] text-bhavtext/30 uppercase tracking-[0.2em] font-bold">Click or Drag to Upload Master Visual</p>
+                  </div>
+                </div>
+                <input type="text" [ngModel]="getVal('hero_image')" (ngModelChange)="setVal('hero_image', $event)" placeholder="Direct Remote URL Override" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-xs font-mono">
+              </div>
+              <div class="lg:col-span-1">
+                <div *ngIf="getVal('hero_image')" class="aspect-video lg:aspect-square rounded-2xl border border-bhavtext/10 overflow-hidden shadow-2xl relative group">
+                  <img [src]="getVal('hero_image')" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Preview">
+                  <div class="absolute inset-0 bg-gradient-to-t from-bhavdark/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <span class="text-[8px] text-bhavtext uppercase tracking-widest font-bold">Current Active Asset</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION & PHILOSOPHY -->
+    <section>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-bhavaccent/10 border border-bhavaccent/20 flex items-center justify-center text-bhavaccent">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+        </div>
+        <h2 class="text-xl font-playfair font-bold text-bhavtext">Mission & Philosophy</h2>
+      </div>
+
+      <div class="glass-card p-8 md:p-12 rounded-[2.5rem] border border-bhavtext/5">
+        <div class="space-y-10">
+          <div>
+            <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-3 block font-bold">Philosophy Heading</label>
+            <input type="text" [ngModel]="getVal('mission_title')" (ngModelChange)="setVal('mission_title', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+          </div>
+          <div>
+            <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-3 block font-bold">Core Narrative</label>
+            <textarea [ngModel]="getVal('mission_subtitle')" (ngModelChange)="setVal('mission_subtitle', $event)" rows="4" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium resize-none leading-relaxed"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST INFRASTRUCTURE -->
+    <section>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-bhavaccent/10 border border-bhavaccent/20 flex items-center justify-center text-bhavaccent">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+        </div>
+        <h2 class="text-xl font-playfair font-bold text-bhavtext">Trust Pillars</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div *ngFor="let i of [1,2,3,4]" class="glass-card p-8 rounded-[2.5rem] border border-bhavtext/5 group">
+          <div class="flex justify-between items-center mb-6">
+            <span class="text-[10px] text-bhavaccent font-bold uppercase tracking-widest bg-bhavaccent/10 px-3 py-1 rounded-full">Pillar 0{{i}}</span>
+          </div>
+          <div class="space-y-4">
+            <input type="text" [ngModel]="getVal('trust_' + i + '_title')" (ngModelChange)="setVal('trust_' + i + '_title', $event)" placeholder="Core Title" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-6 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-bold">
+            <input type="text" [ngModel]="getVal('trust_' + i + '_subtitle')" (ngModelChange)="setVal('trust_' + i + '_subtitle', $event)" placeholder="Detailed Value Proposition" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-6 py-4 text-bhavtext/40 focus:outline-none focus:border-bhavaccent transition-all text-[11px] font-medium">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Commitment Footer -->
+    <div class="flex flex-col md:flex-row gap-6 pt-12 border-t border-bhavtext/5">
+      <button (click)="saveSettings()" class="btn-premium btn-gold px-16 py-6 text-[11px] flex-1 lg:flex-none">
+        Publish Storefront
+      </button>
+      <button (click)="fetchSettings()" class="btn-premium btn-outline px-16 py-6 text-[11px] flex-1 lg:flex-none">
+        Discard Edits
+      </button>
+    </div>
+  </div>
+</div>

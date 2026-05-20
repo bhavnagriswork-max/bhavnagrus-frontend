@@ -1,0 +1,322 @@
+<div class="p-4 md:p-8">
+  <header class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div>
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-[9px] px-2 py-0.5 bg-bhavaccent/20 text-bhavaccent rounded-full font-bold uppercase tracking-widest border border-bhavaccent/30">Master Artist</span>
+        <span class="text-[9px] px-2 py-0.5 bg-white/5 text-bhavtext/40 rounded-full font-bold uppercase tracking-widest border border-white/10">Best Kalakari</span>
+      </div>
+      <h1 class="text-3xl lg:text-4xl font-playfair font-bold text-bhavtext">Namaste, {{api.getUser()?.name}}</h1>
+      <p class="text-bhavtext/40 text-[10px] uppercase tracking-[0.4em] mt-1">Admin Dashboard • Sales Overview</p>
+    </div>
+    <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 w-full lg:w-auto">
+      <!-- Date Filter -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-bhavdark/40 border border-bhavtext/10 rounded-2xl p-3 sm:p-2 w-full sm:w-auto">
+        <div class="flex items-center justify-between gap-2 px-3 py-1.5 sm:py-0 border-b border-bhavtext/5 sm:border-none">
+          <label class="text-[8px] uppercase tracking-widest text-bhavtext/30 font-bold">From</label>
+          <input type="date" [(ngModel)]="dateRange.startDate" class="bg-transparent text-[10px] text-bhavtext focus:outline-none [color-scheme:dark]">
+        </div>
+        <div class="hidden sm:block w-px h-4 bg-bhavtext/10"></div>
+        <div class="flex items-center justify-between gap-2 px-3 py-1.5 sm:py-0 border-b border-bhavtext/5 sm:border-none">
+          <label class="text-[8px] uppercase tracking-widest text-bhavtext/30 font-bold">To</label>
+          <input type="date" [(ngModel)]="dateRange.endDate" class="bg-transparent text-[10px] text-bhavtext focus:outline-none [color-scheme:dark]">
+        </div>
+        <div class="flex items-center gap-2 mt-2 sm:mt-0 px-3 sm:px-0">
+          <button (click)="applyFilter()" class="flex-1 sm:flex-none px-4 py-2.5 sm:py-2 bg-bhavaccent text-bhavdark rounded-xl text-[9px] font-bold uppercase tracking-widest hover:brightness-110 transition-all text-center">Apply</button>
+          <button *ngIf="dateRange.startDate" (click)="clearFilter()" class="p-2 text-bhavtext/30 hover:text-bhavaccent transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      </div>
+
+      <button (click)="generateReport()" class="flex items-center justify-center gap-3 px-6 py-3 bg-bhavaccent/10 border border-bhavaccent/30 text-bhavaccent rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-bhavaccent hover:text-bhavdark transition-all shadow-xl shadow-bhavaccent/20 group w-full lg:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        Get Full Report
+      </button>
+    </div>
+  </header>
+
+  <!-- TODAY'S HIGHLIGHT -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="glass-card p-6 md:p-8 rounded-[2rem] border border-bhavaccent/20 bg-bhavaccent/5 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-bhavaccent/5 blur-[60px]"></div>
+      <div class="relative z-10 flex flex-col gap-2">
+        <p class="text-bhavaccent text-[10px] uppercase tracking-[0.3em] font-bold">Today's Revenue</p>
+        <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold text-bhavtext tracking-tight">₹{{stats?.todayRevenue || 0}}</h3>
+        <div class="flex items-center gap-4 mt-1">
+          <span class="px-3 py-1 bg-bhavaccent/20 rounded-full text-[9px] text-bhavaccent font-bold uppercase tracking-widest">{{stats?.todayOrders || 0}} Orders Today</span>
+        </div>
+      </div>
+    </div>
+    <div class="glass-card p-6 md:p-8 rounded-[2rem] border border-bhavtext/5 relative overflow-hidden">
+      <div class="relative z-10 flex flex-col gap-2">
+        <p class="text-bhavtext/40 text-[10px] uppercase tracking-[0.3em] font-bold">This Month</p>
+        <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold text-bhavtext tracking-tight">₹{{stats?.monthRevenue || 0}}</h3>
+        <div class="flex items-center gap-4 mt-1">
+          <span class="px-3 py-1 bg-bhavtext/5 rounded-full text-[9px] text-bhavtext/40 font-bold uppercase tracking-widest">{{stats?.monthOrders || 0}} Orders This Month</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN STATS GRID -->
+  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+    <div class="glass-card p-6 rounded-[1.5rem] text-center group hover:border-bhavaccent/20 border border-transparent transition-all">
+      <p class="text-4xl font-bold text-gold-gradient mb-1">₹{{stats?.totalRevenue || 0}}</p>
+      <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest font-bold">Total Revenue</p>
+    </div>
+    <div class="glass-card p-6 rounded-[1.5rem] text-center group hover:border-white/10 border border-transparent transition-all">
+      <p class="text-4xl font-bold text-bhavtext mb-1">{{stats?.totalOrders || 0}}</p>
+      <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest font-bold">Total Orders</p>
+    </div>
+    <div class="glass-card p-6 rounded-[1.5rem] text-center group hover:border-yellow-500/20 border border-transparent transition-all">
+      <p class="text-4xl font-bold text-yellow-500 mb-1">{{stats?.pendingOrders || 0}}</p>
+      <p class="text-[9px] text-yellow-500/40 uppercase tracking-widest font-bold">Pending</p>
+    </div>
+    <div class="glass-card p-6 rounded-[1.5rem] text-center group hover:border-blue-500/20 border border-transparent transition-all">
+      <p class="text-4xl font-bold text-blue-400 mb-1">{{stats?.processingOrders || 0}}</p>
+      <p class="text-[9px] text-blue-400/40 uppercase tracking-widest font-bold">Processing</p>
+    </div>
+    <div class="glass-card p-6 rounded-[1.5rem] text-center group hover:border-green-500/20 border border-transparent transition-all">
+      <p class="text-4xl font-bold text-green-500 mb-1">{{stats?.deliveredOrders || 0}}</p>
+      <p class="text-[9px] text-green-500/40 uppercase tracking-widest font-bold">Delivered</p>
+    </div>
+    <div class="glass-card p-6 rounded-[1.5rem] text-center group hover:border-red-500/20 border border-transparent transition-all">
+      <p class="text-4xl font-bold text-red-400 mb-1">{{stats?.cancelledOrders || 0}}</p>
+      <p class="text-[9px] text-red-400/40 uppercase tracking-widest font-bold">Cancelled</p>
+    </div>
+  </div>
+
+  <!-- SECONDARY STATS ROW -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <!-- Customers -->
+    <div class="glass-card p-6 rounded-[1.5rem] flex items-center gap-6">
+      <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-bhavtext">{{stats?.totalCustomers || 0}}</p>
+        <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest font-bold">Registered Customers</p>
+      </div>
+    </div>
+    <!-- Products -->
+    <div class="glass-card p-6 rounded-[1.5rem] flex items-center gap-6">
+      <div class="w-14 h-14 rounded-2xl bg-bhavaccent/10 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bhavaccent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-bhavtext">{{stats?.totalProducts || 0}}</p>
+        <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest font-bold">Products in Store</p>
+      </div>
+    </div>
+    <!-- Payment Split -->
+    <div class="glass-card p-6 rounded-[1.5rem]">
+      <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest font-bold mb-4">Payment Methods</p>
+      <div class="flex items-center gap-4">
+        <div class="flex-1">
+          <div class="flex justify-between mb-2">
+            <span class="text-[9px] text-bhavtext/50 font-bold uppercase">COD</span>
+            <span class="text-xs font-bold text-bhavtext">{{stats?.codOrders || 0}}</span>
+          </div>
+          <div class="h-2 bg-bhavtext/5 rounded-full overflow-hidden">
+            <div class="h-full bg-bhavaccent rounded-full transition-all duration-1000" [style.width.%]="stats?.totalOrders ? (stats.codOrders / stats.totalOrders * 100) : 0"></div>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="flex justify-between mb-2">
+            <span class="text-[9px] text-bhavtext/50 font-bold uppercase">Online</span>
+            <span class="text-xs font-bold text-bhavtext">{{stats?.onlineOrders || 0}}</span>
+          </div>
+          <div class="h-2 bg-bhavtext/5 rounded-full overflow-hidden">
+            <div class="h-full bg-green-500 rounded-full transition-all duration-1000" [style.width.%]="stats?.totalOrders ? (stats.onlineOrders / stats.totalOrders * 100) : 0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY CHART + TOP PRODUCTS -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Weekly Activity -->
+    <div class="glass-card p-8 rounded-[2rem] border border-bhavtext/5">
+      <h3 class="text-sm font-bold uppercase tracking-widest text-bhavtext/50 mb-8">Last 7 Days Activity</h3>
+      <div class="flex items-end gap-3 h-40">
+        <div *ngFor="let day of stats?.weeklyData" class="flex-1 flex flex-col items-center gap-2">
+          <span class="text-[9px] text-bhavaccent font-bold">{{day.count}}</span>
+          <div class="w-full bg-bhavaccent/20 rounded-t-lg transition-all duration-700 hover:bg-bhavaccent/40" 
+               [style.height.%]="getBarHeight(day.count)">
+          </div>
+          <span class="text-[8px] text-bhavtext/20 font-bold">{{formatDay(day.date)}}</span>
+        </div>
+        <div *ngIf="!stats?.weeklyData?.length" class="flex-1 text-center py-16">
+          <p class="text-bhavtext/20 text-xs">No data available</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Selling Products -->
+    <div class="glass-card p-8 rounded-[2rem] border border-bhavtext/5">
+      <h3 class="text-sm font-bold uppercase tracking-widest text-bhavtext/50 mb-8">Top Selling Products</h3>
+      <div class="space-y-4">
+        <div *ngFor="let product of stats?.topProducts; let i = index" class="flex items-center gap-4 p-3 rounded-xl hover:bg-bhavtext/5 transition-all group">
+          <span class="text-bhavaccent font-bold text-lg w-6">{{i + 1}}</span>
+          <div class="w-10 h-10 rounded-xl bg-bhavdark/40 border border-bhavtext/5 overflow-hidden shrink-0">
+            <img [src]="product.image || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-bhavtext truncate group-hover:text-bhavaccent transition-colors">{{product.name}}</p>
+            <p class="text-[9px] text-bhavtext/30 font-bold">{{product.total_sold}} sold • ₹{{product.revenue}}</p>
+          </div>
+        </div>
+        <div *ngIf="!stats?.topProducts?.length" class="text-center py-10">
+          <p class="text-bhavtext/20 text-xs">No sales data yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT ORDERS TABLE -->
+  <div class="bg-bhavdark/40 border border-bhavtext/5 rounded-[2rem] overflow-hidden shadow-2xl">
+    <div class="p-8 border-b border-bhavtext/5 flex justify-between items-center">
+      <h2 class="text-sm font-bold uppercase tracking-widest text-bhavtext/70">Recent Orders</h2>
+      <button routerLink="/admin/orders" class="text-[10px] text-bhavaccent uppercase tracking-widest font-bold hover:text-bhavtext transition-colors flex items-center gap-2">
+        View All
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-bhavtext/5 text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold">
+          <tr>
+            <th class="px-6 py-5">Product</th>
+            <th class="px-6 py-5">Order #</th>
+            <th class="px-6 py-5">Customer</th>
+            <th class="px-6 py-5 hidden md:table-cell">Amount</th>
+            <th class="px-6 py-5 hidden lg:table-cell">Payment</th>
+            <th class="px-6 py-5">Status</th>
+            <th class="px-6 py-5 hidden lg:table-cell">Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-bhavtext/5">
+          <tr *ngFor="let order of stats?.recentOrders" class="hover:bg-bhavtext/[0.03] transition-colors group">
+            <td class="px-6 py-5">
+              <div class="w-10 h-10 rounded-xl bg-bhavdark/40 border border-bhavtext/5 overflow-hidden shadow-xl group-hover:border-bhavaccent/30 transition-all">
+                <img [src]="order.product_image || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover">
+              </div>
+            </td>
+            <td class="px-6 py-5 text-[11px] font-bold tracking-wider text-bhavtext font-mono">#{{order.order_number}}</td>
+            <td class="px-6 py-5 text-xs text-bhavtext/60">{{order.customer_name}}</td>
+            <td class="px-6 py-5 text-xs font-bold text-bhavaccent hidden md:table-cell">₹{{order.total_amount}}</td>
+            <td class="px-6 py-5 hidden lg:table-cell">
+              <span class="px-2 py-1 rounded-full text-[8px] uppercase tracking-widest font-bold" 
+                [ngClass]="order.payment_method === 'COD' ? 'bg-yellow-500/10 text-yellow-500' : 'bg-green-500/10 text-green-400'">
+                {{order.payment_method}}
+              </span>
+            </td>
+            <td class="px-6 py-5">
+              <span class="px-3 py-1.5 rounded-full text-[8px] uppercase tracking-widest font-bold" 
+                [ngClass]="{
+                  'bg-yellow-500/10 text-yellow-500': order.order_status === 'Pending',
+                  'bg-blue-500/10 text-blue-400': order.order_status === 'Processing' || order.order_status === 'Shipped',
+                  'bg-green-500/10 text-green-500': order.order_status === 'Delivered',
+                  'bg-red-500/10 text-red-400': order.order_status === 'Cancelled'
+                }">
+                {{order.order_status}}
+              </span>
+            </td>
+            <td class="px-6 py-5 text-[10px] text-bhavtext/30 hidden lg:table-cell">{{order.created_at | date:'dd MMM, hh:mm a'}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="!stats?.recentOrders?.length" class="text-center py-16">
+        <p class="text-bhavtext/20 text-xs uppercase tracking-widest">No orders yet</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <button routerLink="/admin/products" class="glass-card p-6 rounded-[1.5rem] text-center hover:border-bhavaccent/20 border border-transparent transition-all group">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-bhavtext/30 group-hover:text-bhavaccent transition-colors mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+      <p class="text-[10px] text-bhavtext/50 uppercase tracking-widest font-bold group-hover:text-bhavtext transition-colors">Add Product</p>
+    </button>
+    <button routerLink="/admin/orders" class="glass-card p-6 rounded-[1.5rem] text-center hover:border-bhavaccent/20 border border-transparent transition-all group">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-bhavtext/30 group-hover:text-bhavaccent transition-colors mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+      <p class="text-[10px] text-bhavtext/50 uppercase tracking-widest font-bold group-hover:text-bhavtext transition-colors">Manage Orders</p>
+    </button>
+    <button routerLink="/admin/homepage" class="glass-card p-6 rounded-[1.5rem] text-center hover:border-bhavaccent/20 border border-transparent transition-all group">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-bhavtext/30 group-hover:text-bhavaccent transition-colors mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+      <p class="text-[10px] text-bhavtext/50 uppercase tracking-widest font-bold group-hover:text-bhavtext transition-colors">Edit Homepage</p>
+    </button>
+    <button routerLink="/admin/settings" class="glass-card p-6 rounded-[1.5rem] text-center hover:border-bhavaccent/20 border border-transparent transition-all group">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-bhavtext/30 group-hover:text-bhavaccent transition-colors mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+      <p class="text-[10px] text-bhavtext/50 uppercase tracking-widest font-bold group-hover:text-bhavtext transition-colors">Settings</p>
+    </button>
+  <!-- Heritage Performance Report Modal -->
+  <div *ngIf="showReport" id="heritage-report-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 animate-fade-in print:relative print:inset-auto print:p-0">
+    <div class="absolute inset-0 bg-bhavdark/90 backdrop-blur-xl print:hidden" (click)="showReport = false"></div>
+    
+    <div class="glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[3rem] border border-bhavaccent/30 shadow-[0_0_100px_rgba(197,160,89,0.2)] p-12 relative z-10 print:max-h-none print:shadow-none print:border-none print:bg-white print:text-black">
+      
+      <!-- Report Header -->
+      <header class="flex justify-between items-start border-b border-bhavaccent/20 pb-8 mb-10 print:border-black">
+        <div>
+          <h2 class="text-[10px] uppercase tracking-[0.5em] text-bhavaccent font-bold mb-3">Report Summary</h2>
+          <h1 class="text-4xl font-playfair font-bold text-bhavtext print:text-black">Sales Report</h1>
+          <p class="text-[9px] text-bhavtext/40 uppercase tracking-widest mt-2 print:text-gray-500">Generated on {{stats?.timestamp | date:'long'}}</p>
+        </div>
+        <div class="text-right flex flex-col items-end gap-4 print:hidden">
+          <button (click)="printReport()" class="bg-bhavaccent/10 border border-bhavaccent/30 text-bhavaccent px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-bhavaccent hover:text-bhavdark transition-all">Download PDF / Print</button>
+          <button (click)="showReport = false" class="text-bhavtext/20 hover:text-bhavaccent transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Key Insights Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div class="p-6 bg-bhavaccent/5 rounded-3xl border border-bhavaccent/10">
+          <p class="text-[8px] uppercase tracking-widest text-bhavaccent font-bold mb-2">Total Sales</p>
+          <p class="text-2xl font-bold text-bhavtext print:text-black">₹{{stats?.totalRevenue}}</p>
+        </div>
+        <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
+          <p class="text-[8px] uppercase tracking-widest text-bhavtext/30 font-bold mb-2">Total Orders</p>
+          <p class="text-2xl font-bold text-bhavtext print:text-black">{{stats?.totalOrders}}</p>
+        </div>
+        <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
+          <p class="text-[8px] uppercase tracking-widest text-bhavtext/30 font-bold mb-2">Orders Today</p>
+          <p class="text-2xl font-bold text-bhavtext print:text-black">{{stats?.todayOrders}}</p>
+        </div>
+        <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
+          <p class="text-[8px] uppercase tracking-widest text-bhavtext/30 font-bold mb-2">Customers</p>
+          <p class="text-2xl font-bold text-bhavtext print:text-black">{{stats?.totalCustomers}}</p>
+        </div>
+      </div>
+
+      <!-- Best Seller Analysis -->
+      <div class="mb-12">
+        <h3 class="text-xs uppercase tracking-[0.3em] text-bhavaccent font-bold mb-6 italic underline underline-offset-8 decoration-bhavaccent/20">Best Selling Products</h3>
+        <div class="space-y-4">
+          <div *ngFor="let p of stats?.topProducts" class="flex justify-between items-center p-4 bg-bhavdark/40 rounded-2xl border border-white/5 print:bg-gray-100">
+            <span class="text-xs font-bold text-bhavtext print:text-black">{{p.name}}</span>
+            <div class="text-right">
+              <span class="text-[10px] text-bhavaccent font-bold">{{p.total_sold}} Sold</span>
+              <p class="text-[8px] text-bhavtext/30 uppercase tracking-widest">Revenue: ₹{{p.revenue}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy Recommendation -->
+      <div class="p-8 bg-gradient-to-br from-bhavaccent/10 to-transparent rounded-[2.5rem] border border-bhavaccent/20">
+        <h4 class="text-[9px] uppercase tracking-widest text-bhavaccent font-bold mb-3">AI Advice</h4>
+        <p class="text-xs text-bhavtext/70 leading-relaxed italic">
+          "Based on the high density of {{stats?.topProducts?.[0]?.name}} sales, we recommend launching a premium gift box collection for the upcoming festive cycle. Maintaining the current 100% order resolution rate will ensure the brand remains healthy."
+        </p>
+      </div>
+
+      <footer class="mt-12 text-center border-t border-white/5 pt-8 print:border-black">
+        <p class="text-[8px] uppercase tracking-[0.4em] text-bhavtext/20">Official Bhavnagris Sales Report</p>
+      </footer>
+    </div>
+  </div>
+</div>

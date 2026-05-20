@@ -1,0 +1,232 @@
+<div class="p-4 md:p-8">
+  <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div>
+      <h1 class="text-3xl lg:text-4xl font-playfair font-bold text-bhavtext mb-2">Order Management</h1>
+      <p class="text-bhavtext/40 text-[9px] md:text-[10px] uppercase tracking-[0.4em]">Manage Customer Transactions</p>
+    </div>
+    
+    <div class="flex items-center gap-4 w-full md:w-auto">
+      <div *ngIf="selectedOrderIds.size > 0" class="flex items-center gap-4 animate-fade-in mr-4">
+        <span class="text-[10px] uppercase tracking-widest text-bhavtext/40 font-bold whitespace-nowrap">{{selectedOrderIds.size}} Selected</span>
+        <button (click)="bulkDelete()" class="px-6 py-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-bhavtext transition-all shadow-xl whitespace-nowrap">
+          Bulk Delete
+        </button>
+      </div>
+      <div class="relative flex-1 md:w-64 group">
+        <input type="text" [(ngModel)]="searchQuery" (input)="applyFilter()" placeholder="Search Orders..." class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-xl px-10 py-4 text-[10px] font-bold text-bhavtext tracking-widest uppercase focus:outline-none focus:border-bhavaccent/50 transition-all placeholder:normal-case placeholder:font-normal placeholder:text-bhavtext/20">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute left-4 top-1/2 -translate-y-1/2 text-bhavtext/20 group-focus-within:text-bhavaccent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+      </div>
+      <button (click)="fetchOrders()" class="p-4 bg-bhavtext/5 hover:bg-bhavaccent/10 hover:text-bhavaccent rounded-xl border border-bhavtext/10 transition-all text-bhavtext/40">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" [ngClass]="{'animate-spin': loading}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Desktop Table View -->
+  <div class="hidden md:block bg-bhavdark/40 border border-bhavtext/5 rounded-3xl overflow-hidden shadow-2xl">
+    <div class="p-0 overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-bhavtext/5 text-[10px] uppercase tracking-widest text-bhavtext/40 font-bold">
+          <tr>
+            <th class="px-8 py-6 w-10">
+              <input type="checkbox" (change)="toggleAllSelection($event)" [checked]="isAllSelected()" class="w-4 h-4 rounded border-bhavtext/10 bg-bhavdark/50 text-bhavaccent focus:ring-bhavaccent transition-all">
+            </th>
+            <th class="px-8 py-6">Collection</th>
+            <th class="px-8 py-6">Order ID</th>
+            <th class="px-8 py-6">Customer</th>
+            <th class="px-8 py-6">Date</th>
+            <th class="px-8 py-6">Total</th>
+            <th class="px-8 py-6">Status</th>
+            <th class="px-8 py-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-bhavtext/5">
+          <tr *ngFor="let order of filteredOrders" class="hover:bg-bhavtext/[0.02] transition-all duration-500 group reveal-up" [ngClass]="{'bg-bhavaccent/5': isOrderSelected(order.id)}">
+            <td class="px-8 py-6">
+              <input type="checkbox" (change)="toggleSelection(order.id)" [checked]="isOrderSelected(order.id)" class="w-4 h-4 rounded border-bhavtext/10 bg-bhavdark/50 text-bhavaccent focus:ring-bhavaccent transition-all">
+            </td>
+            <td class="px-8 py-6">
+              <div class="flex -space-x-3 overflow-hidden">
+                <div *ngFor="let img of getItemImagesArray(order.item_images) | slice:0:3" class="w-10 h-10 rounded-lg bg-bhavdark/40 border-2 border-bhavdark overflow-hidden shadow-xl hover:translate-y-[-4px] transition-transform">
+                  <img [src]="api.getMediaUrl(img) || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover">
+                </div>
+                <div *ngIf="getItemImagesArray(order.item_images).length > 3" class="w-10 h-10 rounded-lg bg-bhavtext/5 border-2 border-bhavdark flex items-center justify-center text-[10px] font-bold text-bhavtext/40">
+                  +{{getItemImagesArray(order.item_images).length - 3}}
+                </div>
+              </div>
+            </td>
+            <td class="px-8 py-6">
+              <span class="text-xs font-bold tracking-widest text-bhavaccent group-hover:text-bhavtext transition-colors cursor-pointer" (click)="viewOrder(order)">#{{order.order_number}}</span>
+            </td>
+            <td class="px-8 py-6">
+              <p class="text-xs text-bhavtext font-bold">{{order.customer_name}}</p>
+              <p class="text-[10px] text-bhavtext/40">{{order.customer_mobile}}</p>
+            </td>
+            <td class="px-8 py-6 text-xs text-bhavtext/60">{{order.created_at | date:'medium'}}</td>
+            <td class="px-8 py-6 text-xs font-bold text-bhavaccent">₹{{order.total_amount}}</td>
+            <td class="px-8 py-6">
+              <span class="px-4 py-1.5 rounded-full text-[9px] uppercase tracking-[0.2em] font-bold" [ngClass]="getStatusColor(order.order_status)">
+                {{order.order_status}}
+              </span>
+            </td>
+            <td class="px-8 py-6 text-right">
+              <div class="flex items-center justify-end gap-3 transition-all duration-300">
+                <select (change)="updateStatus(order.id, $any($event.target).value)" class="bg-bhavaccent text-bhavdark text-[9px] uppercase tracking-widest font-bold px-4 py-2 rounded-lg cursor-pointer hover:brightness-110 transition-all border-none focus:ring-0 mr-2">
+                  <option value="Pending" [selected]="order.order_status === 'Pending'">Pending</option>
+                  <option value="Confirmed" [selected]="order.order_status === 'Confirmed'">Confirmed</option>
+                  <option value="Shipped" [selected]="order.order_status === 'Shipped'">Shipped</option>
+                  <option value="Out for Delivery" [selected]="order.order_status === 'Out for Delivery'">Out for Delivery</option>
+                  <option value="Delivered" [selected]="order.order_status === 'Delivered'">Delivered</option>
+                  <option value="Cancelled" [selected]="order.order_status === 'Cancelled'">Cancelled</option>
+                </select>
+                <button (click)="viewOrder(order)" class="p-2.5 bg-bhavtext/5 border border-bhavtext/5 rounded-xl text-bhavtext/40 hover:text-bhavaccent hover:border-bhavaccent/20 transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                </button>
+                <button (click)="deleteOrder(order.id)" class="p-2.5 bg-red-500/5 border border-red-500/10 rounded-xl text-red-400 hover:bg-red-500 hover:text-bhavtext transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div class="md:hidden space-y-6">
+    <div *ngFor="let order of filteredOrders" class="glass-card p-6 rounded-3xl border border-bhavtext/5 space-y-6">
+      <div class="flex justify-between items-start">
+         <div>
+           <span class="text-[9px] uppercase tracking-widest text-bhavtext/30 block mb-1">Order ID</span>
+           <h3 class="text-sm font-bold text-bhavaccent tracking-widest">#{{order.order_number}}</h3>
+         </div>
+         <span class="px-3 py-1 rounded-full text-[8px] uppercase tracking-widest font-bold" [ngClass]="getStatusColor(order.order_status)">
+           {{order.order_status}}
+         </span>
+      </div>
+
+      <!-- Mobile Image Gallery -->
+      <div class="flex gap-2 py-2">
+        <div *ngFor="let img of getItemImagesArray(order.item_images) | slice:0:4" class="w-12 h-12 rounded-xl bg-bhavdark/40 border border-bhavtext/5 overflow-hidden shadow-lg">
+          <img [src]="api.getMediaUrl(img) || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover">
+        </div>
+        <div *ngIf="getItemImagesArray(order.item_images).length > 4" class="w-12 h-12 rounded-xl bg-bhavtext/5 border border-bhavtext/5 flex items-center justify-center text-[10px] font-bold text-bhavtext/40">
+          +{{getItemImagesArray(order.item_images).length - 4}}
+        </div>
+      </div>
+      
+      <div class="flex justify-between items-center py-4 border-y border-bhavtext/5">
+         <div>
+           <p class="text-sm text-bhavtext font-bold">{{order.customer_name}}</p>
+           <p class="text-[10px] text-bhavtext/40">{{order.customer_mobile}}</p>
+         </div>
+         <div class="text-right">
+           <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-1">Total</p>
+           <p class="text-lg font-bold text-bhavaccent">₹{{order.total_amount}}</p>
+         </div>
+      </div>
+
+      <div class="flex gap-4">
+         <button (click)="viewOrder(order)" class="flex-1 py-3 bg-bhavtext/5 rounded-xl text-[10px] font-bold uppercase tracking-widest text-bhavtext/60">View Full</button>
+         <div class="flex-1 relative">
+           <select (change)="updateStatus(order.id, $any($event.target).value)" class="w-full bg-bhavaccent text-bhavdark text-[9px] uppercase tracking-widest font-bold py-3 rounded-xl border-none focus:ring-0 hover:brightness-110 transition-all">
+              <option value="Pending" [selected]="order.order_status === 'Pending'">Pending</option>
+              <option value="Confirmed" [selected]="order.order_status === 'Confirmed'">Confirmed</option>
+              <option value="Shipped" [selected]="order.order_status === 'Shipped'">Shipped</option>
+              <option value="Out for Delivery" [selected]="order.order_status === 'Out for Delivery'">Out for Delivery</option>
+              <option value="Delivered" [selected]="order.order_status === 'Delivered'">Delivered</option>
+              <option value="Cancelled" [selected]="order.order_status === 'Cancelled'">Cancelled</option>
+           </select>
+         </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredOrders.length === 0 && !loading" class="p-20 text-center">
+     <p class="text-bhavtext/20 text-xs uppercase tracking-widest font-bold">No matching orders found</p>
+  </div>
+    
+  <div *ngIf="loading" class="p-20 flex justify-center">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-bhavaccent"></div>
+  </div>
+
+  <!-- View Order Modal (Enhanced for Mobile) -->
+  <div *ngIf="showModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-bhavdark/95 backdrop-blur-xl">
+    <div class="glass-card w-full max-w-2xl rounded-[2.5rem] md:rounded-[3rem] overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="p-8 md:p-10 border-b border-bhavtext/5 flex justify-between items-center shrink-0">
+        <div>
+          <h3 class="text-bhavaccent uppercase tracking-[0.4em] text-[8px] md:text-[10px] font-bold mb-2">Order Details</h3>
+          <h2 class="text-2xl md:text-3xl font-playfair font-bold text-bhavtext">#{{selectedOrder.order_number}}</h2>
+        </div>
+        <button (click)="showModal = false" class="text-bhavtext/20 hover:text-bhavtext transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="p-8 md:p-10 overflow-y-auto custom-scrollbar flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mb-12">
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-3">Customer</p>
+            <p class="text-bhavtext font-bold">{{selectedOrder.customer_name}}</p>
+            <p class="text-bhavtext/50 text-xs mt-1">{{selectedOrder.customer_email}}</p>
+            <p class="text-bhavtext/50 text-xs">{{selectedOrder.customer_mobile}}</p>
+          </div>
+          <div>
+            <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-3">Delivery Address</p>
+            <p class="text-bhavtext/60 text-xs leading-relaxed">
+              {{selectedOrder.address_line1}}, {{selectedOrder.address_line2}}<br>
+              {{selectedOrder.city}}, {{selectedOrder.state}} - {{selectedOrder.pincode}}<br>
+              Landmark: {{selectedOrder.landmark || 'None'}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Visual Gallery -->
+        <div class="mb-12">
+          <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-4">Consignment Gallery</p>
+          <div class="grid grid-cols-4 md:grid-cols-6 gap-3">
+            <div *ngFor="let img of getItemImagesArray(selectedOrder.item_images)" class="aspect-square rounded-xl bg-bhavdark/40 border border-bhavtext/5 overflow-hidden shadow-2xl">
+              <img [src]="api.getMediaUrl(img) || 'assets/placeholder-luxury.jpg'" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-12">
+           <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-6">Order Items</p>
+           <div class="space-y-4">
+             <div *ngFor="let item of selectedOrder.items" class="flex justify-between items-center bg-bhavtext/[0.02] p-4 rounded-xl border border-bhavtext/5">
+                <div class="flex items-center gap-4">
+                  <div class="w-8 h-8 rounded-lg bg-bhavaccent/10 flex items-center justify-center text-bhavaccent font-bold text-[10px]">
+                    {{item.quantity}}x
+                  </div>
+                  <div>
+                    <p class="text-[11px] text-bhavtext font-bold">{{item.product_name}}</p>
+                    <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest">₹{{item.price}} per unit</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs font-bold text-bhavtext">₹{{item.price * item.quantity}}</p>
+                </div>
+             </div>
+           </div>
+        </div>
+
+        <div class="space-y-4">
+           <p class="text-[9px] uppercase tracking-widest text-bhavtext/30 font-bold mb-6">Financial Breakdown</p>
+           <div class="flex justify-between items-center bg-bhavtext/5 p-4 rounded-xl">
+             <span class="text-[10px] text-bhavtext/60 uppercase tracking-widest font-bold">Subtotal</span>
+             <span class="text-sm font-bold text-bhavtext">₹{{selectedOrder.subtotal}}</span>
+           </div>
+           <div class="flex justify-between items-center bg-bhavtext/5 p-4 rounded-xl">
+             <span class="text-[10px] text-bhavtext/60 uppercase tracking-widest font-bold">Delivery</span>
+             <span class="text-sm font-bold text-bhavtext">₹{{selectedOrder.delivery_charge}}</span>
+           </div>
+           <div class="flex justify-between items-center bg-bhavaccent/10 p-6 rounded-2xl border border-bhavaccent/20 mt-6">
+             <span class="text-[10px] text-bhavaccent font-bold uppercase tracking-[0.3em]">Total Amount</span>
+             <span class="text-2xl font-bold text-bhavaccent">₹{{selectedOrder.total_amount}}</span>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

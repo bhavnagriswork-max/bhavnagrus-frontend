@@ -1,0 +1,124 @@
+<div class="pt-40 pb-32 bg-bhavdark relative overflow-hidden min-h-screen">
+  <!-- Subtle Background Glows -->
+  <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-bhavaccent/5 blur-[120px] rounded-full"></div>
+  <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-bhavaccent/5 blur-[120px] rounded-full"></div>
+  <div class="grain-overlay"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+    
+    <!-- Header -->
+    <div class="text-center mb-24 reveal-up">
+      <h3 class="text-bhavaccent uppercase tracking-[0.5em] text-[10px] font-bold mb-6">Get in Touch</h3>
+      <h1 class="text-5xl md:text-8xl font-playfair font-bold text-bhavtext uppercase tracking-tight leading-none">
+        Connect <br/> <span class="text-bhavtext/20">With Us</span>
+      </h1>
+      <div class="h-px w-24 bg-bhavaccent/30 mx-auto mt-12"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
+      
+      <!-- Contact Info -->
+      <div class="space-y-16 reveal-up">
+        <div>
+          <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-bhavaccent mb-10 border-b border-white/5 pb-6">Heritage Office</h4>
+          <div class="space-y-6">
+            <p class="text-2xl font-playfair text-bhavtext leading-relaxed">
+              123 Heritage Street, <br>
+              Bhavnagar, Gujarat 364001, India
+            </p>
+            <p class="text-bhavtext/40 text-sm tracking-widest font-light">+91 91571 31430</p>
+            <p class="text-bhavtext/40 text-sm tracking-widest font-light italic">contact@bhavnagris.com</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30 mb-10 border-b border-white/5 pb-6">Business Hours</h4>
+          <div class="grid grid-cols-2 gap-8">
+            <div>
+              <p class="text-[9px] uppercase tracking-widest text-bhavtext/20 mb-2">Monday - Friday</p>
+              <p class="text-sm text-bhavtext font-medium">09:00 AM - 08:00 PM</p>
+            </div>
+            <div>
+              <p class="text-[9px] uppercase tracking-widest text-bhavtext/20 mb-2">Saturday</p>
+              <p class="text-sm text-bhavtext font-medium">10:00 AM - 06:00 PM</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-8 rounded-3xl border border-white/5 bg-bhavaccent/5">
+           <h4 class="text-[9px] font-bold uppercase tracking-[0.3em] text-bhavaccent mb-4">Immediate Support</h4>
+           <p class="text-bhavtext/40 text-[10px] leading-relaxed mb-6">For urgent order inquiries, please use our 24/7 WhatsApp concierge service.</p>
+           <a href="https://wa.me/919157131430" target="_blank" class="text-[10px] font-bold uppercase tracking-widest text-bhavtext hover:text-bhavaccent transition-all flex items-center gap-3">
+             Launch Concierge
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+           </a>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="reveal-up" style="transition-delay: 0.2s">
+        <div class="glass-card p-10 md:p-16 rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden">
+          <h2 class="text-3xl font-playfair font-bold text-bhavtext mb-12 uppercase tracking-tight">Send a Message</h2>
+          
+          <form (ngSubmit)="onSubmit()" #contactForm="ngForm" class="space-y-10">
+            <div class="relative group">
+              <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-2 block font-bold">Full Name</label>
+              <input type="text" name="name" [(ngModel)]="formData.name" required class="w-full bg-transparent border-b border-white/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+            </div>
+
+            <div class="relative group">
+              <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-2 block font-bold">Email Address</label>
+              <input type="email" name="email" [(ngModel)]="formData.email" required class="w-full bg-transparent border-b border-white/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+            </div>
+
+            <div class="relative group">
+              <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-2 block font-bold">Mobile Number (Optional)</label>
+              <input type="tel" name="mobile" [(ngModel)]="formData.mobile" class="w-full bg-transparent border-b border-white/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all">
+            </div>
+
+            <div class="relative group z-50">
+              <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-2 block font-bold">Inquiry Topic</label>
+              
+              <!-- Custom Premium Dropdown -->
+              <div class="relative cursor-pointer z-20" (click)="toggleDropdown()">
+                <div class="w-full bg-transparent border-b border-white/10 py-4 text-bhavtext flex justify-between items-center hover:border-bhavaccent transition-all">
+                  <span>{{formData.subject}}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-bhavtext/40 transition-transform duration-300" [ngClass]="{'rotate-180': isDropdownOpen}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                
+                <!-- Dropdown Menu -->
+                <div *ngIf="isDropdownOpen" class="absolute left-0 right-0 top-full mt-2 bg-bhavdark/95 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl animate-fade-in z-50">
+                  <div *ngFor="let topic of topics" 
+                       (click)="selectTopic(topic)"
+                       class="px-6 py-4 text-bhavtext/70 hover:text-bhavaccent hover:bg-white/5 transition-colors text-sm font-medium border-b border-white/5 last:border-0">
+                    {{topic}}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Invisible backdrop to close dropdown when clicking outside -->
+              <div *ngIf="isDropdownOpen" class="fixed inset-0 z-10" (click)="isDropdownOpen = false"></div>
+            </div>
+
+            <div class="relative group">
+              <label class="text-[9px] uppercase tracking-[0.3em] text-bhavtext/30 mb-2 block font-bold">Message</label>
+              <textarea name="message" [(ngModel)]="formData.message" required rows="4" class="w-full bg-transparent border-b border-white/10 py-4 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all resize-none"></textarea>
+            </div>
+
+            <button type="submit" [disabled]="loading || !contactForm.form.valid" class="btn-premium btn-gold w-full py-6 text-[10px] mt-4 disabled:opacity-50 group">
+              <span *ngIf="!loading">Submit Inquiry</span>
+              <span *ngIf="loading" class="flex items-center gap-3">
+                <div class="w-4 h-4 border-2 border-bhavdark/30 border-t-bhavdark rounded-full animate-spin"></div>
+                Transmitting...
+              </span>
+              <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

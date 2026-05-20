@@ -1,0 +1,27 @@
+<div class="fixed top-8 left-1/2 -translate-x-1/2 z-[999] flex flex-col items-center gap-4 pointer-events-none w-full max-w-md px-6">
+    <div *ngFor="let n of notifications" 
+         class="pointer-events-auto w-full glass-card heritage-shadow flex items-center gap-4 px-6 py-4 rounded-2xl border border-white/10 animate-slide-down transition-all"
+         [ngClass]="{
+            'bg-green-500/10 border-green-500/20 text-green-400': n.type === 'success',
+            'bg-red-500/10 border-red-500/20 text-red-400': n.type === 'error',
+            'bg-bhavaccent/10 border-bhavaccent/20 text-bhavaccent': n.type === 'info'
+         }">
+        
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+             [ngClass]="{
+                'bg-green-500/20': n.type === 'success',
+                'bg-red-500/20': n.type === 'error',
+                'bg-bhavaccent/20': n.type === 'info'
+             }">
+            <svg *ngIf="n.type === 'success'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            <svg *ngIf="n.type === 'error'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            <svg *ngIf="n.type === 'info'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </div>
+
+        <p class="text-[11px] font-bold uppercase tracking-widest leading-relaxed flex-1">{{n.message}}</p>
+
+        <button (click)="remove(n.id)" class="text-bhavtext/20 hover:text-bhavtext transition-colors p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+    </div>
+</div>
