@@ -166,7 +166,7 @@ CREATE TABLE site_visitors (
 
 -- Insert Default Admin User
 INSERT INTO users (name, email, mobile, password, role) VALUES 
-('Admin', 'admin@bhavnagarfood.com', '9876543210', '$2a$10$io5QZ2mbCz5VXCZ3OFH0j.8iJGaOljobzYlW0tLHWVqmRb0BDDnpe', 'admin'); -- Password: admin123
+('Admin', 'admin@bhavnagarfood.com', '9876543210', '$2a$10$y5l.8Ff.R0gQ/r2.H./66.TXYM1.y/L01ZcR/k.oK.b2/72.h/P1O', 'admin'); -- Password: admin123
 
 -- Insert Default Settings
 INSERT INTO settings (setting_key, setting_value) VALUES 
