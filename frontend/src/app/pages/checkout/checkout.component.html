@@ -43,7 +43,7 @@
             </div>
             <div>
               <label class="text-[10px] uppercase tracking-[0.3em] text-bhavtext/30 mb-3 block font-bold">Pincode</label>
-              <input type="text" name="pincode" [(ngModel)]="orderData.pincode" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-bhavtext placeholder-white/20 focus:outline-none focus:border-bhavaccent/50 transition-all text-sm font-medium">
+              <input type="text" name="pincode" [(ngModel)]="orderData.pincode" (ngModelChange)="onPincodeChange($event)" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-bhavtext placeholder-white/20 focus:outline-none focus:border-bhavaccent/50 transition-all text-sm font-medium">
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
                 <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all" [ngClass]="orderData.payment_method === 'COD' ? 'border-bhavaccent' : 'border-white/10'">
                   <div class="w-3 h-3 bg-bhavaccent rounded-full" *ngIf="orderData.payment_method === 'COD'"></div>
                 </div>
-                <input type="radio" name="payment" value="COD" [(ngModel)]="orderData.payment_method" class="hidden">
+                <input type="radio" name="payment" value="COD" [(ngModel)]="orderData.payment_method" (change)="onPaymentMethodChange()" class="hidden">
                 <span class="text-xs font-bold text-bhavtext uppercase tracking-[0.2em]">Cash on Delivery</span>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bhavaccent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
@@ -70,7 +70,7 @@
                 <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all" [ngClass]="orderData.payment_method === 'UPI' ? 'border-bhavaccent' : 'border-white/10'">
                   <div class="w-3 h-3 bg-bhavaccent rounded-full" *ngIf="orderData.payment_method === 'UPI'"></div>
                 </div>
-                <input type="radio" name="payment" value="UPI" [(ngModel)]="orderData.payment_method" class="hidden">
+                <input type="radio" name="payment" value="UPI" [(ngModel)]="orderData.payment_method" (change)="onPaymentMethodChange()" class="hidden">
                 <span class="text-xs font-bold text-bhavtext uppercase tracking-[0.2em]">UPI Payment</span>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bhavaccent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -104,7 +104,7 @@
                 <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all" [ngClass]="orderData.payment_method === 'ONLINE' ? 'border-bhavaccent' : 'border-white/10'">
                   <div class="w-3 h-3 bg-bhavaccent rounded-full" *ngIf="orderData.payment_method === 'ONLINE'"></div>
                 </div>
-                <input type="radio" name="payment" value="ONLINE" [(ngModel)]="orderData.payment_method" class="hidden">
+                <input type="radio" name="payment" value="ONLINE" [(ngModel)]="orderData.payment_method" (change)="onPaymentMethodChange()" class="hidden">
                 <div>
                   <span class="text-xs font-bold text-bhavtext uppercase tracking-[0.2em]">Online Payment</span>
                   <p class="text-[9px] text-bhavtext/30 uppercase tracking-widest mt-1">Cards • NetBanking • Wallets • UPI</p>
@@ -139,7 +139,21 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="text-[10px] text-bhavtext/30 uppercase tracking-[0.3em] font-bold">Delivery</span>
-              <span class="text-lg font-bold text-bhavtext">₹{{deliveryCharge}}</span>
+              <span class="text-lg font-bold text-bhavtext">
+                <span *ngIf="calculatingShipping" class="inline-block w-4 h-4 border border-bhavaccent border-t-transparent rounded-full animate-spin mr-2 align-middle"></span>
+                ₹{{deliveryCharge}}
+              </span>
+            </div>
+            <div *ngIf="shiprocketEnabled && orderData.pincode && orderData.pincode.toString().length === 6 && !calculatingShipping" class="text-[9px] uppercase tracking-wider text-right font-semibold transition-all">
+              <span *ngIf="shippingRateType === 'dynamic' && courierDetails" class="text-green-400">
+                🚀 Routed via {{courierDetails.name}} <span *ngIf="courierDetails.etd">• Est. {{courierDetails.etd}}</span>
+              </span>
+              <span *ngIf="shippingRateType === 'fallback'" class="text-bhavtext/30">
+                📦 Standard Delivery Route Assigned
+              </span>
+            </div>
+            <div *ngIf="calculatingShipping" class="text-[9px] text-bhavaccent uppercase tracking-widest text-right font-bold animate-pulse">
+              ⚡ Recalculating courier routes...
             </div>
             <div class="h-px bg-white/5"></div>
             <div class="flex justify-between items-end pt-2">

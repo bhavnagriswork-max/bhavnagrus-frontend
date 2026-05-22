@@ -13,7 +13,8 @@ const getPublicSettings = async (req, res) => {
             'trust_1_title', 'trust_1_subtitle', 'trust_2_title', 'trust_2_subtitle',
             'trust_3_title', 'trust_3_subtitle', 'trust_4_title', 'trust_4_subtitle',
             'mission_title', 'mission_subtitle',
-            'login_image', 'website_greeting'
+            'login_image', 'website_greeting',
+            'delivery_charge', 'shiprocket_enabled'
         ];
         const [settings] = await pool.query('SELECT setting_key, setting_value FROM settings WHERE setting_key IN (?)', [publicKeys]);
         

@@ -193,6 +193,74 @@
       </div>
     </section>
 
+    <!-- Logistics Infrastructure -->
+    <section>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 border border-amber-500/20">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+          </svg>
+        </div>
+        <h2 class="text-xl font-playfair font-bold text-bhavtext">Logistics & Shiprocket Infrastructure</h2>
+      </div>
+
+      <div class="glass-card p-8 md:p-12 rounded-[2.5rem] border border-bhavtext/5 overflow-hidden">
+        <div class="space-y-12">
+          <!-- Shiprocket Header & Toggle -->
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-xs font-bold text-bhavaccent uppercase tracking-[0.3em] mb-2">Shiprocket Logistics Engine</h3>
+              <p class="text-[9px] text-bhavtext/40 uppercase tracking-widest font-bold">Query real-time shipping costs based on pincode and weight</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="text-[9px] font-bold uppercase tracking-widest" [ngClass]="getVal('shiprocket_enabled') === 'true' ? 'text-green-400' : 'text-bhavtext/20'">
+                {{getVal('shiprocket_enabled') === 'true' ? 'Active' : 'Inactive'}}
+              </span>
+              <button (click)="setVal('shiprocket_enabled', getVal('shiprocket_enabled') === 'true' ? 'false' : 'true')" 
+                class="w-12 h-6 rounded-full transition-all duration-500 relative"
+                [ngClass]="getVal('shiprocket_enabled') === 'true' ? 'bg-bhavaccent' : 'bg-bhavtext/10'">
+                <div class="w-4 h-4 bg-bhavdark rounded-full absolute top-1 transition-all duration-300"
+                  [ngClass]="getVal('shiprocket_enabled') === 'true' ? 'left-7' : 'left-1'"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Credentials & Details Row -->
+          <div class="pt-8 border-t border-bhavtext/5 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">API Account Email</label>
+              <input type="email" [ngModel]="getVal('shiprocket_email')" (ngModelChange)="setVal('shiprocket_email', $event)" placeholder="e.g. shiprocket@bhavnagris.com" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">API Account Password</label>
+              <input type="password" [ngModel]="getVal('shiprocket_password')" (ngModelChange)="setVal('shiprocket_password', $event)" placeholder="••••••••••••" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium font-mono">
+            </div>
+          </div>
+
+          <!-- Warehouse & Box Dimensions Row -->
+          <div class="pt-8 border-t border-bhavtext/5 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Pickup Pincode</label>
+              <input type="text" [ngModel]="getVal('shiprocket_pickup_postcode')" (ngModelChange)="setVal('shiprocket_pickup_postcode', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Box Length (cm)</label>
+              <input type="number" [ngModel]="getVal('shiprocket_length')" (ngModelChange)="setVal('shiprocket_length', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Box Width (cm)</label>
+              <input type="number" [ngModel]="getVal('shiprocket_width')" (ngModelChange)="setVal('shiprocket_width', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Box Height (cm)</label>
+              <input type="number" [ngModel]="getVal('shiprocket_height')" (ngModelChange)="setVal('shiprocket_height', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Security Infrastructure -->
     <section>
       <div class="flex items-center gap-4 mb-8">

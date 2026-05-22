@@ -34,6 +34,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 const subscriberRoutes = require('./routes/subscriberRoutes');
+const shippingRoutes = require('./routes/shippingRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
@@ -48,6 +49,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/subscribers', subscriberRoutes);
+app.use('/api/shipping', shippingRoutes);
 
 app.get('/', (req, res) => {
     res.send('Bhavnagar Heritage Foods API is running...');

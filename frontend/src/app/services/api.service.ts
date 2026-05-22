@@ -361,6 +361,12 @@ export class ApiService {
     );
   }
 
+  calculateShippingRate(payload: { delivery_postcode: string, weight: number, cod: number, declared_value: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/shipping/calculate-rate`, payload).pipe(
+      catchError(err => this.handleError(err))
+    );
+  }
+
   // Orders
   placeOrder(orderData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/orders/place`, orderData, this.getHeaders()).pipe(

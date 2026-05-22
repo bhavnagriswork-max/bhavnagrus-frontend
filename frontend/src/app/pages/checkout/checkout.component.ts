@@ -16,6 +16,12 @@ export class CheckoutComponent implements OnInit {
   loading = true;
   processing = false;
   upiSettings: any = null;
+  
+  // Shiprocket states
+  shiprocketEnabled = false;
+  calculatingShipping = false;
+  shippingRateType = 'static'; 
+  courierDetails: any = null;
 
   orderData = {
     customer_name: '',
@@ -52,10 +58,24 @@ export class CheckoutComponent implements OnInit {
   }
 
   fetchDeliveryCharge() {
-    this.api.getPublicSettings().subscribe(settings => {
-      const charge = settings.find((s: any) => s.setting_key === 'delivery_charge');
-      if (charge) this.deliveryCharge = parseFloat(charge.setting_value);
-      this.calculateTotals();
+    this.api.getPublicSettings().subscribe({
+      next: (settings) => {
+        if (settings.delivery_charge) {
+          this.deliveryCharge = parseFloat(settings.delivery_charge) || 50;
+        }
+        if (settings.shiprocket_enabled) {
+          this.shiprocketEnabled = (settings.shiprocket_enabled === 'true');
+        }
+        this.calculateTotals();
+        
+        // Recalculate rate if pincode is already loaded/prefilled
+        if (this.orderData.pincode && this.orderData.pincode.toString().trim().length === 6) {
+          this.calculateDynamicShippingRate();
+        }
+      },
+      error: () => {
+        this.calculateTotals();
+      }
     });
   }
 
@@ -75,6 +95,11 @@ export class CheckoutComponent implements OnInit {
             this.orderData.address_line2 = savedAddress.address_line2 || '';
             this.orderData.pincode = savedAddress.pincode || '';
             this.orderData.landmark = savedAddress.landmark || '';
+            
+            // Recalculate shipping rate if loaded pincode is valid
+            if (this.orderData.pincode && this.orderData.pincode.toString().trim().length === 6) {
+              this.calculateDynamicShippingRate();
+            }
           } catch (e) {
             this.orderData.address_line1 = user.address;
           }
@@ -103,6 +128,98 @@ export class CheckoutComponent implements OnInit {
   calculateTotals() {
     this.subtotal = this.cartItems.reduce((acc, item) => acc + (item.selling_price * item.quantity), 0);
     this.total = this.subtotal + this.deliveryCharge;
+  }
+
+  parseWeightToKg(weightStr: string): number {
+    if (!weightStr) return 0.5; // default fallback weight to prevent calculation failure
+    
+    const cleanStr = weightStr.toLowerCase().trim();
+    
+    // Look for kilograms pattern: e.g., "1kg", "1.5 kg", "2 kg pack"
+    const kgMatch = cleanStr.match(/([0-9.]+)\s*kg/);
+    if (kgMatch) {
+      return parseFloat(kgMatch[1]);
+    }
+    
+    // Look for grams pattern: e.g., "500g", "250 g", "250g pack"
+    const gMatch = cleanStr.match(/([0-9.]+)\s*g/);
+    if (gMatch) {
+      return parseFloat(gMatch[1]) / 1000;
+    }
+    
+    // If it's just a number, assume grams if >= 10, else assume kg
+    const numMatch = cleanStr.match(/([0-9.]+)/);
+    if (numMatch) {
+      const val = parseFloat(numMatch[1]);
+      return val >= 10 ? val / 1000 : val;
+    }
+    
+    return 0.5; // fallback
+  }
+
+  calculateDynamicShippingRate() {
+    const pin = this.orderData.pincode ? this.orderData.pincode.toString().trim() : '';
+    if (pin.length !== 6) {
+      return;
+    }
+
+    if (!this.shiprocketEnabled) {
+      return;
+    }
+
+    this.calculatingShipping = true;
+    
+    // Calculate total weight by parsing item weights
+    const totalWeight = this.cartItems.reduce((acc, item) => {
+      const itemWeight = this.parseWeightToKg(item.weight);
+      return acc + (itemWeight * item.quantity);
+    }, 0);
+
+    const codStatus = this.orderData.payment_method === 'COD' ? 1 : 0;
+
+    const payload = {
+      delivery_postcode: pin,
+      weight: totalWeight,
+      cod: codStatus,
+      declared_value: this.subtotal
+    };
+
+    this.api.calculateShippingRate(payload).subscribe({
+      next: (res) => {
+        this.deliveryCharge = res.rate;
+        this.shippingRateType = res.rate_type;
+        if (res.rate_type === 'dynamic') {
+          this.courierDetails = {
+            name: res.courier_name,
+            etd: res.etd,
+            etd_hours: res.etd_hours
+          };
+        } else {
+          this.courierDetails = null;
+        }
+        this.calculateTotals();
+        this.calculatingShipping = false;
+      },
+      error: (err) => {
+        console.error('Dynamic shipping API failed:', err);
+        this.shippingRateType = 'fallback';
+        this.courierDetails = null;
+        this.calculatingShipping = false;
+        this.calculateTotals();
+      }
+    });
+  }
+
+  onPincodeChange(pin: string) {
+    if (pin && pin.toString().trim().length === 6) {
+      this.calculateDynamicShippingRate();
+    }
+  }
+
+  onPaymentMethodChange() {
+    if (this.orderData.pincode && this.orderData.pincode.toString().trim().length === 6) {
+      this.calculateDynamicShippingRate();
+    }
   }
 
   paymentConfig: any = null;
