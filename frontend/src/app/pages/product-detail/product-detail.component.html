@@ -22,23 +22,55 @@
       
       <!-- Product Image -->
       <div class="lg:w-1/2 w-full space-y-6 reveal-up">
-        <div class="aspect-square rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-black/40 border border-white/5 shadow-2xl relative">
-          <img [src]="api.getMediaUrl(activeImage)" (error)="handleImageError($event)" alt="{{product.name}}" class="w-full h-full object-cover transform transition-transform duration-1000 md:group-hover:scale-105">
-          <div class="absolute inset-0 bg-gradient-to-t from-bhavdark/60 via-transparent to-transparent"></div>
+        <div class="aspect-square rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-black/40 border border-white/5 shadow-2xl relative group cursor-grab active:cursor-grabbing"
+             (touchstart)="onTouchStart($event)"
+             (touchend)="onTouchEnd($event)">
+          <!-- Main Product Image with Smooth Transition Fade/Scale -->
+          <img [src]="api.getMediaUrl(activeImage)" 
+               (load)="onImageLoad()"
+               (error)="handleImageError($event)" 
+               alt="{{product.name}}" 
+               class="w-full h-full object-cover transform transition-all duration-500 ease-out"
+               [ngClass]="{'opacity-35 scale-95 blur-sm': isImageTransitioning, 'opacity-100 scale-100': !isImageTransitioning}">
+          
+          <!-- Continuous Ambient Dark Backdrop overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-bhavdark/60 via-transparent to-transparent pointer-events-none"></div>
+
+          <!-- Prev Chevron Arrow Button (Glowing Luxury Hover) -->
+          <button *ngIf="allImages.length > 1" 
+                  (click)="prevImage(); $event.stopPropagation();"
+                  class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 hover:bg-bhavaccent hover:text-bhavdark text-white border border-white/10 flex items-center justify-center transition-all duration-300 backdrop-blur-md opacity-80 sm:opacity-0 group-hover:opacity-100 active:scale-90 z-20 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <!-- Next Chevron Arrow Button (Glowing Luxury Hover) -->
+          <button *ngIf="allImages.length > 1" 
+                  (click)="nextImage(); $event.stopPropagation();"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/50 hover:bg-bhavaccent hover:text-bhavdark text-white border border-white/10 flex items-center justify-center transition-all duration-300 backdrop-blur-md opacity-80 sm:opacity-0 group-hover:opacity-100 active:scale-90 z-20 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <!-- Elite Pagination Dot Indicators -->
+          <div *ngIf="allImages.length > 1" 
+               class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-black/40 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/5 shadow-xl pointer-events-auto">
+            <button *ngFor="let img of allImages; let idx = index" 
+                    (click)="selectImage(idx); $event.stopPropagation();"
+                    class="w-2 h-2 rounded-full transition-all duration-300"
+                    [ngClass]="idx === activeIndex ? 'bg-bhavaccent w-4 shadow-[0_0_8px_rgba(197,160,89,0.8)]' : 'bg-white/30 hover:bg-white/60'"></button>
+          </div>
         </div>
 
-        <!-- Gallery Thumbnails -->
-        <div class="grid grid-cols-4 md:grid-cols-5 gap-4" *ngIf="product.images && product.images.length > 0">
-          <div (click)="activeImage = product.image" 
-               class="aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all"
-               [ngClass]="activeImage === product.image ? 'border-bhavaccent' : 'border-white/5 opacity-50 hover:opacity-100'">
-            <img [src]="api.getMediaUrl(product.image)" (error)="handleImageError($event)" class="w-full h-full object-cover">
-          </div>
-          <div *ngFor="let img of product.images" 
-               (click)="activeImage = img.image_url" 
-               class="aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all"
-               [ngClass]="activeImage === img.image_url ? 'border-bhavaccent' : 'border-white/5 opacity-50 hover:opacity-100'">
-            <img [src]="api.getMediaUrl(img.image_url)" (error)="handleImageError($event)" class="w-full h-full object-cover">
+        <!-- Gallery Thumbnails (Beautifully aligned round grids) -->
+        <div class="grid grid-cols-4 md:grid-cols-5 gap-4" *ngIf="allImages.length > 1">
+          <div *ngFor="let img of allImages; let idx = index" 
+               (click)="selectImage(idx)" 
+               class="aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all duration-300"
+               [ngClass]="idx === activeIndex ? 'border-bhavaccent scale-[1.05] shadow-[0_0_12px_rgba(197,160,89,0.3)]' : 'border-white/5 opacity-50 hover:opacity-100 hover:scale-[1.02]'">
+            <img [src]="api.getMediaUrl(img)" (error)="handleImageError($event)" class="w-full h-full object-cover">
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { NotificationService } from '../../services/notification.service';
@@ -15,6 +15,14 @@ gsap.registerPlugin(ScrollTrigger);
 export class ProductDetailComponent implements OnInit, AfterViewInit {
   product: any = null;
   activeImage: string = '';
+  allImages: string[] = [];
+  activeIndex: number = 0;
+  isImageTransitioning: boolean = false;
+  
+  // Touch gestures swipe state
+  touchStartX = 0;
+  touchEndX = 0;
+
   reviews: any[] = [];
   averageRating: number = 0;
   quantity = 1;
@@ -49,7 +57,15 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
     this.api.getProductBySlug(slug).subscribe({
       next: (data) => {
         this.product = data;
-        this.activeImage = data.image;
+        
+        // Compile all gallery images dynamically
+        this.allImages = [data.image];
+        if (data.images && data.images.length > 0) {
+          this.allImages.push(...data.images.map((img: any) => img.image_url));
+        }
+        
+        this.activeIndex = 0;
+        this.activeImage = this.allImages[0];
         this.loading = false;
         this.fetchReviews(data.id);
       },
@@ -59,6 +75,72 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
         this.notify.show('Failed to load heritage artifact', 'error');
       }
     });
+  }
+
+  // --- IMAGE CAROUSEL METHODS ---
+  selectImage(index: number) {
+    if (this.activeIndex === index || this.isImageTransitioning) return;
+    this.isImageTransitioning = true;
+    this.activeIndex = index;
+    this.activeImage = this.allImages[index];
+    setTimeout(() => {
+      this.isImageTransitioning = false;
+    }, 350);
+  }
+
+  nextImage() {
+    if (this.allImages.length <= 1 || this.isImageTransitioning) return;
+    this.isImageTransitioning = true;
+    this.activeIndex = (this.activeIndex + 1) % this.allImages.length;
+    this.activeImage = this.allImages[this.activeIndex];
+    setTimeout(() => {
+      this.isImageTransitioning = false;
+    }, 350);
+  }
+
+  prevImage() {
+    if (this.allImages.length <= 1 || this.isImageTransitioning) return;
+    this.isImageTransitioning = true;
+    this.activeIndex = (this.activeIndex - 1 + this.allImages.length) % this.allImages.length;
+    this.activeImage = this.allImages[this.activeIndex];
+    setTimeout(() => {
+      this.isImageTransitioning = false;
+    }, 350);
+  }
+
+  onImageLoad() {
+    this.isImageTransitioning = false;
+  }
+
+  onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipeGesture();
+  }
+
+  handleSwipeGesture() {
+    const threshold = 50; // Min swipe distance
+    if (this.touchStartX - this.touchEndX > threshold) {
+      this.nextImage();
+    } else if (this.touchEndX - this.touchStartX > threshold) {
+      this.prevImage();
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Only switch images if the user is not actively typing in an input/textarea
+    const activeElem = document.activeElement?.tagName;
+    if (activeElem === 'INPUT' || activeElem === 'TEXTAREA') return;
+
+    if (event.key === 'ArrowRight') {
+      this.nextImage();
+    } else if (event.key === 'ArrowLeft') {
+      this.prevImage();
+    }
   }
 
   fetchReviews(productId: string) {
