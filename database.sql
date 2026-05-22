@@ -40,6 +40,7 @@ CREATE TABLE products (
     stock_quantity INT DEFAULT 0,
     image VARCHAR(255),
     brand VARCHAR(255) DEFAULT 'Bhavnagris',
+    spiciness INT DEFAULT 0,
     is_featured TINYINT DEFAULT 0,
     is_active TINYINT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
