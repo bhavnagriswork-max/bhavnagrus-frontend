@@ -165,6 +165,12 @@ CREATE TABLE site_visitors (
     INDEX idx_ip (ip_address)
 );
 
+CREATE TABLE subscribers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Insert Default Admin User
 INSERT INTO users (name, email, mobile, password, role) VALUES 
 ('Admin', 'admin@bhavnagarfood.com', '9876543210', '$2a$10$y5l.8Ff.R0gQ/r2.H./66.TXYM1.y/L01ZcR/k.oK.b2/72.h/P1O', 'admin'); -- Password: admin123
