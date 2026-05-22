@@ -133,6 +133,7 @@ CREATE TABLE product_images (
     product_id INT NOT NULL,
     image_url VARCHAR(255) NOT NULL,
     is_main TINYINT(1) DEFAULT 0,
+    sequence_order INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
