@@ -284,3 +284,115 @@ select option {
     line-height: 1.1 !important;
   }
 }
+
+/* ==========================================
+   💎 PREMIUM BRANDED LUXURY CARD EXEMPTIONS
+   Ensures product cards retain a state-of-the-art dark royal branded theme 
+   under BOTH Light and Dark modes.
+   ========================================== */
+
+/* 1. Base Card Override */
+.light-theme .luxury-card {
+  background: linear-gradient(135deg, rgba(20, 15, 10, 0.95) 0%, rgba(10, 7, 5, 0.98) 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8), 0 20px 40px -10px rgba(197, 160, 89, 0.15) !important;
+}
+
+/* 2. Text Colors & Opacities */
+.light-theme .luxury-card .text-bhavtext,
+.light-theme .luxury-card h3.text-bhavtext {
+  color: #ffffff !important;
+}
+
+.light-theme .luxury-card .text-bhavaccent {
+  color: #c5a059 !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/80 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/50 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/45 {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/40 {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/30 {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/20 {
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.light-theme .luxury-card .text-white\/10 {
+  color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.light-theme .luxury-card .text-xs.line-through {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.light-theme .luxury-card .text-bhavdark {
+  color: #080808 !important;
+}
+
+/* 3. Gradient Prices */
+.light-theme .luxury-card .text-gold-gradient {
+  background: linear-gradient(to right, #eec98a, #c5a059) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #eec98a !important; /* Fallback */
+}
+
+/* 4. Backgrounds & Overlays */
+.light-theme .luxury-card .bg-black\/40 {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.light-theme .luxury-card .bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.light-theme .luxury-card .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.light-theme .luxury-card .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.light-theme .luxury-card .border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.light-theme .luxury-card .border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. Sleek Basket Button Overrides */
+.light-theme .luxury-card button.bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #c5a059 !important;
+}
+
+.light-theme .luxury-card button.bg-white\/5:hover {
+  background-color: #c5a059 !important;
+  border-color: #c5a059 !important;
+  color: #080808 !important;
+}
+
+/* 6. Elegant Divider */
+.light-theme .luxury-card .via-bhavaccent\/30 {
+  background-image: linear-gradient(to right, transparent, rgba(197, 160, 89, 0.35), transparent) !important;
+}
+
