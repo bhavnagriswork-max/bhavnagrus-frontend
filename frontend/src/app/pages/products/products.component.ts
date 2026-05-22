@@ -110,6 +110,17 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  buyNow(product: any) {
+    this.api.addToCart(product, 1).subscribe({
+      next: () => {
+        this.router.navigate(['/checkout']);
+      },
+      error: (err) => {
+        this.notify.show('Failed to initiate quick purchase', 'error');
+      }
+    });
+  }
+
   handleImageError(event: any) {
     event.target.src = 'assets/placeholder-luxury.jpg';
   }

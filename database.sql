@@ -41,6 +41,8 @@ CREATE TABLE products (
     image VARCHAR(255),
     brand VARCHAR(255) DEFAULT 'Bhavnagris',
     spiciness INT DEFAULT 0,
+    rating DECIMAL(3, 1) DEFAULT 4.8,
+    rating_count INT DEFAULT 120,
     is_featured TINYINT DEFAULT 0,
     is_active TINYINT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

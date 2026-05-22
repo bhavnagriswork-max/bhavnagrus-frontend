@@ -30,7 +30,9 @@ export class ProductManagementComponent implements OnInit {
     is_featured: 0,
     spiciness: 0,
     slug: '',
-    brand: 'Bhavnagris'
+    brand: 'Bhavnagris',
+    rating: 4.8,
+    rating_count: 120
   };
 
   visibleColumns = {
@@ -135,7 +137,9 @@ export class ProductManagementComponent implements OnInit {
       is_featured: 0,
       spiciness: 0,
       slug: '',
-      brand: 'Bhavnagris'
+      brand: 'Bhavnagris',
+      rating: 4.8,
+      rating_count: 120
     };
     this.showModal = true;
   }
@@ -143,7 +147,13 @@ export class ProductManagementComponent implements OnInit {
   openEditModal(product: any) {
     this.isEdit = true;
     const additional = product.images ? product.images.map((img: any) => img.image_url) : [];
-    this.currentProduct = { ...product, brand: product.brand || 'Bhavnagris', additional_images: additional };
+    this.currentProduct = { 
+      ...product, 
+      brand: product.brand || 'Bhavnagris', 
+      rating: product.rating !== undefined && product.rating !== null ? product.rating : 4.8, 
+      rating_count: product.rating_count !== undefined && product.rating_count !== null ? product.rating_count : 120, 
+      additional_images: additional 
+    };
     this.showModal = true;
   }
 

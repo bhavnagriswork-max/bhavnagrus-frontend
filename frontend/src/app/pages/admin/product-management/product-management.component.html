@@ -74,7 +74,11 @@
                 <p class="font-bold text-sm text-bhavtext group-hover:text-gold-gradient transition-all">{{p.name}}</p>
                 <span *ngIf="p.is_featured" class="px-2 py-0.5 bg-yellow-500/10 text-yellow-500 text-[7px] uppercase font-bold rounded-full border border-yellow-500/20">Featured</span>
               </div>
-              <p *ngIf="visibleColumns.weight" class="text-[9px] text-bhavtext/30 tracking-[0.3em] uppercase mt-1">{{p.weight}}</p>
+              <p class="text-[9px] text-bhavtext/30 tracking-[0.3em] uppercase mt-1">
+                <span *ngIf="visibleColumns.weight">{{p.weight}}</span>
+                <span *ngIf="visibleColumns.weight"> • </span>
+                <span class="text-bhavaccent font-bold">⭐ {{p.rating || '4.8'}} ({{p.rating_count || '120'}})</span>
+              </p>
             </div>
           </td>
           <td *ngIf="visibleColumns.category" class="px-8 py-7 text-[10px] uppercase tracking-widest text-bhavtext/50">{{p.category_name}}</td>
@@ -239,6 +243,17 @@
                   🌶️
                 </span>
               </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-8">
+            <div>
+              <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-4 block font-bold">Dummy Rating (1.0 to 5.0)</label>
+              <input type="number" name="rating" [(ngModel)]="currentProduct.rating" min="1.0" max="5.0" step="0.1" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-xs" placeholder="e.g., 4.8">
+            </div>
+            <div>
+              <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-4 block font-bold">Review Count (Dummy)</label>
+              <input type="number" name="rating_count" [(ngModel)]="currentProduct.rating_count" min="0" step="1" class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-xs" placeholder="e.g., 120">
             </div>
           </div>
         </div>

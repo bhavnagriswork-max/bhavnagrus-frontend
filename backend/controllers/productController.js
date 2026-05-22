@@ -83,16 +83,16 @@ const getAllProductsAdmin = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stock, image, additional_images, is_featured, is_active, brand } = req.body;
+        const { category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stock, image, additional_images, is_featured, is_active, brand, rating, rating_count } = req.body;
         
         const stockVal = stock || req.body.stock_quantity || 0;
         const brandVal = brand || 'Bhavnagris';
 
         const [result] = await pool.query(
             `INSERT INTO products 
-            (category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stock_quantity, image, is_featured, spiciness, is_active, brand) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage || 0, weight, stockVal, image, is_featured || 0, req.body.spiciness || 0, is_active || 1, brandVal]
+            (category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stock_quantity, image, is_featured, spiciness, is_active, brand, rating, rating_count) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage || 0, weight, stockVal, image, is_featured || 0, req.body.spiciness || 0, is_active || 1, brandVal, rating !== undefined ? rating : 4.8, rating_count !== undefined ? rating_count : 120]
         );
 
         const product_id = result.insertId;
@@ -115,13 +115,13 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const id = req.params.id;
-        const { category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stock, image, additional_images, is_featured, is_active, brand } = req.body;
+        const { category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stock, image, additional_images, is_featured, is_active, brand, rating, rating_count } = req.body;
         
         const stockVal = stock || req.body.stock_quantity || 0;
         const brandVal = brand || 'Bhavnagris';
 
-        const query = `UPDATE products SET category_id=?, name=?, slug=?, description=?, ingredients=?, original_price=?, selling_price=?, discount_percentage=?, weight=?, stock_quantity=?, image=?, is_featured=?, spiciness=?, is_active=?, brand=? WHERE id=?`;
-        const params = [category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stockVal, image, is_featured, req.body.spiciness || 0, is_active, brandVal, id];
+        const query = `UPDATE products SET category_id=?, name=?, slug=?, description=?, ingredients=?, original_price=?, selling_price=?, discount_percentage=?, weight=?, stock_quantity=?, image=?, is_featured=?, spiciness=?, is_active=?, brand=?, rating=?, rating_count=? WHERE id=?`;
+        const params = [category_id, name, slug, description, ingredients, original_price, selling_price, discount_percentage, weight, stockVal, image, is_featured, req.body.spiciness || 0, is_active, brandVal, rating !== undefined ? rating : 4.8, rating_count !== undefined ? rating_count : 120, id];
 
         await pool.query(query, params);
 
