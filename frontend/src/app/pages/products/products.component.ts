@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
@@ -22,11 +22,19 @@ export class ProductsComponent implements OnInit {
   constructor(
     public api: ApiService, 
     private router: Router,
+    private route: ActivatedRoute,
     private notify: NotificationService
   ) { }
 
   ngOnInit(): void {
-    this.fetchData();
+    this.route.queryParams.subscribe(params => {
+      this.selectedBrand = params['brand'] || null;
+      if (this.products && this.products.length > 0) {
+        this.applyFilter();
+      } else {
+        this.fetchData();
+      }
+    });
   }
 
   fetchData() {
@@ -57,8 +65,11 @@ export class ProductsComponent implements OnInit {
   }
 
   filterByBrand(brand: string | null) {
-    this.selectedBrand = brand;
-    this.applyFilter();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { brand: brand || null },
+      queryParamsHandling: 'merge'
+    });
   }
 
   applyFilter() {
