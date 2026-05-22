@@ -9,6 +9,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role ENUM('user', 'admin') DEFAULT 'user',
     status TINYINT DEFAULT 1,
+    last_login TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -37,6 +38,7 @@ CREATE TABLE products (
     weight VARCHAR(50),
     stock_quantity INT DEFAULT 0,
     image VARCHAR(255),
+    brand VARCHAR(255) DEFAULT 'Bhavnagris',
     is_featured TINYINT DEFAULT 0,
     is_active TINYINT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -123,6 +125,43 @@ CREATE TABLE order_status_history (
     note TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    is_main TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    user_name VARCHAR(255) NOT NULL,
+    rating INT NOT NULL DEFAULT 5,
+    comment TEXT,
+    image_url VARCHAR(255),
+    is_approved TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE site_visitors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip_address VARCHAR(50),
+    user_agent TEXT,
+    page_url VARCHAR(500),
+    referrer VARCHAR(500),
+    device_type ENUM('Desktop', 'Mobile', 'Tablet') DEFAULT 'Desktop',
+    country VARCHAR(100) DEFAULT '',
+    session_id VARCHAR(100),
+    user_id INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_created (created_at),
+    INDEX idx_session (session_id),
+    INDEX idx_ip (ip_address)
 );
 
 -- Insert Default Admin User
