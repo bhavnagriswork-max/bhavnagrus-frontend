@@ -29,12 +29,14 @@ export class ProductManagementComponent implements OnInit {
     weight: '',
     is_featured: 0,
     spiciness: 0,
-    slug: ''
+    slug: '',
+    brand: 'Bhavnagris'
   };
 
   visibleColumns = {
     image: true,
     name: true,
+    brand: true,
     category: true,
     spiciness: true,
     valuation: true,
@@ -132,7 +134,8 @@ export class ProductManagementComponent implements OnInit {
       weight: '',
       is_featured: 0,
       spiciness: 0,
-      slug: ''
+      slug: '',
+      brand: 'Bhavnagris'
     };
     this.showModal = true;
   }
@@ -140,7 +143,7 @@ export class ProductManagementComponent implements OnInit {
   openEditModal(product: any) {
     this.isEdit = true;
     const additional = product.images ? product.images.map((img: any) => img.image_url) : [];
-    this.currentProduct = { ...product, additional_images: additional };
+    this.currentProduct = { ...product, brand: product.brand || 'Bhavnagris', additional_images: additional };
     this.showModal = true;
   }
 

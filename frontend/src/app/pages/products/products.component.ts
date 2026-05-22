@@ -15,6 +15,7 @@ export class ProductsComponent implements OnInit {
   loading = true;
   selectedCategoryId: any = null;
   selectedSpiciness: number = 0;
+  selectedBrand: string | null = null;
   sortOption = 'Latest Arrivals';
   window = window;
 
@@ -55,11 +56,23 @@ export class ProductsComponent implements OnInit {
     this.applyFilter();
   }
 
+  filterByBrand(brand: string | null) {
+    this.selectedBrand = brand;
+    this.applyFilter();
+  }
+
   applyFilter() {
     let result = [...this.products];
     
     if (this.selectedCategoryId) {
       result = result.filter(p => p.category_id === this.selectedCategoryId);
+    }
+
+    if (this.selectedBrand) {
+      result = result.filter(p => {
+        const prodBrand = p.brand || 'Bhavnagris';
+        return prodBrand.toLowerCase().trim() === this.selectedBrand!.toLowerCase().trim();
+      });
     }
 
     if (this.selectedSpiciness > 0) {

@@ -15,6 +15,32 @@
       <div class="h-px w-16 md:w-24 bg-bhavaccent/30 mx-auto mt-8 md:mt-12"></div>
     </div>
 
+    <!-- Premium Brand Tab Bar -->
+    <div class="flex justify-center items-center mb-12 md:mb-16">
+      <div class="glass-card px-2 py-2 md:px-3 md:py-3 rounded-full border border-white/5 bg-white/[0.02] flex gap-1 md:gap-3 w-fit mx-auto shadow-2xl relative">
+        <!-- Glow effect -->
+        <div class="absolute inset-0 bg-bhavaccent/5 blur-xl rounded-full -z-10 transition-all"></div>
+        
+        <button (click)="filterByBrand(null)"
+                class="px-5 py-2.5 md:px-8 md:py-3 rounded-full text-[9px] md:text-[11px] uppercase tracking-[0.2em] font-bold transition-all duration-500"
+                [ngClass]="selectedBrand === null ? 'bg-bhavaccent text-bhavdark shadow-lg shadow-bhavaccent/25' : 'text-bhavtext/40 hover:text-bhavtext hover:bg-white/5'">
+          All Products
+        </button>
+        
+        <button (click)="filterByBrand('Bhavnagris')"
+                class="px-5 py-2.5 md:px-8 md:py-3 rounded-full text-[9px] md:text-[11px] uppercase tracking-[0.2em] font-bold transition-all duration-500"
+                [ngClass]="selectedBrand === 'Bhavnagris' ? 'bg-bhavaccent text-bhavdark shadow-lg shadow-bhavaccent/25' : 'text-bhavtext/40 hover:text-bhavtext hover:bg-white/5'">
+          Bhavnagris
+        </button>
+        
+        <button (click)="filterByBrand('Heritage Imports')"
+                class="px-5 py-2.5 md:px-8 md:py-3 rounded-full text-[9px] md:text-[11px] uppercase tracking-[0.2em] font-bold transition-all duration-500"
+                [ngClass]="selectedBrand === 'Heritage Imports' ? 'bg-bhavaccent text-bhavdark shadow-lg shadow-bhavaccent/25' : 'text-bhavtext/40 hover:text-bhavtext hover:bg-white/5'">
+          Heritage
+        </button>
+      </div>
+    </div>
+
     <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
       
       <!-- Filters Sidebar (Horizontal on Mobile) -->

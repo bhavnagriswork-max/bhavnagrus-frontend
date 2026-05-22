@@ -55,6 +55,7 @@
         <tr>
           <th *ngIf="visibleColumns.image || visibleColumns.name" class="px-8 py-7">Heritage Item</th>
           <th *ngIf="visibleColumns.category" class="px-8 py-7">Classification</th>
+          <th *ngIf="visibleColumns.brand" class="px-8 py-7">Brand</th>
           <th *ngIf="visibleColumns.spiciness" class="px-8 py-7">Spiciness Heat</th>
           <th *ngIf="visibleColumns.valuation" class="px-8 py-7">Valuation</th>
           <th *ngIf="visibleColumns.stock" class="px-8 py-7">Availability</th>
@@ -77,6 +78,7 @@
             </div>
           </td>
           <td *ngIf="visibleColumns.category" class="px-8 py-7 text-[10px] uppercase tracking-widest text-bhavtext/50">{{p.category_name}}</td>
+          <td *ngIf="visibleColumns.brand" class="px-8 py-7 text-[10px] uppercase tracking-widest text-bhavaccent font-bold">{{p.brand || 'Bhavnagris'}}</td>
           <td *ngIf="visibleColumns.spiciness" class="px-8 py-7">
             <div class="flex items-center gap-3 bg-bhavtext/5 px-4 py-2 rounded-full border border-bhavtext/5 w-fit">
               <input type="range" 
@@ -123,7 +125,7 @@
               <p class="font-bold text-bhavtext text-lg">{{p.name}}</p>
               <span *ngIf="p.is_active === 0" class="px-2 py-0.5 bg-red-500/10 text-red-400 text-[7px] uppercase font-bold rounded-full">Archived</span>
             </div>
-            <p class="text-[9px] text-bhavtext/30 uppercase tracking-[0.3em] mt-1">{{p.category_name}} • {{p.weight}}</p>
+            <p class="text-[9px] text-bhavtext/30 uppercase tracking-[0.3em] mt-1">{{p.category_name}} • {{p.brand || 'Bhavnagris'}} • {{p.weight}}</p>
             <div class="flex items-center gap-3 bg-bhavtext/5 px-4 py-2 rounded-xl border border-bhavtext/5 w-fit mt-3">
               <input type="range" 
                      [value]="p.spiciness" 
@@ -171,6 +173,13 @@
             <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Category</label>
             <select name="category" [(ngModel)]="currentProduct.category_id" required class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all appearance-none">
               <option *ngFor="let cat of categories" [value]="cat.id" class="bg-bhavdark">{{cat.name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[9px] uppercase tracking-widest text-bhavtext/30 mb-2 block font-bold">Brand</label>
+            <select name="brand" [(ngModel)]="currentProduct.brand" required class="w-full bg-bhavtext/5 border-b border-bhavtext/10 px-0 py-3 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all appearance-none">
+              <option value="Bhavnagris" class="bg-bhavdark">Bhavnagris</option>
+              <option value="Heritage Imports" class="bg-bhavdark">Heritage Imports</option>
             </select>
           </div>
           <div>
