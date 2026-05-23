@@ -406,4 +406,31 @@ select option {
   filter: brightness(1.1) !important;
 }
 
+/* Homepage Product Card Premium Styling overrides for Light and Dark themes */
+.luxury-card-home {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.light-theme .luxury-card-home {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(252, 248, 242, 0.98) 100%) !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+  box-shadow: 0 20px 40px rgba(197, 160, 89, 0.06), 0 1px 3px rgba(0, 0, 0, 0.01) !important;
+}
+
+.light-theme .luxury-card-home .bg-bhavdark\/40 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+  color: #1e140a !important;
+}
+
+.light-theme .luxury-card-home .border-white\/10 {
+  border-color: rgba(197, 160, 89, 0.15) !important;
+}
+
+.light-theme .luxury-card-home .bg-gradient-to-t.from-bhavdark {
+  background-image: linear-gradient(to top, #fcfcfc 0%, rgba(252, 252, 252, 0.8) 50%, transparent 100%) !important;
+}
+
 
