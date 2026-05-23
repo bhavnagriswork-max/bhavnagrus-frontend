@@ -287,27 +287,56 @@
               <input type="file" multiple (change)="onMultipleFilesSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer">
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              <div *ngFor="let img of currentProduct.additional_images; let i = index" class="relative group aspect-square rounded-2xl overflow-hidden border border-bhavtext/5 bg-bhavdark/40 shadow-xl reveal-up" [style.transition-delay]="(i * 0.05) + 's'">
-                <img [src]="api.getMediaUrl(img)" (error)="handleImageError($event)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s]">
+            <!-- Premium Box Grid for Arranging Image Sequence -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div *ngFor="let img of currentProduct.additional_images; let i = index" 
+                   class="flex flex-col items-center bg-white/5 border border-white/10 rounded-3xl p-3 shadow-2xl reveal-up" 
+                   [style.transition-delay]="(i * 0.05) + 's'">
                 
-                <!-- Overlay Controls -->
-                <div class="absolute inset-0 bg-bhavdark/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-between p-3">
-                  <div class="flex justify-between items-start">
-                    <span class="bg-bhavaccent text-bhavdark text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-tighter shadow-lg">#{{i + 1}}</span>
-                    <button type="button" (click)="removeImage(i)" class="w-7 h-7 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-bhavtext flex items-center justify-center transition-all">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                  </div>
+                <!-- Image Wrapper with Persistent Sequence Badge -->
+                <div class="w-full aspect-square rounded-2xl overflow-hidden border border-white/5 bg-bhavdark/40 relative shadow-inner group">
+                  <img [src]="api.getMediaUrl(img)" (error)="handleImageError($event)" 
+                       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s]">
                   
-                  <div class="flex justify-center gap-2 pb-2">
-                    <button type="button" (click)="moveImage(i, 'up')" [disabled]="i === 0" class="w-9 h-9 rounded-full bg-bhavtext/10 text-bhavtext hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-20 flex items-center justify-center transition-all">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-                    <button type="button" (click)="moveImage(i, 'down')" [disabled]="i === currentProduct.additional_images.length - 1" class="w-9 h-9 rounded-full bg-bhavtext/10 text-bhavtext hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-20 flex items-center justify-center transition-all">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </button>
+                  <!-- Persistent Sequence Badge -->
+                  <div class="absolute top-2 left-2 bg-bhavaccent text-bhavdark font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-widest shadow-md">
+                    #{{i + 1}}
                   </div>
+                </div>
+
+                <!-- Always-Visible Action & Re-ordering Control Bar -->
+                <div class="w-full flex items-center justify-between mt-3 bg-white/5 rounded-2xl p-1.5 border border-white/5 gap-2">
+                  <!-- Move Left (Up) -->
+                  <button type="button" 
+                          (click)="moveImage(i, 'up')" 
+                          [disabled]="i === 0" 
+                          class="w-8 h-8 rounded-xl bg-white/5 hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-20 flex items-center justify-center text-bhavtext border border-white/5 transition-all cursor-pointer shadow"
+                          title="Move Left">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+
+                  <!-- Delete/Remove Image -->
+                  <button type="button" 
+                          (click)="removeImage(i)" 
+                          class="w-8 h-8 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-bhavtext flex items-center justify-center border border-red-500/10 transition-all cursor-pointer shadow"
+                          title="Remove Image">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+
+                  <!-- Move Right (Down) -->
+                  <button type="button" 
+                          (click)="moveImage(i, 'down')" 
+                          [disabled]="i === currentProduct.additional_images.length - 1" 
+                          class="w-8 h-8 rounded-xl bg-white/5 hover:bg-bhavaccent hover:text-bhavdark disabled:opacity-20 flex items-center justify-center text-bhavtext border border-white/5 transition-all cursor-pointer shadow"
+                          title="Move Right">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>

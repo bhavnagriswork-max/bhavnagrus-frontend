@@ -74,7 +74,26 @@ const getAllProductsAdmin = async (req, res) => {
             LEFT JOIN categories c ON p.category_id = c.id
             ORDER BY p.id DESC
         `);
-        res.json(products);
+        
+        // Fetch all product images to avoid N+1 query and sort by sequence order
+        const [images] = await pool.query('SELECT * FROM product_images ORDER BY sequence_order ASC');
+        
+        // Group images by product_id
+        const imagesMap = {};
+        for (const img of images) {
+            if (!imagesMap[img.product_id]) {
+                imagesMap[img.product_id] = [];
+            }
+            imagesMap[img.product_id].push(img);
+        }
+        
+        // Attach images to products
+        const productsWithImages = products.map(p => ({
+            ...p,
+            images: imagesMap[p.id] || []
+        }));
+        
+        res.json(productsWithImages);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
