@@ -114,119 +114,134 @@
 }
 
 /* --- LIGHT THEME CONTRAST EXEMPTIONS --- */
-/* Ensure text inside luxury-card is always perfectly legible, even when body has .light-theme override */
+/* Ensure the luxury card is truly light-themed when body has .light-theme override */
 .light-theme .luxury-card {
-  background: linear-gradient(135deg, rgba(20, 15, 10, 0.95) 0%, rgba(10, 7, 5, 0.98) 100%) !important;
-  color: #ffffff !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(252, 249, 244, 0.92) 100%) !important;
+  color: #1e140a !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+  box-shadow: 0 20px 40px rgba(197, 160, 89, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
 
-  /* Redefine Dark Theme CSS variables inside the luxury card context so they are protected from light-theme overrides */
-  --bhavbg: #080808 !important;
-  --bhavbg-rgb: 8, 8, 8 !important;
-  --bhavtext: #ffffff !important;
-  --bhavtext-rgb: 255, 255, 255 !important;
-  --bhavtext-muted: rgba(255, 255, 255, 0.4) !important;
-  --bhavglass: rgba(255, 255, 255, 0.03) !important;
-  --bhavglass-hover: rgba(255, 255, 255, 0.06) !important;
-  --bhavborder: rgba(255, 255, 255, 0.08) !important;
-  --bhavshadow: rgba(0, 0, 0, 0.8) !important;
-  --bhavcard: rgba(0, 0, 0, 0.4) !important;
-  --bhavpanel: #111111 !important;
-  --bhavaccent: #c5a059 !important;
-  --bhavaccent-rgb: 197, 160, 89 !important;
+  /* Redefine Light Theme CSS variables inside the luxury card context so they are aligned with the light layout */
+  --bhavbg: #faf6f0 !important;
+  --bhavbg-rgb: 250, 246, 240 !important;
+  --bhavtext: #1e140a !important;
+  --bhavtext-rgb: 30, 20, 10 !important;
+  --bhavtext-muted: rgba(30, 20, 10, 0.6) !important;
+  --bhavglass: rgba(0, 0, 0, 0.02) !important;
+  --bhavglass-hover: rgba(0, 0, 0, 0.05) !important;
+  --bhavborder: rgba(197, 160, 89, 0.15) !important;
+  --bhavshadow: rgba(197, 160, 89, 0.05) !important;
+  --bhavcard: rgba(255, 255, 255, 0.9) !important;
+  --bhavaccent: #a17b35 !important;
+  --bhavaccent-rgb: 161, 123, 53 !important;
+}
+
+.light-theme .luxury-card::before {
+  background: linear-gradient(135deg, rgba(30, 20, 10, 0.03) 0%, rgba(197, 160, 89, 0.15) 50%, rgba(30, 20, 10, 0.02) 100%) !important;
+}
+
+.light-theme .luxury-card:hover::before {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.4) 0%, rgba(30, 20, 10, 0.08) 50%, rgba(197, 160, 89, 0.3) 100%) !important;
 }
 
 /* Category Badge */
-.luxury-card .text-bhavtext\/80,
 .light-theme .luxury-card .text-bhavtext\/80 {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: rgba(30, 20, 10, 0.75) !important;
 }
 
 /* Title & Subtitle */
-.luxury-card h3.text-bhavtext,
 .light-theme .luxury-card h3.text-bhavtext {
-  color: #ffffff !important;
+  color: #1e140a !important;
 }
 
-.luxury-card .text-bhavaccent,
 .light-theme .luxury-card .text-bhavaccent {
-  color: #c5a059 !important;
+  color: #a17b35 !important;
 }
 
 /* Ratings */
-.luxury-card .text-bhavtext\/50,
 .light-theme .luxury-card .text-bhavtext\/50 {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(30, 20, 10, 0.55) !important;
 }
 
-.luxury-card .text-bhavtext\/30,
 .light-theme .luxury-card .text-bhavtext\/30 {
-  color: rgba(255, 255, 255, 0.3) !important;
+  color: rgba(30, 20, 10, 0.35) !important;
 }
 
 /* Weight Pack Badge */
-.luxury-card .bg-white\/5,
 .light-theme .luxury-card .bg-white\/5 {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(30, 20, 10, 0.03) !important;
+  border-color: rgba(30, 20, 10, 0.06) !important;
 }
 
-.luxury-card .text-bhavtext\/40,
 .light-theme .luxury-card .text-bhavtext\/40 {
-  color: rgba(255, 255, 255, 0.45) !important;
+  color: rgba(30, 20, 10, 0.5) !important;
 }
 
 /* Inactive Spice dots */
-.luxury-card .bg-white\/10,
 .light-theme .luxury-card .bg-white\/10 {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(30, 20, 10, 0.06) !important;
 }
 
 /* Description */
-.luxury-card p.text-bhavtext\/45,
 .light-theme .luxury-card p.text-bhavtext\/45 {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(30, 20, 10, 0.6) !important;
 }
 
 /* Price */
-.luxury-card .text-gold-gradient,
 .light-theme .luxury-card .text-gold-gradient {
-  background: linear-gradient(to right, #eec98a, #c5a059) !important;
+  background: linear-gradient(to right, #a17b35, #836021) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  color: #eec98a !important; /* Fallback */
+  color: #a17b35 !important;
 }
 
-.luxury-card .text-xs.line-through,
 .light-theme .luxury-card .text-xs.line-through {
-  color: rgba(255, 255, 255, 0.25) !important;
+  color: rgba(30, 20, 10, 0.3) !important;
 }
 
 /* Brand badge dark text */
-.luxury-card .text-bhavdark,
 .light-theme .luxury-card .text-bhavdark {
-  color: #080808 !important;
+  color: #faf6f0 !important;
 }
 
 /* Divider colors */
-.luxury-card .via-bhavaccent\/30,
 .light-theme .luxury-card .via-bhavaccent\/30 {
-  background-image: linear-gradient(to right, transparent, rgba(197, 160, 89, 0.35), transparent) !important;
+  background-image: linear-gradient(to right, transparent, rgba(161, 123, 53, 0.2), transparent) !important;
 }
 
 /* Image background overlays */
-.luxury-card .bg-black\/40,
 .light-theme .luxury-card .bg-black\/40 {
-  background-color: rgba(0, 0, 0, 0.4) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-.luxury-card .bg-black\/60,
 .light-theme .luxury-card .bg-black\/60 {
-  background-color: rgba(0, 0, 0, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-.luxury-card .text-white\/10,
 .light-theme .luxury-card .text-white\/10 {
-  color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(30, 20, 10, 0.08) !important;
+}
+
+/* Add to basket button inside light card */
+.light-theme .luxury-card button.bg-white\/5 {
+  background-color: rgba(161, 123, 53, 0.06) !important;
+  border-color: rgba(161, 123, 53, 0.12) !important;
+  color: #a17b35 !important;
+}
+
+.light-theme .luxury-card button.bg-white\/5:hover {
+  background-color: rgba(161, 123, 53, 0.12) !important;
+  color: #836021 !important;
+}
+
+/* BUY NOW Button in light theme */
+.light-theme .luxury-card .btn-premium.btn-gold {
+  background: linear-gradient(to right, #a17b35, #836021) !important;
+  color: #ffffff !important;
+}
+
+.light-theme .luxury-card .btn-premium.btn-gold:hover {
+  filter: brightness(1.1) !important;
 }
 
 
