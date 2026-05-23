@@ -23,6 +23,11 @@ export class CheckoutComponent implements OnInit {
   shippingRateType = 'static'; 
   courierDetails: any = null;
 
+  // Caching/Deduplication states
+  private lastQueriedPin = '';
+  private lastQueriedCod = -1;
+  private lastQueriedWeight = -1;
+
   orderData = {
     customer_name: '',
     customer_email: '',
@@ -167,8 +172,6 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    this.calculatingShipping = true;
-    
     // Calculate total weight by parsing item weights
     const totalWeight = this.cartItems.reduce((acc, item) => {
       const itemWeight = this.parseWeightToKg(item.weight);
@@ -176,6 +179,17 @@ export class CheckoutComponent implements OnInit {
     }, 0);
 
     const codStatus = this.orderData.payment_method === 'COD' ? 1 : 0;
+
+    // Suppress redundant calls if parameters haven't changed
+    if (
+      this.lastQueriedPin === pin &&
+      this.lastQueriedCod === codStatus &&
+      this.lastQueriedWeight === totalWeight
+    ) {
+      return;
+    }
+
+    this.calculatingShipping = true;
 
     const payload = {
       delivery_postcode: pin,
@@ -197,6 +211,9 @@ export class CheckoutComponent implements OnInit {
         } else {
           this.courierDetails = null;
         }
+        this.lastQueriedPin = pin;
+        this.lastQueriedCod = codStatus;
+        this.lastQueriedWeight = totalWeight;
         this.calculateTotals();
         this.calculatingShipping = false;
       },
@@ -204,6 +221,9 @@ export class CheckoutComponent implements OnInit {
         console.error('Dynamic shipping API failed:', err);
         this.shippingRateType = 'fallback';
         this.courierDetails = null;
+        this.lastQueriedPin = pin;
+        this.lastQueriedCod = codStatus;
+        this.lastQueriedWeight = totalWeight;
         this.calculatingShipping = false;
         this.calculateTotals();
       }

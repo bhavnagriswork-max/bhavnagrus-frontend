@@ -43,7 +43,7 @@
             </div>
             <div>
               <label class="text-[10px] uppercase tracking-[0.3em] text-bhavtext/30 mb-3 block font-bold">Pincode</label>
-              <input type="text" name="pincode" [(ngModel)]="orderData.pincode" (ngModelChange)="onPincodeChange($event)" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-bhavtext placeholder-white/20 focus:outline-none focus:border-bhavaccent/50 transition-all text-sm font-medium">
+              <input type="text" name="pincode" [(ngModel)]="orderData.pincode" (ngModelChange)="onPincodeChange($event)" required maxlength="6" pattern="[0-9]*" inputmode="numeric" class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-bhavtext placeholder-white/20 focus:outline-none focus:border-bhavaccent/50 transition-all text-sm font-medium">
             </div>
           </div>
         </div>
