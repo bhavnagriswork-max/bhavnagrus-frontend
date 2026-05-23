@@ -61,24 +61,24 @@
 /* Luxury Catalog Card Styles */
 .luxury-card {
   position: relative;
-  background: linear-gradient(135deg, rgba(20, 15, 10, 0.95) 0%, rgba(10, 7, 5, 0.98) 100%) !important;
+  background: linear-gradient(135deg, rgba(20, 15, 10, 0.95) 0%, rgba(10, 7, 5, 0.98) 100%);
   transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-  color: #ffffff !important;
+  color: #ffffff;
 
   /* Redefine Dark Theme CSS variables inside the luxury card context so they are protected from light-theme overrides */
-  --bhavbg: #080808 !important;
-  --bhavbg-rgb: 8, 8, 8 !important;
-  --bhavtext: #ffffff !important;
-  --bhavtext-rgb: 255, 255, 255 !important;
-  --bhavtext-muted: rgba(255, 255, 255, 0.4) !important;
-  --bhavglass: rgba(255, 255, 255, 0.03) !important;
-  --bhavglass-hover: rgba(255, 255, 255, 0.06) !important;
-  --bhavborder: rgba(255, 255, 255, 0.08) !important;
-  --bhavshadow: rgba(0, 0, 0, 0.8) !important;
-  --bhavcard: rgba(0, 0, 0, 0.4) !important;
-  --bhavpanel: #111111 !important;
-  --bhavaccent: #c5a059 !important;
-  --bhavaccent-rgb: 197, 160, 89 !important;
+  --bhavbg: #080808;
+  --bhavbg-rgb: 8, 8, 8;
+  --bhavtext: #ffffff;
+  --bhavtext-rgb: 255, 255, 255;
+  --bhavtext-muted: rgba(255, 255, 255, 0.4);
+  --bhavglass: rgba(255, 255, 255, 0.03);
+  --bhavglass-hover: rgba(255, 255, 255, 0.06);
+  --bhavborder: rgba(255, 255, 255, 0.08);
+  --bhavshadow: rgba(0, 0, 0, 0.8);
+  --bhavcard: rgba(0, 0, 0, 0.4);
+  --bhavpanel: #111111;
+  --bhavaccent: #c5a059;
+  --bhavaccent-rgb: 197, 160, 89;
 }
 
 .luxury-card::before {
