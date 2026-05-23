@@ -99,6 +99,95 @@
   background: linear-gradient(135deg, rgba(197, 160, 89, 0.4) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(197, 160, 89, 0.3) 100%);
 }
 
+/* Light Theme Catalog Card Overrides */
+:host-context(.light-theme) .luxury-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(252, 248, 242, 0.98) 100%) !important;
+  color: #1e140a !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+  box-shadow: 0 20px 50px rgba(197, 160, 89, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+
+  /* Redefine variables for light theme context */
+  --bhavbg: #faf6f0;
+  --bhavbg-rgb: 250, 246, 240;
+  --bhavtext: #1e140a;
+  --bhavtext-rgb: 30, 20, 10;
+  --bhavtext-muted: rgba(30, 20, 10, 0.6);
+  --bhavglass: rgba(30, 20, 10, 0.03);
+  --bhavglass-hover: rgba(30, 20, 10, 0.06);
+  --bhavborder: rgba(197, 160, 89, 0.15);
+  --bhavshadow: rgba(197, 160, 89, 0.05);
+  --bhavcard: rgba(255, 255, 255, 0.95);
+  --bhavpanel: #ffffff;
+  --bhavaccent: #a17b35;
+  --bhavaccent-rgb: 161, 123, 53;
+}
+
+:host-context(.light-theme) .luxury-card::before {
+  background: linear-gradient(135deg, rgba(30, 20, 10, 0.05) 0%, rgba(197, 160, 89, 0.2) 50%, rgba(30, 20, 10, 0.03) 100%) !important;
+}
+
+:host-context(.light-theme) .luxury-card:hover::before {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.4) 0%, rgba(30, 20, 10, 0.08) 50%, rgba(197, 160, 89, 0.3) 100%) !important;
+}
+
+/* Image background overlays */
+:host-context(.light-theme) .luxury-card .bg-black\/40 {
+  background-color: rgba(30, 20, 10, 0.03) !important;
+  border-color: rgba(197, 160, 89, 0.1) !important;
+}
+
+/* Category badge overlays */
+:host-context(.light-theme) .luxury-card .bg-black\/60 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+  color: #1e140a !important;
+}
+
+/* Pack weight badges */
+:host-context(.light-theme) .luxury-card .bg-white\/5 {
+  background-color: rgba(30, 20, 10, 0.04) !important;
+  border-color: rgba(30, 20, 10, 0.08) !important;
+  color: rgba(30, 20, 10, 0.6) !important;
+}
+
+/* Inactive spice dots */
+:host-context(.light-theme) .luxury-card .bg-white\/10 {
+  background-color: rgba(30, 20, 10, 0.1) !important;
+}
+
+/* Borders */
+:host-context(.light-theme) .luxury-card .border-white\/5 {
+  border-color: rgba(197, 160, 89, 0.12) !important;
+}
+:host-context(.light-theme) .luxury-card .border-white\/10 {
+  border-color: rgba(197, 160, 89, 0.18) !important;
+}
+
+/* Inactive rating stars */
+:host-context(.light-theme) .luxury-card .text-white\/10 {
+  color: rgba(30, 20, 10, 0.1) !important;
+}
+
+/* Price gold gradient */
+:host-context(.light-theme) .luxury-card .text-gold-gradient {
+  background: linear-gradient(to right, #a17b35, #836021) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #a17b35 !important;
+}
+
+/* Add to basket button */
+:host-context(.light-theme) .luxury-card button.bg-white\/5 {
+  background-color: rgba(161, 123, 53, 0.08) !important;
+  border-color: rgba(161, 123, 53, 0.15) !important;
+  color: #a17b35 !important;
+}
+
+:host-context(.light-theme) .luxury-card button.bg-white\/5:hover {
+  background-color: #a17b35 !important;
+  color: #ffffff !important;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
