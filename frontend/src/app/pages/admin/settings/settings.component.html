@@ -261,6 +261,72 @@
       </div>
     </section>
 
+    <!-- WhatsApp Communication Infrastructure -->
+    <section>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </div>
+        <h2 class="text-xl font-playfair font-bold text-bhavtext">Communication & WhatsApp Notifications</h2>
+      </div>
+
+      <div class="glass-card p-8 md:p-12 rounded-[2.5rem] border border-emerald-500/10 bg-emerald-500/[0.01] overflow-hidden">
+        <div class="space-y-12">
+          <!-- WhatsApp Header & Toggle -->
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-xs font-bold text-bhavaccent uppercase tracking-[0.3em] mb-2">WhatsApp Order Alerts Engine</h3>
+              <p class="text-[9px] text-bhavtext/40 uppercase tracking-widest font-bold">Transmit real-time transaction receipts directly to customer mobile numbers</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="text-[9px] font-bold uppercase tracking-widest" [ngClass]="getVal('whatsapp_enabled') === 'true' ? 'text-green-400' : 'text-bhavtext/20'">
+                {{getVal('whatsapp_enabled') === 'true' ? 'Active' : 'Inactive'}}
+              </span>
+              <button (click)="setVal('whatsapp_enabled', getVal('whatsapp_enabled') === 'true' ? 'false' : 'true')" 
+                class="w-12 h-6 rounded-full transition-all duration-500 relative"
+                [ngClass]="getVal('whatsapp_enabled') === 'true' ? 'bg-bhavaccent' : 'bg-bhavtext/10'">
+                <div class="w-4 h-4 bg-bhavdark rounded-full absolute top-1 transition-all duration-300"
+                  [ngClass]="getVal('whatsapp_enabled') === 'true' ? 'left-7' : 'left-1'"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Configuration Inputs -->
+          <div class="pt-8 border-t border-bhavtext/5 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Alert Gateway Provider</label>
+              <select [ngModel]="getVal('whatsapp_provider') || 'ultramsg'" (ngModelChange)="setVal('whatsapp_provider', $event)" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-6 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+                <option value="ultramsg" class="bg-bhavdark text-bhavtext">UltraMsg Gateway (Instance)</option>
+                <option value="twilio" class="bg-bhavdark text-bhavtext">Twilio API (Basic Auth)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Instance ID / Twilio SID</label>
+              <input type="text" [ngModel]="getVal('whatsapp_instance_id')" (ngModelChange)="setVal('whatsapp_instance_id', $event)" placeholder="e.g. instance12345 or AC..." class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">API Access Token / Token Secret</label>
+              <input type="password" [ngModel]="getVal('whatsapp_token')" (ngModelChange)="setVal('whatsapp_token', $event)" placeholder="••••••••••••••••" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium font-mono">
+            </div>
+          </div>
+
+          <!-- Sender Details Row -->
+          <div class="pt-8 border-t border-bhavtext/5 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.3em] text-bhavaccent mb-4 block font-bold">Sender WhatsApp Number</label>
+              <input type="text" [ngModel]="getVal('whatsapp_sender_number')" (ngModelChange)="setVal('whatsapp_sender_number', $event)" placeholder="e.g. +919999999999 or whatsapp:+14155238886" class="w-full bg-bhavtext/5 border border-bhavtext/10 rounded-2xl px-8 py-5 text-bhavtext focus:outline-none focus:border-bhavaccent transition-all text-sm font-medium">
+              <p class="text-[8px] text-bhavtext/20 uppercase tracking-widest mt-3 font-bold">Your active WhatsApp Business Number linked to the chosen gateway provider.</p>
+            </div>
+            <div class="p-6 bg-emerald-500/[0.03] border border-emerald-500/10 rounded-3xl text-[10px] text-bhavtext/40 leading-relaxed italic flex items-center justify-center">
+              "Ensures immediate order reassurance for customers, maintaining a standard of high transactional reliability."
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Security Infrastructure -->
     <section>
       <div class="flex items-center gap-4 mb-8">

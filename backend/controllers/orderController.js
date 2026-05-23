@@ -1,5 +1,6 @@
 const pool = require('../config/db');
 const { sendOrderEmail } = require('../utils/email');
+const { sendWhatsAppOrderAlert } = require('../utils/whatsapp');
 
 const placeOrder = async (req, res) => {
     try {
@@ -67,6 +68,11 @@ const placeOrder = async (req, res) => {
         sendOrderEmail({ 
             order_number, customer_name, customer_email, customer_mobile, total_amount, address_line1, city 
         }, finalItems, adminEmail).catch(console.error);
+
+        // --- Send WhatsApp Order Confirmation Alert ---
+        sendWhatsAppOrderAlert({
+            order_number, customer_name, customer_mobile, total_amount, address_line1, address_line2, city, state, pincode, payment_method
+        }, finalItems).catch(console.error);
 
         res.status(201).json({ message: 'Order placed successfully', order_number });
     } catch (error) {
