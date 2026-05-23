@@ -285,4 +285,125 @@ select option {
   }
 }
 
+/* ==========================================
+   🌓 PREMIUM LIGHT THEME PRODUCTS CARD ALIGNMENT
+   Ensures product cards become a gorgeous cream/white glassmorphic
+   container with high-contrast, premium dark gold & charcoal accents
+   ========================================== */
+
+.light-theme .luxury-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(252, 248, 242, 0.98) 100%) !important;
+  color: #1e140a !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+  box-shadow: 0 20px 50px rgba(197, 160, 89, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+}
+
+.light-theme .luxury-card::before {
+  background: linear-gradient(135deg, rgba(30, 20, 10, 0.05) 0%, rgba(197, 160, 89, 0.25) 50%, rgba(30, 20, 10, 0.03) 100%) !important;
+}
+
+.light-theme .luxury-card:hover::before {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.5) 0%, rgba(30, 20, 10, 0.1) 50%, rgba(197, 160, 89, 0.4) 100%) !important;
+}
+
+/* Category Badge */
+.light-theme .luxury-card .text-bhavtext\/80 {
+  color: rgba(30, 20, 10, 0.75) !important;
+}
+
+/* Title & Subtitle */
+.light-theme .luxury-card h3.text-bhavtext {
+  color: #1e140a !important;
+}
+
+.light-theme .luxury-card .text-bhavaccent {
+  color: #a17b35 !important;
+}
+
+/* Ratings */
+.light-theme .luxury-card .text-bhavtext\/50 {
+  color: rgba(30, 20, 10, 0.55) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/30 {
+  color: rgba(30, 20, 10, 0.35) !important;
+}
+
+/* Weight Pack Badge */
+.light-theme .luxury-card .bg-white\/5 {
+  background-color: rgba(30, 20, 10, 0.04) !important;
+  border-color: rgba(30, 20, 10, 0.08) !important;
+}
+
+.light-theme .luxury-card .text-bhavtext\/40 {
+  color: rgba(30, 20, 10, 0.5) !important;
+}
+
+/* Inactive Spice dots */
+.light-theme .luxury-card .bg-white\/10 {
+  background-color: rgba(30, 20, 10, 0.08) !important;
+}
+
+/* Description */
+.light-theme .luxury-card p.text-bhavtext\/45 {
+  color: rgba(30, 20, 10, 0.6) !important;
+}
+
+/* Price */
+.light-theme .luxury-card .text-gold-gradient {
+  background: linear-gradient(to right, #a17b35, #836021) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #a17b35 !important;
+}
+
+.light-theme .luxury-card .text-xs.line-through {
+  color: rgba(30, 20, 10, 0.3) !important;
+}
+
+/* Brand badge text inside light card */
+.light-theme .luxury-card .text-bhavdark {
+  color: #faf6f0 !important;
+}
+
+/* Divider colors */
+.light-theme .luxury-card .via-bhavaccent\/30 {
+  background-image: linear-gradient(to right, transparent, rgba(161, 123, 53, 0.25), transparent) !important;
+}
+
+/* Image background overlays */
+.light-theme .luxury-card .bg-black\/40 {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.light-theme .luxury-card .bg-black\/60 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.light-theme .luxury-card .text-white\/10 {
+  color: rgba(30, 20, 10, 0.1) !important;
+}
+
+/* Add to basket button inside light card */
+.light-theme .luxury-card button.bg-white\/5 {
+  background-color: rgba(161, 123, 53, 0.06) !important;
+  border-color: rgba(161, 123, 53, 0.12) !important;
+  color: #a17b35 !important;
+}
+
+.light-theme .luxury-card button.bg-white\/5:hover {
+  background-color: rgba(161, 123, 53, 0.12) !important;
+  color: #836021 !important;
+}
+
+/* BUY NOW Button in light theme */
+.light-theme .luxury-card .btn-premium.btn-gold {
+  background: linear-gradient(to right, #a17b35, #836021) !important;
+  color: #ffffff !important;
+}
+
+.light-theme .luxury-card .btn-premium.btn-gold:hover {
+  filter: brightness(1.1) !important;
+}
+
 
