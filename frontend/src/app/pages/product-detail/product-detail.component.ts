@@ -1,5 +1,7 @@
-import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener, Inject, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { NotificationService } from '../../services/notification.service';
 import { gsap } from 'gsap';
@@ -42,7 +44,11 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     public api: ApiService,
     private router: Router,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private titleService: Title,
+    private metaService: Meta,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document
   ) { }
 
   ngOnInit(): void {
@@ -67,6 +73,12 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
         this.activeIndex = 0;
         this.activeImage = this.allImages[0];
         this.loading = false;
+        
+        // SEO Metadata Optimization
+        this.titleService.setTitle(`${this.product.name} | Buy Premium Snacks Online | Bhavnagris`);
+        this.metaService.updateTag({ name: 'description', content: this.product.description?.substring(0, 160) || 'Experience the authentic taste of Bhavnagar heritage with our premium selection of hand-crafted delicacies.' });
+        this.setSchemaMarkup(this.product);
+
         this.fetchReviews(data.id);
       },
       error: (err) => {
@@ -239,5 +251,31 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
       '5 Stars - Exceptional'
     ];
     return texts[rating] || texts[0];
+  }
+
+  setSchemaMarkup(product: any) {
+    const schema = {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": product.name,
+      "image": this.api.getMediaUrl(product.image),
+      "description": product.description || 'Premium Bhavnagari snack.',
+      "brand": {
+        "@type": "Brand",
+        "name": "Bhavnagris"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": window.location.href,
+        "priceCurrency": "INR",
+        "price": product.selling_price,
+        "availability": "https://schema.org/InStock"
+      }
+    };
+    
+    const script = this.renderer.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(schema);
+    this.renderer.appendChild(this.document.head, script);
   }
 }
