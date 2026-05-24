@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     website_name: 'Bhavnagris Heritage',
     hero_badge: 'Established 1948 • Bhavnagar',
     hero_cta_text: 'Order Now',
-    hero_image: 'assets/images/hero-snacks.png',
+    hero_image: 'assets/images/hero-snacks.webp',
     products_title: 'Signature <br/><span class="text-white/20">Hand-Picked Mix</span>',
     products_subtitle: 'Select your favorite traditional flavors from our curated collection.',
     cta_title: 'Savor the <br/> <span class="italic text-white/20">Legacy.</span>',
