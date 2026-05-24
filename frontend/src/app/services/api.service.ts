@@ -115,8 +115,12 @@ export class ApiService {
   }
 
   private syncGuestCart() {
-    const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
-    if (guestCart.length > 0) {
+    try {
+      const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      if (guestCart.length > 0) {
+        localStorage.removeItem('guestCart');
+      }
+    } catch (e) {
       localStorage.removeItem('guestCart');
     }
   }
@@ -266,7 +270,8 @@ export class ApiService {
         catchError(err => this.handleError(err))
       );
     } else {
-      const items = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      let items = [];
+      try { items = JSON.parse(localStorage.getItem('guestCart') || '[]'); } catch(e) {}
       const mapped = items.map((i: any) => ({ ...i, id: i.product_id }));
       return of(mapped);
     }
@@ -278,7 +283,8 @@ export class ApiService {
         catchError(err => this.handleError(err))
       );
     } else {
-      let items = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      let items: any[] = [];
+      try { items = JSON.parse(localStorage.getItem('guestCart') || '[]'); } catch(e) {}
       const existing = items.find((i: any) => i.product_id === product.id);
       if (existing) {
         existing.quantity += quantity;
@@ -303,7 +309,8 @@ export class ApiService {
         catchError(err => this.handleError(err))
       );
     } else {
-      let items = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      let items: any[] = [];
+      try { items = JSON.parse(localStorage.getItem('guestCart') || '[]'); } catch(e) {}
       const item = items.find((i: any) => i.product_id === id);
       if (item) item.quantity = quantity;
       localStorage.setItem('guestCart', JSON.stringify(items));
@@ -317,7 +324,8 @@ export class ApiService {
         catchError(err => this.handleError(err))
       );
     } else {
-      let items = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      let items: any[] = [];
+      try { items = JSON.parse(localStorage.getItem('guestCart') || '[]'); } catch(e) {}
       items = items.filter((i: any) => i.product_id !== id);
       localStorage.setItem('guestCart', JSON.stringify(items));
       return of({ message: 'Removed from guest cart' });

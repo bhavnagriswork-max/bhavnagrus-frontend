@@ -132,7 +132,7 @@
             <div class="flex items-center bg-white/5 border border-white/10 rounded-full px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto justify-between">
               <button (click)="quantity = quantity > 1 ? quantity - 1 : 1" class="text-bhavtext/30 hover:text-bhavaccent transition-all px-2 font-bold text-lg">-</button>
               <span class="mx-8 md:mx-12 text-lg font-bold text-bhavtext">{{quantity}}</span>
-              <button (click)="quantity = quantity + 1" class="text-bhavtext/30 hover:text-bhavaccent transition-all px-2 font-bold text-lg">+</button>
+              <button (click)="quantity = quantity < 50 ? quantity + 1 : 50" class="text-bhavtext/30 hover:text-bhavaccent transition-all px-2 font-bold text-lg">+</button>
             </div>
             
             <div class="flex w-full gap-4">

@@ -158,11 +158,16 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
   fetchReviews(productId: string) {
     this.api.getReviews(productId).subscribe({
       next: (data) => {
-        this.reviews = data;
-        if (data && data.length > 0) {
-          const sum = data.reduce((acc: number, curr: any) => acc + curr.rating, 0);
-          this.averageRating = Math.round((sum / data.length) * 10) / 10;
+        if (Array.isArray(data)) {
+          this.reviews = data;
+          if (data.length > 0) {
+            const sum = data.reduce((acc: number, curr: any) => acc + curr.rating, 0);
+            this.averageRating = Math.round((sum / data.length) * 10) / 10;
+          } else {
+            this.averageRating = 0;
+          }
         } else {
+          this.reviews = [];
           this.averageRating = 0;
         }
       },
@@ -220,7 +225,9 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
   }
 
   handleImageError(event: any) {
-    event.target.src = 'assets/placeholder-luxury.jpg';
+    if (!event.target.src.includes('assets/placeholder-luxury.jpg')) {
+      event.target.src = 'assets/placeholder-luxury.jpg';
+    }
   }
 
   ngAfterViewInit(): void {
