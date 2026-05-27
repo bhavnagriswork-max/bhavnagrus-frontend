@@ -156,7 +156,9 @@
 
         <div class="mt-8 px-2">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors duration-500">{{product.name}}</h3>
+            <h3 class="text-xl font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors duration-500">
+              {{ langService.getCurrentLanguage() === 'gujarati' && product.name_gu ? product.name_gu : product.name }}
+            </h3>
             <!-- Tiny spiciness dots -->
             <div *ngIf="product.spiciness > 0" class="flex gap-0.5">
               <div *ngFor="let s of [1,2,3,4,5]" 

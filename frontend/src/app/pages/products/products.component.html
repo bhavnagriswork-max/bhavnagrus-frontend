@@ -6,8 +6,24 @@
 
   <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 relative z-10">
     
-    <!-- Page Header -->
-    <div class="text-center mb-16 md:mb-24">
+    <!-- Premium Category Collections Banner (Shown on specific category landing pages) -->
+    <div *ngIf="activeCategory" class="relative overflow-hidden rounded-[3rem] border border-bhavaccent/20 bg-gradient-to-r from-bhavaccent/5 via-[#120e0a]/90 to-bhavaccent/5 p-8 md:p-16 mb-16 shadow-2xl reveal-up">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.1)_0%,transparent_50%)] pointer-events-none"></div>
+      <div class="relative z-10 max-w-3xl">
+        <span class="inline-block py-1.5 px-4 rounded-full bg-bhavaccent/10 border border-bhavaccent/25 text-bhavaccent text-[9px] font-bold tracking-[0.3em] uppercase mb-4">
+          Snacking Collection
+        </span>
+        <h1 class="text-4xl md:text-7xl font-playfair font-bold text-bhavtext mb-4 uppercase tracking-tight">
+          {{ activeCategory.name }}
+        </h1>
+        <p class="text-bhavtext/50 text-sm md:text-base font-light leading-relaxed max-w-2xl">
+          {{ activeCategory.description }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Generic Page Header (Shown only if on global all products catalog) -->
+    <div *ngIf="!activeCategory" class="text-center mb-16 md:mb-24">
       <h3 class="text-bhavaccent uppercase tracking-[0.5em] text-[8px] md:text-[10px] font-bold mb-4 md:mb-6">Explore the Collection</h3>
       <h1 class="text-4xl md:text-8xl font-playfair font-bold text-bhavtext uppercase tracking-tight leading-none">
         Heritage <br class="hidden md:block"/> <span class="text-bhavtext/20">Catalog</span>
@@ -15,10 +31,9 @@
       <div class="h-px w-16 md:w-24 bg-bhavaccent/30 mx-auto mt-8 md:mt-12"></div>
     </div>
 
-    <!-- Premium Brand Tab Bar -->
-    <div class="flex justify-center items-center mb-12 md:mb-16">
+    <!-- Premium Brand Tab Bar (Only shown on global catalog) -->
+    <div *ngIf="!activeCategory" class="flex justify-center items-center mb-12 md:mb-16">
       <div class="glass-card px-2 py-2 md:px-3 md:py-3 rounded-full border border-white/5 bg-white/[0.02] flex gap-1 md:gap-3 w-fit mx-auto shadow-2xl relative">
-        <!-- Glow effect -->
         <div class="absolute inset-0 bg-bhavaccent/5 blur-xl rounded-full -z-10 transition-all"></div>
         
         <button (click)="filterByBrand(null)"
@@ -43,37 +58,48 @@
 
     <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
       
-      <!-- Filters Sidebar (Horizontal on Mobile) -->
+      <!-- Filters Sidebar -->
       <aside class="lg:w-72 flex-shrink-0">
         <div class="lg:sticky lg:top-40 space-y-10 lg:space-y-16">
           
+          <!-- Category List (Always shown for seamless category navigation) -->
           <div class="overflow-x-auto lg:overflow-visible no-scrollbar pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
             <h4 class="hidden lg:block text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30 mb-10 border-b border-white/5 pb-6">Categories</h4>
             <ul class="flex lg:flex-col gap-4 md:gap-6 whitespace-nowrap lg:whitespace-normal">
               <li>
                 <button (click)="filterByCategory(null)" 
                         class="group flex items-center justify-between px-6 py-3 lg:px-0 lg:py-0 bg-white/5 lg:bg-transparent rounded-full lg:rounded-none text-left text-[10px] md:text-xs uppercase tracking-widest font-bold transition-all"
-                        [ngClass]="selectedCategoryId === null ? 'text-bhavaccent bg-bhavaccent/10 lg:bg-transparent' : 'text-bhavtext/40 hover:text-bhavtext'">
+                        [ngClass]="selectedCategoryId == null ? 'text-bhavaccent bg-bhavaccent/10 lg:bg-transparent' : 'text-bhavtext/40 hover:text-bhavtext'">
                   All Products
-                  <span class="hidden lg:block w-1.5 h-1.5 bg-bhavaccent rounded-full transition-all" [ngClass]="selectedCategoryId === null ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"></span>
+                  <span class="hidden lg:block w-1.5 h-1.5 bg-bhavaccent rounded-full transition-all" [ngClass]="selectedCategoryId == null ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"></span>
                 </button>
               </li>
-              <li *ngFor="let cat of categories">
+              <li *ngFor="let cat of getRestructuredCategoriesList()">
                 <button (click)="filterByCategory(cat.id)" 
                         class="group flex items-center justify-between px-6 py-3 lg:px-0 lg:py-0 bg-white/5 lg:bg-transparent rounded-full lg:rounded-none text-left text-[10px] md:text-xs uppercase tracking-widest font-bold transition-all"
-                        [ngClass]="selectedCategoryId === cat.id ? 'text-bhavaccent bg-bhavaccent/10 lg:bg-transparent' : 'text-bhavtext/40 hover:text-bhavtext'">
+                        [ngClass]="selectedCategoryId == cat.id ? 'text-bhavaccent bg-bhavaccent/10 lg:bg-transparent' : 'text-bhavtext/40 hover:text-bhavtext'">
                   {{cat.name}}
-                  <span class="hidden lg:block w-1.5 h-1.5 bg-bhavaccent rounded-full transition-all" [ngClass]="selectedCategoryId === cat.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"></span>
+                  <span class="hidden lg:block w-1.5 h-1.5 bg-bhavaccent rounded-full transition-all" [ngClass]="selectedCategoryId == cat.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"></span>
                 </button>
               </li>
             </ul>
+          </div>
+
+          <!-- Showcase / Featured Filter -->
+          <div class="space-y-6">
+            <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30 border-b border-white/5 pb-6">Showcase</h4>
+            <button (click)="toggleBestSellers()"
+                    class="w-full px-5 py-3 rounded-2xl border text-[9px] uppercase tracking-widest font-bold transition-all duration-300 flex items-center justify-between"
+                    [ngClass]="showOnlyBestSellers ? 'bg-bhavaccent/10 border-bhavaccent text-bhavaccent shadow-sm' : 'bg-white/5 border-white/10 text-bhavtext/60 hover:bg-white/10'">
+              <span class="flex items-center gap-2">⭐ Best Sellers Only</span>
+              <span class="w-1.5 h-1.5 rounded-full transition-all" [ngClass]="showOnlyBestSellers ? 'bg-bhavaccent scale-100' : 'bg-white/20 scale-50'"></span>
+            </button>
           </div>
 
           <!-- Spicy Slider Filter -->
           <div class="space-y-8">
             <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-bhavtext/30 border-b border-white/5 pb-6">Spice Level Filter</h4>
             <div class="glass-card p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] relative overflow-hidden group">
-              <!-- Glow effect -->
               <div class="absolute -top-10 -right-10 w-24 h-24 bg-red-500/10 blur-2xl rounded-full transition-all duration-700 group-hover:bg-red-500/20"></div>
               
               <div class="flex justify-between items-center mb-6">
@@ -106,23 +132,34 @@
             </div>
           </div>
 
+          <!-- Clear Filters Button -->
+          <button *ngIf="selectedTags.length > 0 || selectedSpiciness > 0 || showOnlyBestSellers"
+                  (click)="resetFilters()"
+                  class="w-full py-4 bg-red-500/5 border border-red-500/15 text-red-400 font-bold text-[9px] uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all duration-300 active:scale-95 shadow-md">
+            Clear Active Filters
+          </button>
+
           <!-- Quick Discovery (Hidden on small mobile) -->
           <div class="hidden md:block glass-card p-8 rounded-3xl border border-white/5 bg-bhavaccent/5">
              <h4 class="text-[9px] font-bold uppercase tracking-[0.3em] text-bhavaccent mb-4">Heritage Tip</h4>
-             <p class="text-bhavtext/40 text-[10px] leading-relaxed">Try our Signature Farsan with masala tea for the most authentic experience.</p>
+             <p class="text-bhavtext/40 text-[10px] leading-relaxed">Try our Gathiya and Sev collections with hot tea for the ultimate traditional breakfast.</p>
           </div>
         </div>
       </aside>
 
-      <!-- Products Grid -->
+      <!-- Products Grid & Sections -->
       <div class="flex-1">
         
         <!-- Sorting and Count -->
         <div class="flex justify-between items-center mb-10 md:mb-16 pb-6 md:pb-8 border-b border-white/5">
-          <p class="text-[9px] md:text-[10px] text-bhavtext/30 uppercase tracking-[0.3em] font-bold">{{filteredProducts.length}} Items</p>
+          <p class="text-[9px] md:text-[10px] text-bhavtext/30 uppercase tracking-[0.3em] font-bold">
+            <span *ngIf="activeCategory">{{filteredProducts.length}} Items Found</span>
+            <span *ngIf="!activeCategory">Complete Snacking Catalog</span>
+          </p>
           <div class="flex items-center gap-4">
             <span class="hidden md:inline text-[9px] text-bhavtext/20 uppercase tracking-widest">Sort By:</span>
             <select [(ngModel)]="sortOption" (change)="applyFilter()" class="bg-transparent text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-bhavtext border-none focus:ring-0 cursor-pointer hover:text-bhavaccent transition-colors">
+              <option value="Best Selling" class="bg-bhavdark">Best Selling</option>
               <option value="Latest Arrivals" class="bg-bhavdark">Latest</option>
               <option value="Price: Low to High" class="bg-bhavdark">Price ↑</option>
               <option value="Price: High to Low" class="bg-bhavdark">Price ↓</option>
@@ -139,140 +176,236 @@
            </div>
         </div>
 
-        <!-- Products List -->
-        <div *ngIf="!loading" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12">
-          <div *ngFor="let product of filteredProducts" 
-               class="luxury-card group cursor-pointer relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] bg-[#0e0a06]/85 border border-white/5 shadow-2xl p-5 transition-all duration-500 hover:-translate-y-2 hover:border-bhavaccent/30 hover:shadow-[0_20px_50px_rgba(197,160,89,0.15)]"
-               [routerLink]="['/product', product.slug || product.id]">
-            
-            <!-- Top Row: Image & Badges inside a continuous container -->
-            <div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-6 bg-black/40 border border-white/5">
-              <!-- Ensure Image Visibility -->
-              <img [src]="api.getMediaUrl(product.image)" 
-                   (error)="handleImageError($event)" 
-                   alt="{{product.name}}" 
-                   class="w-full h-full object-cover transform transition-transform duration-[1.5s] group-hover:scale-110" 
-                   loading="lazy">
-              
-              <!-- Premium Dynamic Gold Brand Badge & Category badge overlay -->
-              <div class="absolute top-4 left-4 flex flex-col gap-2 z-20">
-                <div class="px-4 py-1.5 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-bhavdark rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1 border border-yellow-400/30">
-                  <span>👑</span> {{ product.brand || 'Bhavnagris' }}
-                </div>
-                <div class="px-3 py-1 bg-black/60 backdrop-blur-md text-bhavtext/80 rounded-full text-[8px] font-bold uppercase tracking-widest border border-white/10 w-fit">
-                  {{ product.category_name || 'Heritage' }}
-                </div>
-              </div>
-
-              <!-- Spiciness Overlay on Image Bottom-Right -->
-              <div *ngIf="product.spiciness > 0" class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex gap-0.5 items-center">
-                <span class="text-[8px] uppercase tracking-wider text-red-400 font-bold mr-1">HEAT</span>
-                <span *ngFor="let s of [1,2,3,4,5] | slice:0:product.spiciness" class="text-[9px]">🌶️</span>
-              </div>
-            </div>
-
-            <!-- Product Meta Info -->
-            <div class="flex-grow flex flex-col justify-between">
-              <!-- Title, Ratings, Weight, Description -->
-              <div>
-                <!-- Brand / Category Subtitle -->
-                <p class="text-[9px] uppercase tracking-[0.25em] text-bhavaccent font-bold mb-1.5">{{ product.category_name || 'Heritage' }} Collection</p>
+        <!-- Products List Showcase -->
+        <div *ngIf="!loading">
+          
+          <!-- CASE A: Viewing an Isolated Category Collection (Gathiya, Sev, or Bhujia) -->
+          <div *ngIf="activeCategory">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12">
+              <div *ngFor="let product of filteredProducts" 
+                   class="luxury-card group cursor-pointer relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] bg-[#0e0a06]/85 border border-white/5 shadow-2xl p-5 transition-all duration-500 hover:-translate-y-2 hover:border-bhavaccent/30 hover:shadow-[0_20px_50px_rgba(197,160,89,0.15)]"
+                   [routerLink]="['/product', product.slug || product.id]">
                 
-                <!-- Large Serif Title -->
-                <h3 class="text-xl md:text-2xl font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors duration-500 line-clamp-2 min-h-[3.25rem] md:min-h-[4rem] mb-2">
-                  {{product.name}}
-                </h3>
-
-                <!-- Dummy Ratings with Luxury Star Row -->
-                <div class="flex items-center gap-2 mb-3">
-                  <div class="flex items-center gap-0.5">
-                    <svg *ngFor="let i of [1,2,3,4,5]" 
-                         xmlns="http://www.w3.org/2000/svg" 
-                         class="h-3.5 w-3.5" 
-                         [ngClass]="i <= (product.rating || 4.8) ? 'text-bhavaccent drop-shadow-[0_0_4px_rgba(197,160,89,0.7)]' : 'text-white/10'" 
-                         fill="currentColor" 
-                         viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  </div>
-                  <span class="text-[10px] text-bhavtext/50 font-medium">
-                    <strong class="text-bhavaccent font-bold">{{ product.rating || '4.8' }}</strong> 
-                    <span class="text-bhavtext/30 mx-1">•</span> 
-                    ({{ product.rating_count || '120' }} reviews)
-                  </span>
-                </div>
-
-                <!-- Weight & Spiciness Dots Row -->
-                <div class="flex items-center gap-4 mb-4">
-                  <p class="text-[9px] text-bhavtext/40 uppercase tracking-[0.15em] font-bold bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
-                    ⚖️ {{product.weight || '500g'}} Pack
-                  </p>
-                  <div class="flex gap-1 items-center">
-                    <span class="text-[8px] text-bhavtext/30 font-bold uppercase tracking-wider">Spice:</span>
-                    <div class="flex gap-0.5">
-                      <div *ngFor="let s of [1,2,3,4,5]" 
-                           class="w-1.5 h-1.5 rounded-full transition-all duration-500"
-                           [ngClass]="s <= product.spiciness ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-white/10'"></div>
+                <!-- Image & Badges -->
+                <div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-6 bg-black/40 border border-white/5">
+                  <img [src]="api.getMediaUrl(product.image)" 
+                       (error)="handleImageError($event)" 
+                       alt="{{product.name}}" 
+                       class="w-full h-full object-cover transform transition-transform duration-[1.5s] group-hover:scale-110" 
+                       loading="lazy">
+                  
+                  <div class="absolute top-4 left-4 flex flex-col gap-2 z-20">
+                    <div class="px-4 py-1.5 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-bhavdark rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1 border border-yellow-400/30">
+                      <span>👑</span> {{ product.brand || 'Bhavnagris' }}
                     </div>
                   </div>
+
+                  <!-- Spiciness Overlay -->
+                  <div *ngIf="product.spiciness > 0" class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex gap-0.5 items-center">
+                    <span class="text-[8px] uppercase tracking-wider text-red-400 font-bold mr-1">HEAT</span>
+                    <span *ngFor="let s of [1,2,3,4,5] | slice:0:product.spiciness" class="text-[9px]">🌶️</span>
+                  </div>
                 </div>
 
-                <!-- Truncated descriptive summary -->
-                <p class="text-bhavtext/45 text-[11px] leading-relaxed mb-6 line-clamp-2">
-                  {{ product.description || 'Premium Gujarati snack handcrafted using traditional heritage recipes and premium ingredients.' }}
-                </p>
-              </div>
+                <!-- Product Meta Info -->
+                <div class="flex-grow flex flex-col justify-between">
+                  <div>
+                    <p class="text-[9px] uppercase tracking-[0.25em] text-bhavaccent font-bold mb-1.5">
+                      {{ activeCategory.name }} <span *ngIf="product.tags" class="text-bhavtext/30"> &gt; {{ product.tags.split(',')[0] }}</span>
+                    </p>
+                    
+                    <h3 class="text-xl md:text-2xl font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors duration-500 line-clamp-2 min-h-[3.25rem] md:min-h-[4rem] mb-2">
+                      {{ langService.getCurrentLanguage() === 'gujarati' && product.name_gu ? product.name_gu : product.name }}
+                    </h3>
 
-              <!-- Footer & Action Section -->
-              <div>
-                <!-- Gold tinted elegant divider -->
-                <div class="h-px bg-gradient-to-r from-transparent via-bhavaccent/30 to-transparent mb-5 w-full"></div>
+                    <!-- Ratings -->
+                    <div class="flex items-center gap-2 mb-3">
+                      <div class="flex items-center gap-0.5">
+                        <svg *ngFor="let i of [1,2,3,4,5]" 
+                             xmlns="http://www.w3.org/2000/svg" 
+                             class="h-3.5 w-3.5" 
+                             [ngClass]="i <= (product.rating || 4.8) ? 'text-bhavaccent drop-shadow-[0_0_4px_rgba(197,160,89,0.7)]' : 'text-white/10'" 
+                             fill="currentColor" 
+                             viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      </div>
+                      <span class="text-[10px] text-bhavtext/50 font-medium">
+                        <strong class="text-bhavaccent font-bold">{{ product.rating || '4.8' }}</strong> 
+                      </span>
+                    </div>
 
-                <!-- Price and Actions stacked vertically to prevent clipping -->
-                <div class="space-y-4">
-                  <!-- Price Row -->
-                  <div class="flex items-center justify-between">
-                    <div class="flex flex-col">
-                      <span class="text-[8px] uppercase tracking-[0.2em] text-bhavtext/30 font-bold">PRICE</span>
-                      <div class="flex items-baseline gap-1.5">
-                        <span class="text-2xl font-bold text-gold-gradient">₹{{product.selling_price}}</span>
-                        <span *ngIf="product.original_price > product.selling_price" class="text-xs line-through text-bhavtext/20">₹{{product.original_price}}</span>
+                    <!-- Pack weight -->
+                    <div class="flex items-center gap-4 mb-4">
+                      <p class="text-[9px] text-bhavtext/40 uppercase tracking-[0.15em] font-bold bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
+                        ⚖️ {{product.weight || '250g'}} Pack
+                      </p>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-bhavtext/45 text-[11px] leading-relaxed mb-6 line-clamp-2">
+                      {{ langService.getCurrentLanguage() === 'gujarati' && product.description_gu ? product.description_gu : product.description }}
+                    </p>
+                  </div>
+
+                  <!-- Price & Sleek Actions -->
+                  <div>
+                    <div class="h-px bg-gradient-to-r from-transparent via-bhavaccent/30 to-transparent mb-5 w-full"></div>
+                    <div class="space-y-4">
+                      <div class="flex items-center justify-between">
+                        <div class="flex flex-col">
+                          <span class="text-[8px] uppercase tracking-[0.2em] text-bhavtext/30 font-bold">PRICE</span>
+                          <div class="flex items-baseline gap-1.5">
+                            <span class="text-2xl font-bold text-gold-gradient">₹{{product.selling_price}}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="flex gap-2.5 w-full">
+                        <button (click)="$event.stopPropagation(); addToCart(product)" 
+                                class="w-12 h-12 bg-white/5 border border-white/10 text-bhavaccent hover:text-bhavdark hover:bg-bhavaccent hover:border-bhavaccent rounded-2xl flex items-center justify-center transition-all duration-300 active:scale-95 shadow-lg shrink-0">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                          </svg>
+                        </button>
+
+                        <button (click)="$event.stopPropagation(); buyNow(product)" 
+                                class="flex-1 py-3 bg-bhavaccent text-bhavdark font-bold text-[10px] uppercase tracking-[0.15em] rounded-2xl hover:opacity-90 hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] active:scale-95 transition-all duration-300 shadow-md flex items-center justify-center gap-1.5">
+                          <span>BUY NOW</span>
+                        </button>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Actions Row (Responsive Flex Layout) -->
-                  <div class="flex gap-2.5 w-full">
-                    <!-- Add to Basket sleek glass icon button -->
-                    <button (click)="$event.stopPropagation(); addToCart(product)" 
-                            title="Add to Basket"
-                            class="w-12 h-12 bg-white/5 border border-white/10 text-bhavaccent hover:text-bhavdark hover:bg-bhavaccent hover:border-bhavaccent rounded-2xl flex items-center justify-center transition-all duration-300 active:scale-95 shadow-lg shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                      </svg>
-                    </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                    <!-- BUY NOW premium gold pill button (takes remaining width) -->
-                    <button (click)="$event.stopPropagation(); buyNow(product)" 
-                            class="flex-1 py-3 bg-bhavaccent text-bhavdark font-bold text-[10px] uppercase tracking-[0.15em] rounded-2xl hover:opacity-90 hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] active:scale-95 transition-all duration-300 shadow-md flex items-center justify-center gap-1.5">
-                      <span>BUY NOW</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                      </svg>
-                    </button>
+          <!-- CASE B: Viewing All Products, Grouped Beautifully by Restructured Snacking Category! -->
+          <div *ngIf="!activeCategory" class="space-y-32">
+            <div *ngFor="let cat of getRestructuredCategories()" class="space-y-10 border-b border-white/5 pb-20 last:border-none last:pb-0">
+              
+              <!-- Luxury Segment Header -->
+              <div class="border-l-4 border-bhavaccent pl-6 mb-12">
+                <span class="text-[9px] uppercase tracking-[0.4em] text-bhavaccent font-bold mb-2 block">Premium Collection</span>
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold text-bhavtext uppercase tracking-tight mb-3">
+                  {{ cat.name }}
+                </h2>
+                <p class="text-bhavtext/45 text-xs md:text-sm font-light max-w-2xl leading-relaxed">
+                  {{ cat.description }}
+                </p>
+              </div>
+
+              <!-- Segment Category Products Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12">
+                <div *ngFor="let product of getProductsByCategory(cat.id)" 
+                     class="luxury-card group cursor-pointer relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] bg-[#0e0a06]/85 border border-white/5 shadow-2xl p-5 transition-all duration-500 hover:-translate-y-2 hover:border-bhavaccent/30 hover:shadow-[0_20px_50px_rgba(197,160,89,0.15)]"
+                     [routerLink]="['/product', product.slug || product.id]">
+                  
+                  <!-- Image & Badges -->
+                  <div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-6 bg-black/40 border border-white/5">
+                    <img [src]="api.getMediaUrl(product.image)" 
+                         (error)="handleImageError($event)" 
+                         alt="{{product.name}}" 
+                         class="w-full h-full object-cover transform transition-transform duration-[1.5s] group-hover:scale-110" 
+                         loading="lazy">
+                    
+                    <div class="absolute top-4 left-4 flex flex-col gap-2 z-20">
+                      <div class="px-4 py-1.5 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-bhavdark rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1 border border-yellow-400/30">
+                        <span>👑</span> {{ product.brand || 'Bhavnagris' }}
+                      </div>
+                    </div>
+
+                    <!-- Spiciness Overlay -->
+                    <div *ngIf="product.spiciness > 0" class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex gap-0.5 items-center">
+                      <span class="text-[8px] uppercase tracking-wider text-red-400 font-bold mr-1">HEAT</span>
+                      <span *ngFor="let s of [1,2,3,4,5] | slice:0:product.spiciness" class="text-[9px]">🌶️</span>
+                    </div>
+                  </div>
+
+                  <!-- Product Meta Info -->
+                  <div class="flex-grow flex flex-col justify-between">
+                    <div>
+                      <p class="text-[9px] uppercase tracking-[0.25em] text-bhavaccent font-bold mb-1.5">
+                        {{ cat.name }} <span *ngIf="product.tags" class="text-bhavtext/30"> &gt; {{ product.tags.split(',')[0] }}</span>
+                      </p>
+                      
+                      <h3 class="text-xl md:text-2xl font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors duration-500 line-clamp-2 min-h-[3.25rem] md:min-h-[4rem] mb-2">
+                        {{ langService.getCurrentLanguage() === 'gujarati' && product.name_gu ? product.name_gu : product.name }}
+                      </h3>
+
+                      <!-- Ratings -->
+                      <div class="flex items-center gap-2 mb-3">
+                        <div class="flex items-center gap-0.5">
+                          <svg *ngFor="let i of [1,2,3,4,5]" 
+                               xmlns="http://www.w3.org/2000/svg" 
+                               class="h-3.5 w-3.5" 
+                               [ngClass]="i <= (product.rating || 4.8) ? 'text-bhavaccent drop-shadow-[0_0_4px_rgba(197,160,89,0.7)]' : 'text-white/10'" 
+                               fill="currentColor" 
+                               viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        </div>
+                        <span class="text-[10px] text-bhavtext/50 font-medium">
+                          <strong class="text-bhavaccent font-bold">{{ product.rating || '4.8' }}</strong> 
+                        </span>
+                      </div>
+
+                      <!-- Pack weight -->
+                      <div class="flex items-center gap-4 mb-4">
+                        <p class="text-[9px] text-bhavtext/40 uppercase tracking-[0.15em] font-bold bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
+                          ⚖️ {{product.weight || '250g'}} Pack
+                        </p>
+                      </div>
+
+                      <!-- Description -->
+                      <p class="text-bhavtext/45 text-[11px] leading-relaxed mb-6 line-clamp-2">
+                        {{ langService.getCurrentLanguage() === 'gujarati' && product.description_gu ? product.description_gu : product.description }}
+                      </p>
+                    </div>
+
+                    <!-- Price & Actions -->
+                    <div>
+                      <div class="h-px bg-gradient-to-r from-transparent via-bhavaccent/30 to-transparent mb-5 w-full"></div>
+                      <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                          <div class="flex flex-col">
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-bhavtext/30 font-bold">PRICE</span>
+                            <div class="flex items-baseline gap-1.5">
+                              <span class="text-2xl font-bold text-gold-gradient">₹{{product.selling_price}}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="flex gap-2.5 w-full">
+                          <button (click)="$event.stopPropagation(); addToCart(product)" 
+                                  class="w-12 h-12 bg-white/5 border border-white/10 text-bhavaccent hover:text-bhavdark hover:bg-bhavaccent hover:border-bhavaccent rounded-2xl flex items-center justify-center transition-all duration-300 active:scale-95 shadow-lg shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                          </button>
+
+                          <button (click)="$event.stopPropagation(); buyNow(product)" 
+                                  class="flex-1 py-3 bg-bhavaccent text-bhavdark font-bold text-[10px] uppercase tracking-[0.15em] rounded-2xl hover:opacity-90 hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] active:scale-95 transition-all duration-300 shadow-md flex items-center justify-center gap-1.5">
+                            <span>BUY NOW</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
 
         <!-- Empty State -->
-        <div *ngIf="filteredProducts.length === 0 && !loading" class="py-24 md:py-40 text-center glass-card rounded-[2rem] md:rounded-[3rem] px-6">
+        <div *ngIf="filteredProducts.length === 0 && !loading && activeCategory" class="py-24 md:py-40 text-center glass-card rounded-[2rem] md:rounded-[3rem] px-6">
            <h2 class="text-2xl md:text-3xl font-playfair font-bold text-bhavtext mb-4 md:mb-6">No products found</h2>
-           <p class="text-bhavtext/40 mb-8 md:mb-12 text-xs md:text-sm">We couldn't find any products in this category. Try exploring our other collections!</p>
-           <button (click)="filterByCategory(null)" class="btn-premium btn-outline px-10 md:px-12 text-[10px]">Show All</button>
+           <p class="text-bhavtext/40 mb-8 md:mb-12 text-xs md:text-sm">We couldn't find any products in this collection with the selected filters. Try clearing some filters!</p>
+           <button (click)="resetFilters()" class="btn-premium btn-outline px-10 md:px-12 text-[10px]">Reset Filters</button>
         </div>
 
       </div>

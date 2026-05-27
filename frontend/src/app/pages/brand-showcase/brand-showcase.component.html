@@ -150,7 +150,7 @@
               <!-- Handle Gujarati and Hindi name translation if possible, or fallback to product.name -->
               <span *ngIf="langService.getCurrentLanguage() === 'english'">{{product.name}}</span>
               <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">
-                {{ product.name.includes('Cheesewala') ? 'ભાવનગરી ચીઝવાલા સિંગ' : (product.name.includes('Sweet') ? 'ભાવનગરી સ્વીટ એન્ડ ચટપટા સિંગ' : (product.name.includes('Roasted') ? 'ભાવનગરી રોસ્ટેડ સિંગ' : product.name)) }}
+                {{ product.name_gu ? product.name_gu : product.name }}
               </span>
               <span *ngIf="langService.getCurrentLanguage() === 'hindi'">
                 {{ product.name.includes('Cheesewala') ? 'भावनगरी ची़जवाला मूंगफली' : (product.name.includes('Sweet') ? 'भावनगरी स्वीट एंड चटपटा मूंगफली' : (product.name.includes('Roasted') ? 'भावनगरी रोस्टेड मूंगफली' : product.name)) }}
@@ -161,7 +161,9 @@
             </p>
             <p class="text-xs text-bhavtext/50 line-clamp-2 leading-relaxed">
               <span *ngIf="langService.getCurrentLanguage() === 'english'">{{product.description}}</span>
-              <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">અસલી ભાવનગરી સ્વાદ સાથે તૈયાર કરેલ ઉત્તમ ગુણવત્તાવાળા સિંગદાણા.</span>
+              <span *ngIf="langService.getCurrentLanguage() === 'gujarati'">
+                {{ product.description_gu ? product.description_gu : product.description }}
+              </span>
               <span *ngIf="langService.getCurrentLanguage() === 'hindi'">भावनगरी के प्रामाणिक और लाजवाब स्वाद से भरपूर प्रीमियम गुणवत्ता वाली मूंगफली।</span>
             </p>
           </div>

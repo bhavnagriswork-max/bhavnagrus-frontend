@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener }
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { NotificationService } from '../../services/notification.service';
+import { LanguageService } from '../../services/language.service';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -38,7 +39,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     public api: ApiService, 
     public router: Router,
-    private notify: NotificationService
+    private notify: NotificationService,
+    public langService: LanguageService
   ) { }
 
   ngOnInit(): void {
@@ -62,22 +64,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (data && data.length > 0) {
           this.products = data.slice(0, 4);
         } else {
-          this.loadDemoProducts();
+          this.products = [];
         }
       },
       error: () => {
-        this.loadDemoProducts();
+        this.products = [];
       }
     });
-  }
-
-  loadDemoProducts() {
-    this.products = [
-      { id: 1, name: 'Premium Saffron Blend', price: 24.99, image: 'https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?w=600&q=80', description: 'Hand-picked royal saffron threads.' },
-      { id: 2, name: 'Heritage Farsan Mix', price: 18.50, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80', description: 'Traditional Gujarati savory mix.' },
-      { id: 3, name: 'Roasted Spiced Cashews', price: 32.00, image: 'https://images.unsplash.com/photo-1599577180579-22a89368d5eb?w=600&q=80', description: 'Premium large cashews roasted in exotic spices.' },
-      { id: 4, name: 'Golden Jalebi Box', price: 22.00, image: 'https://images.unsplash.com/photo-1589114471223-fa0812726359?w=600&q=80', description: 'Crispy, syrupy traditional sweets.' }
-    ];
   }
 
   scrollToProducts() {

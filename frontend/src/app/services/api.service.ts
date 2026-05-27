@@ -8,9 +8,14 @@ import { Router } from '@angular/router';
 })
 export class ApiService {
   private baseHost = window.location.hostname;
-  private isLocal = this.baseHost === 'localhost' || this.baseHost === '127.0.0.1';
-  private apiUrl = this.isLocal ? `http://localhost:5000/api` : `https://bhavnagris-backend.onrender.com/api`;
-  private mediaUrl = this.isLocal ? `http://localhost:5000` : `https://bhavnagris-backend.onrender.com`;
+  private isLocal = this.baseHost === 'localhost' || 
+                    this.baseHost === '127.0.0.1' || 
+                    this.baseHost.startsWith('192.168.') || 
+                    this.baseHost.startsWith('10.') || 
+                    this.baseHost.startsWith('172.') || 
+                    this.baseHost.includes('.local');
+  private apiUrl = this.isLocal ? `http://${this.baseHost}:5000/api` : `https://bhavnagris-backend.onrender.com/api`;
+  private mediaUrl = this.isLocal ? `http://${this.baseHost}:5000` : `https://bhavnagris-backend.onrender.com`;
   
   
   private userSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('user') || 'null'));

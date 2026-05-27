@@ -9,9 +9,9 @@
     <nav class="mb-8 md:mb-12 flex items-center gap-3 md:gap-4 text-[8px] md:text-[10px] uppercase tracking-[0.3em] font-bold text-bhavtext/30 overflow-x-auto no-scrollbar whitespace-nowrap">
       <a routerLink="/" class="hover:text-bhavaccent transition-colors">Home</a>
       <span class="w-1 h-1 bg-white/20 rounded-full shrink-0"></span>
-      <a routerLink="/products" class="hover:text-bhavaccent transition-colors">Catalog</a>
+      <a [routerLink]="['/collections', categorySlug]" class="hover:text-bhavaccent transition-colors">{{ categoryName || 'Catalog' }}</a>
       <span class="w-1 h-1 bg-bhavaccent rounded-full shrink-0"></span>
-      <span class="text-bhavtext/60 truncate">{{product?.name}}</span>
+      <span class="text-bhavtext/60 truncate">{{ langService.getCurrentLanguage() === 'gujarati' && product?.name_gu ? product?.name_gu : product?.name }}</span>
     </nav>
 
     <div *ngIf="loading" class="flex justify-center py-40">
@@ -79,8 +79,10 @@
       <!-- Product Info -->
       <div class="lg:w-1/2 w-full reveal-up" style="transition-delay: 0.2s">
         <div class="mb-10 md:mb-12">
-          <h3 class="text-bhavaccent uppercase tracking-[0.4em] md:tracking-[0.5em] text-[8px] md:text-[10px] font-bold mb-3 md:mb-4">{{product.category_name || 'Heritage Collection'}}</h3>
-          <h1 class="text-2xl md:text-4xl lg:text-5xl font-playfair font-bold text-bhavtext mb-4 tracking-wide leading-snug md:leading-tight">{{product.name}}</h1>
+          <h3 class="text-bhavaccent uppercase tracking-[0.4em] md:tracking-[0.5em] text-[8px] md:text-[10px] font-bold mb-3 md:mb-4">
+            {{ categoryName }} <span *ngIf="product.tags" class="text-white/25"> &gt; {{ product.tags.split(',')[0] }}</span>
+          </h3>
+          <h1 class="text-2xl md:text-4xl lg:text-5xl font-playfair font-bold text-bhavtext mb-4 tracking-wide leading-snug md:leading-tight">{{ langService.getCurrentLanguage() === 'gujarati' && product.name_gu ? product.name_gu : product.name }}</h1>
           
           <!-- Rating Summary -->
           <div class="flex items-center gap-3 mb-6 md:mb-8" *ngIf="reviews.length > 0">
@@ -98,7 +100,7 @@
             </div>
           </div>
 
-          <p class="text-bhavtext/60 leading-relaxed text-sm md:text-base font-light max-w-xl">{{product.description || 'Experience the authentic taste of Bhavnagar heritage with our premium selection of hand-crafted delicacies.'}}</p>
+          <p class="text-bhavtext/60 leading-relaxed text-sm md:text-base font-light max-w-xl">{{ langService.getCurrentLanguage() === 'gujarati' && product.description_gu ? product.description_gu : (product.description || 'Experience the authentic taste of Bhavnagar heritage with our premium selection of hand-crafted delicacies.') }}</p>
         </div>
 
         <div class="space-y-8 md:space-y-12 border-t border-white/5 pt-8 md:pt-10">
@@ -262,9 +264,45 @@
 
       <div *ngIf="reviews.length === 0" class="py-20 text-center">
         <p class="text-bhavtext/20 text-[10px] uppercase tracking-[0.3em] font-bold">Be the first to share your experience</p>
+    <!-- Related Products Showcase -->
+    <div *ngIf="!loading && relatedProducts.length > 0" class="mt-32 border-t border-white/5 pt-20">
+      <div class="mb-16">
+        <h3 class="text-bhavaccent uppercase tracking-[0.4em] text-[10px] font-bold mb-4">Gourmet Pairings</h3>
+        <h2 class="text-4xl md:text-5xl font-playfair font-bold text-bhavtext">Related <span class="text-bhavtext/20">Delicacies</span></h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div *ngFor="let rel of relatedProducts"
+             [routerLink]="['/product', rel.slug || rel.id]"
+             class="group luxury-card relative flex flex-col justify-between overflow-hidden rounded-[2rem] bg-[#0e0a06]/80 border border-white/5 p-5 transition-all duration-500 hover:-translate-y-1.5 hover:border-bhavaccent/30 hover:shadow-[0_15px_35px_rgba(197,160,89,0.1)] cursor-pointer">
+          
+          <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-5 bg-black/30 border border-white/5">
+            <img [src]="api.getMediaUrl(rel.image)" 
+                 (error)="handleImageError($event)" 
+                 alt="{{rel.name}}" 
+                 class="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-105"
+                 loading="lazy">
+          </div>
+
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <p class="text-[8px] uppercase tracking-wider text-bhavaccent font-bold mb-1">{{ categoryName }}</p>
+              <h4 class="text-base font-playfair font-bold text-bhavtext group-hover:text-bhavaccent transition-colors duration-500 line-clamp-1 mb-1">
+                {{ langService.getCurrentLanguage() === 'gujarati' && rel.name_gu ? rel.name_gu : rel.name }}
+              </h4>
+              <div class="flex items-center gap-1 mb-3">
+                <svg *ngFor="let i of [1,2,3,4,5]" xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5" [ngClass]="i <= (rel.rating || 4.8) ? 'text-bhavaccent' : 'text-white/10'" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              </div>
+            </div>
+
+            <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-white/5">
+              <span class="text-sm font-bold text-gold-gradient">₹{{ rel.selling_price }}</span>
+              <span class="text-[8px] text-bhavtext/30 font-bold uppercase tracking-widest">{{ rel.weight || '250g' }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
   <!-- Mobile Sticky CTA -->
   <div class="fixed bottom-0 left-0 right-0 bg-bhavdark/95 backdrop-blur-md border-t border-white/10 p-4 z-50 md:hidden flex gap-4">

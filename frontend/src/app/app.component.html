@@ -20,6 +20,20 @@
       <div class="hidden md:flex items-center justify-between flex-grow">
         <!-- Left Links -->
         <div class="flex space-x-8 items-center justify-end flex-1 mr-8">
+          <div class="group relative py-2">
+            <button class="text-[12px] uppercase tracking-widest font-bold text-bhavtext/70 hover:text-bhavaccent transition-colors flex items-center gap-1">
+              Shop
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transform group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            <div class="absolute left-0 top-full mt-2 w-56 bg-bhavbg border border-bhavtext/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[60] py-2 overflow-hidden">
+              <a routerLink="/collections/gathiya" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Gathiya</a>
+              <a routerLink="/collections/sev" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Sev</a>
+              <a routerLink="/collections/bhujia" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Bhujia</a>
+              <a routerLink="/collections/puri-papadi" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Puri & Papadi</a>
+              <a routerLink="/collections/mixture-chevdo" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Mixture & Chevdo</a>
+              <a routerLink="/collections/chana-peanuts" class="block px-6 py-3 text-xs text-bhavtext/70 hover:text-bhavaccent hover:bg-bhavaccent/5 transition-all">Chana & Peanuts</a>
+            </div>
+          </div>
           <a routerLink="/products" class="text-[12px] uppercase tracking-widest font-bold text-bhavtext/70 hover:text-bhavaccent transition-colors">{{t('all_products')}}</a>
           <a routerLink="/heritage" class="text-[12px] uppercase tracking-widest font-bold text-bhavtext/70 hover:text-bhavaccent transition-colors">{{t('heritage')}}</a>
         </div>
@@ -98,10 +112,18 @@
        [ngClass]="{'max-h-screen opacity-100 py-10 visible pointer-events-auto': mobileMenuOpen, 'max-h-0 opacity-0 overflow-hidden invisible pointer-events-none': !mobileMenuOpen}">
     <div class="flex flex-col px-10 space-y-10">
       <a routerLink="/" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('home')}}</a>
+      <!-- Mobile Collections Links -->
+      <div class="flex flex-col space-y-4">
+        <span class="text-[10px] uppercase tracking-widest text-bhavtext/30 font-bold">Shop Collections</span>
+        <a routerLink="/collections/gathiya" (click)="toggleMobileMenu()" class="text-2xl font-playfair font-bold text-bhavtext uppercase pl-4">Gathiya</a>
+        <a routerLink="/collections/sev" (click)="toggleMobileMenu()" class="text-2xl font-playfair font-bold text-bhavtext uppercase pl-4">Sev</a>
+        <a routerLink="/collections/bhujia" (click)="toggleMobileMenu()" class="text-2xl font-playfair font-bold text-bhavtext uppercase pl-4">Bhujia</a>
+        <a routerLink="/collections/puri-papadi" (click)="toggleMobileMenu()" class="text-2xl font-playfair font-bold text-bhavtext uppercase pl-4">Puri & Papadi</a>
+        <a routerLink="/collections/mixture-chevdo" (click)="toggleMobileMenu()" class="text-2xl font-playfair font-bold text-bhavtext uppercase pl-4">Mixture & Chevdo</a>
+        <a routerLink="/collections/chana-peanuts" (click)="toggleMobileMenu()" class="text-2xl font-playfair font-bold text-bhavtext uppercase pl-4">Chana & Peanuts</a>
+      </div>
       <a routerLink="/products" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('all_products')}}</a>
       <a routerLink="/heritage" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('heritage')}}</a>
-      <a routerLink="/products" [queryParams]="{brand: 'Bhavnagris'}" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">Bhavnagris</a>
-      <a routerLink="/products" [queryParams]="{brand: 'Heritage Imports'}" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">Heritage Imports</a>
       <a *ngIf="user" routerLink="/my-orders" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('my_orders')}}</a>
       <a *ngIf="!user" routerLink="/login" (click)="toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavtext uppercase">{{t('login')}}</a>
       <button *ngIf="user" (click)="logout(); toggleMobileMenu()" class="text-3xl font-playfair font-bold text-bhavaccent uppercase text-left">{{t('sign_out')}}</button>
@@ -139,8 +161,12 @@
       <div>
         <h4 class="font-medium text-xs mb-6 text-bhavtext/40 uppercase tracking-[0.2em]">{{t('shop')}}</h4>
         <ul class="space-y-4 text-sm text-bhavtext/80">
-          <li><a routerLink="/products" class="hover:text-bhavaccent transition-colors">{{t('snacks')}}</a></li>
-          <li><a routerLink="/products" class="hover:text-bhavaccent transition-colors">{{t('sweets')}}</a></li>
+          <li><a routerLink="/collections/gathiya" class="hover:text-bhavaccent transition-colors">Gathiya</a></li>
+          <li><a routerLink="/collections/sev" class="hover:text-bhavaccent transition-colors">Sev</a></li>
+          <li><a routerLink="/collections/bhujia" class="hover:text-bhavaccent transition-colors">Bhujia</a></li>
+          <li><a routerLink="/collections/puri-papadi" class="hover:text-bhavaccent transition-colors">Puri & Papadi</a></li>
+          <li><a routerLink="/collections/mixture-chevdo" class="hover:text-bhavaccent transition-colors">Mixture & Chevdo</a></li>
+          <li><a routerLink="/collections/chana-peanuts" class="hover:text-bhavaccent transition-colors">Chana & Peanuts</a></li>
         </ul>
       </div>
       <div>

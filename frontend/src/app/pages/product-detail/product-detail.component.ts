@@ -4,6 +4,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { NotificationService } from '../../services/notification.service';
+import { LanguageService } from '../../services/language.service';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -30,6 +31,11 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
   quantity = 1;
   loading = true;
   
+  // Category & Related Products State
+  categoryName: string = '';
+  categorySlug: string = '';
+  relatedProducts: any[] = [];
+  
   // Review form
   reviewData = {
     user_name: '',
@@ -48,14 +54,18 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
     private titleService: Title,
     private metaService: Meta,
     private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    public langService: LanguageService
   ) { }
 
   ngOnInit(): void {
-    const slug = this.route.snapshot.paramMap.get('slug');
-    if (slug) {
-      this.fetchProduct(slug);
-    }
+    // Subscribe to paramMap to handle navigation between related products
+    this.route.paramMap.subscribe(params => {
+      const slug = params.get('slug');
+      if (slug) {
+        this.fetchProduct(slug);
+      }
+    });
   }
 
   fetchProduct(slug: string) {
@@ -80,12 +90,39 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
         this.setSchemaMarkup(this.product);
 
         this.fetchReviews(data.id);
+        this.fetchRelatedAndCategory(data);
       },
       error: (err) => {
         console.error(err);
         this.loading = false;
         this.notify.show('Failed to load heritage artifact', 'error');
       }
+    });
+  }
+
+  fetchRelatedAndCategory(productData: any) {
+    // Resolve Category Name and Slug
+    this.api.getCategories().subscribe({
+      next: (cats: any[]) => {
+        const cat = cats.find(c => c.id == productData.category_id);
+        if (cat) {
+          this.categoryName = cat.name;
+          this.categorySlug = cat.slug;
+        } else {
+          this.categoryName = 'Snacks';
+          this.categorySlug = 'snacks';
+        }
+      }
+    });
+
+    // Fetch Related Products from the same category
+    this.api.getProducts().subscribe({
+      next: (prods: any[]) => {
+        this.relatedProducts = prods
+          .filter(p => p.category_id == productData.category_id && p.id !== productData.id)
+          .slice(0, 4);
+      },
+      error: (err) => console.error('Error fetching related products:', err)
     });
   }
 

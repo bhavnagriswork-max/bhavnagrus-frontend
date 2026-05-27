@@ -71,7 +71,7 @@ export class BrandShowcaseComponent implements OnInit {
     let result = [...this.products];
 
     if (this.selectedCategoryId) {
-      result = result.filter(p => p.category_id === this.selectedCategoryId);
+      result = result.filter(p => p.category_id == this.selectedCategoryId);
     }
 
     if (this.selectedSpiciness > 0) {
