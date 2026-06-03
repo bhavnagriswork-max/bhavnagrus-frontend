@@ -147,7 +147,12 @@
           </div>
 
           <!-- Price Overlay -->
-          <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-8 bg-gradient-to-t from-bhavdark via-bhavdark/80 to-transparent">
+          <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-8 bg-gradient-to-t from-bhavdark via-bhavdark/80 to-transparent flex flex-col gap-2.5">
+             <div class="flex items-center bg-white/5 border border-white/10 rounded-2xl px-3 py-1.5 w-full justify-between" (click)="$event.stopPropagation()">
+               <button (click)="product.quantity = (product.quantity || 1) > 1 ? (product.quantity || 1) - 1 : 1" class="text-bhavtext/40 hover:text-bhavaccent text-lg font-bold px-2">-</button>
+               <span class="text-xs font-bold text-bhavtext">{{product.quantity || 1}}</span>
+               <button (click)="product.quantity = (product.quantity || 1) < 50 ? (product.quantity || 1) + 1 : 50" class="text-bhavtext/40 hover:text-bhavaccent text-lg font-bold px-2">+</button>
+             </div>
              <button (click)="addToCart(product); $event.stopPropagation()" class="w-full py-3 sm:py-4 bg-bhavaccent text-bhavdark text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-bhavtext hover:text-bhavdark transition-colors shadow-xl">
                Add to Basket • ₹{{product.selling_price || product.price}}
              </button>

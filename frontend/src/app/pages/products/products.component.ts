@@ -220,7 +220,8 @@ export class ProductsComponent implements OnInit {
   }
 
   addToCart(product: any) {
-    this.api.addToCart(product, 1).subscribe({
+    const qty = product.quantity || 1;
+    this.api.addToCart(product, qty).subscribe({
       next: () => {
         this.notify.show('Added to Heritage Basket!', 'success');
       },
@@ -231,7 +232,8 @@ export class ProductsComponent implements OnInit {
   }
 
   buyNow(product: any) {
-    this.api.addToCart(product, 1).subscribe({
+    const qty = product.quantity || 1;
+    this.api.addToCart(product, qty).subscribe({
       next: () => {
         this.router.navigate(['/checkout']);
       },

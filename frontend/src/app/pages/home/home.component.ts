@@ -81,7 +81,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   addToCart(product: any) {
-    this.api.addToCart(product, 1).subscribe({
+    const qty = product.quantity || 1;
+    this.api.addToCart(product, qty).subscribe({
       next: () => {
         this.notify.show('Added to heritage basket!', 'success');
       },
