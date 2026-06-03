@@ -54,6 +54,8 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
   isDragging = false;
   dragStartX = 0;
   dragStartY = 0;
+  lightboxTouchStartX = 0;
+  lightboxTouchEndX = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -385,19 +387,37 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
   }
 
   onLightboxTouchStart(event: TouchEvent) {
-    if (this.lightboxZoom <= 1 || event.touches.length !== 1) return;
-    this.isDragging = true;
-    this.dragStartX = event.touches[0].clientX - this.lightboxPanX;
-    this.dragStartY = event.touches[0].clientY - this.lightboxPanY;
+    if (this.lightboxZoom <= 1) {
+      this.lightboxTouchStartX = event.touches[0].clientX;
+      this.lightboxTouchEndX = event.touches[0].clientX;
+    } else {
+      if (event.touches.length !== 1) return;
+      this.isDragging = true;
+      this.dragStartX = event.touches[0].clientX - this.lightboxPanX;
+      this.dragStartY = event.touches[0].clientY - this.lightboxPanY;
+    }
   }
 
   onLightboxTouchMove(event: TouchEvent) {
-    if (!this.isDragging || event.touches.length !== 1) return;
-    this.lightboxPanX = event.touches[0].clientX - this.dragStartX;
-    this.lightboxPanY = event.touches[0].clientY - this.dragStartY;
+    if (this.lightboxZoom <= 1) {
+      this.lightboxTouchEndX = event.touches[0].clientX;
+    } else {
+      if (!this.isDragging || event.touches.length !== 1) return;
+      this.lightboxPanX = event.touches[0].clientX - this.dragStartX;
+      this.lightboxPanY = event.touches[0].clientY - this.dragStartY;
+    }
   }
 
   onLightboxTouchEnd() {
-    this.isDragging = false;
+    if (this.lightboxZoom <= 1) {
+      const threshold = 50; // Min swipe distance
+      if (this.lightboxTouchStartX - this.lightboxTouchEndX > threshold) {
+        this.nextImage();
+      } else if (this.lightboxTouchEndX - this.lightboxTouchStartX > threshold) {
+        this.prevImage();
+      }
+    } else {
+      this.isDragging = false;
+    }
   }
 }

@@ -346,8 +346,8 @@
       <!-- Left Chevron -->
       <button *ngIf="allImages.length > 1" 
               (click)="prevImage(); $event.stopPropagation();"
-              class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 hover:bg-bhavaccent hover:text-bhavdark text-white border border-white/10 flex items-center justify-center transition-all duration-300 active:scale-95 z-20 shadow-2xl cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/5 hover:bg-bhavaccent hover:text-bhavdark text-white border border-white/10 items-center justify-center transition-all duration-300 active:scale-95 z-20 shadow-2xl cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
@@ -371,8 +371,8 @@
       <!-- Right Chevron -->
       <button *ngIf="allImages.length > 1" 
               (click)="nextImage(); $event.stopPropagation();"
-              class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 hover:bg-bhavaccent hover:text-bhavdark text-white border border-white/10 flex items-center justify-center transition-all duration-300 active:scale-95 z-20 shadow-2xl cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/5 hover:bg-bhavaccent hover:text-bhavdark text-white border border-white/10 items-center justify-center transition-all duration-300 active:scale-95 z-20 shadow-2xl cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
       </button>
