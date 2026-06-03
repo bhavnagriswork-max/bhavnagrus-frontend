@@ -46,6 +46,15 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
   showReviewForm = false;
   hoverRating: number = 0;
 
+  // Lightbox properties
+  showLightbox = false;
+  lightboxZoom = 1;
+  lightboxPanX = 0;
+  lightboxPanY = 0;
+  isDragging = false;
+  dragStartX = 0;
+  dragStartY = 0;
+
   constructor(
     private route: ActivatedRoute,
     public api: ApiService,
@@ -321,5 +330,74 @@ export class ProductDetailComponent implements OnInit, AfterViewInit {
     script.type = 'application/ld+json';
     script.text = JSON.stringify(schema);
     this.renderer.appendChild(this.document.head, script);
+  }
+
+  // --- LIGHTBOX / INFOGRAPHIC ZOOM VIEWER METHODS ---
+  openLightbox() {
+    this.showLightbox = true;
+    this.resetZoom();
+    this.renderer.addClass(this.document.body, 'overflow-hidden');
+  }
+
+  closeLightbox() {
+    this.showLightbox = false;
+    this.renderer.removeClass(this.document.body, 'overflow-hidden');
+  }
+
+  zoomIn() {
+    if (this.lightboxZoom < 3) {
+      this.lightboxZoom += 0.25;
+    }
+  }
+
+  zoomOut() {
+    if (this.lightboxZoom > 0.5) {
+      this.lightboxZoom -= 0.25;
+      if (this.lightboxZoom < 1) {
+        this.lightboxPanX = 0;
+        this.lightboxPanY = 0;
+      }
+    }
+  }
+
+  resetZoom() {
+    this.lightboxZoom = 1;
+    this.lightboxPanX = 0;
+    this.lightboxPanY = 0;
+  }
+
+  onLightboxDragStart(event: MouseEvent) {
+    if (this.lightboxZoom <= 1) return;
+    this.isDragging = true;
+    this.dragStartX = event.clientX - this.lightboxPanX;
+    this.dragStartY = event.clientY - this.lightboxPanY;
+    event.preventDefault();
+  }
+
+  onLightboxDragMove(event: MouseEvent) {
+    if (!this.isDragging) return;
+    this.lightboxPanX = event.clientX - this.dragStartX;
+    this.lightboxPanY = event.clientY - this.dragStartY;
+  }
+
+  onLightboxDragEnd() {
+    this.isDragging = false;
+  }
+
+  onLightboxTouchStart(event: TouchEvent) {
+    if (this.lightboxZoom <= 1 || event.touches.length !== 1) return;
+    this.isDragging = true;
+    this.dragStartX = event.touches[0].clientX - this.lightboxPanX;
+    this.dragStartY = event.touches[0].clientY - this.lightboxPanY;
+  }
+
+  onLightboxTouchMove(event: TouchEvent) {
+    if (!this.isDragging || event.touches.length !== 1) return;
+    this.lightboxPanX = event.touches[0].clientX - this.dragStartX;
+    this.lightboxPanY = event.touches[0].clientY - this.dragStartY;
+  }
+
+  onLightboxTouchEnd() {
+    this.isDragging = false;
   }
 }
