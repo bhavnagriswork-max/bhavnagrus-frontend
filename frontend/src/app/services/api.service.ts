@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, map, tap, of, catchError, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, map, tap, of, concat, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { FALLBACK_CATEGORIES, FALLBACK_PRODUCTS } from './fallback-data';
 
 @Injectable({
   providedIn: 'root'
@@ -157,10 +158,26 @@ export class ApiService {
 
   // Categories
   getCategories(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/categories`).pipe(
+    const cachedStr = localStorage.getItem('bhav_categories');
+    let cached: any[] = [];
+    if (cachedStr) {
+      try {
+        cached = JSON.parse(cachedStr);
+      } catch (e) {}
+    }
+    if (!cached || cached.length === 0) {
+      cached = FALLBACK_CATEGORIES.map(c => this.normalizeImage(c));
+    }
+
+    const network$ = this.http.get(`${this.apiUrl}/categories`).pipe(
       map((cats: any[]) => cats.map(c => this.normalizeImage(c))),
+      tap(cats => {
+        localStorage.setItem('bhav_categories', JSON.stringify(cats));
+      }),
       catchError(err => this.handleError(err))
     );
+
+    return concat(of(cached), network$);
   }
 
   createCategory(data: any): Observable<any> {
@@ -183,10 +200,26 @@ export class ApiService {
 
   // Products
   getProducts(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/products`).pipe(
+    const cachedStr = localStorage.getItem('bhav_products');
+    let cached: any[] = [];
+    if (cachedStr) {
+      try {
+        cached = JSON.parse(cachedStr);
+      } catch (e) {}
+    }
+    if (!cached || cached.length === 0) {
+      cached = FALLBACK_PRODUCTS.map(p => this.normalizeImage(p));
+    }
+
+    const network$ = this.http.get(`${this.apiUrl}/products`).pipe(
       map((prods: any[]) => prods.map(p => this.normalizeImage(p))),
+      tap(prods => {
+        localStorage.setItem('bhav_products', JSON.stringify(prods));
+      }),
       catchError(err => this.handleError(err))
     );
+
+    return concat(of(cached), network$);
   }
 
   getBrandProducts(brandName: string): Observable<any> {
@@ -204,17 +237,53 @@ export class ApiService {
   }
 
   getProduct(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/products/${id}`).pipe(
+    const cachedStr = localStorage.getItem('bhav_products');
+    let cachedList: any[] = [];
+    if (cachedStr) {
+      try {
+        cachedList = JSON.parse(cachedStr);
+      } catch (e) {}
+    }
+    if (!cachedList || cachedList.length === 0) {
+      cachedList = FALLBACK_PRODUCTS;
+    }
+    const cached = cachedList.find(p => p.id == id);
+
+    const network$ = this.http.get(`${this.apiUrl}/products/${id}`).pipe(
       map(p => this.normalizeImage(p)),
       catchError(err => this.handleError(err))
     );
+
+    if (cached) {
+      return concat(of(this.normalizeImage(cached)), network$);
+    } else {
+      return network$;
+    }
   }
 
   getProductBySlug(slug: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/products/slug/${slug}`).pipe(
+    const cachedStr = localStorage.getItem('bhav_products');
+    let cachedList: any[] = [];
+    if (cachedStr) {
+      try {
+        cachedList = JSON.parse(cachedStr);
+      } catch (e) {}
+    }
+    if (!cachedList || cachedList.length === 0) {
+      cachedList = FALLBACK_PRODUCTS;
+    }
+    const cached = cachedList.find(p => p.slug === slug);
+
+    const network$ = this.http.get(`${this.apiUrl}/products/slug/${slug}`).pipe(
       map(p => this.normalizeImage(p)),
       catchError(err => this.handleError(err))
     );
+
+    if (cached) {
+      return concat(of(this.normalizeImage(cached)), network$);
+    } else {
+      return network$;
+    }
   }
 
   // Admin Product Management
