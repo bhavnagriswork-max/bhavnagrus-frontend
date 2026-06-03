@@ -181,7 +181,7 @@
           
           <!-- CASE A: Viewing an Isolated Category Collection (Gathiya, Sev, or Bhujia) -->
           <div *ngIf="activeCategory">
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12">
+            <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-8 md:gap-12">
               <div *ngFor="let product of filteredProducts" 
                    class="luxury-card group cursor-pointer relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] bg-[#0e0a06]/85 border border-white/5 shadow-2xl p-5 transition-all duration-500 hover:-translate-y-2 hover:border-bhavaccent/30 hover:shadow-[0_20px_50px_rgba(197,160,89,0.15)]"
                    [routerLink]="['/product', product.slug || product.id]">
@@ -305,7 +305,7 @@
               </div>
 
               <!-- Segment Category Products Grid -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-12">
+              <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-8 md:gap-12">
                 <div *ngFor="let product of getProductsByCategory(cat.id)" 
                      class="luxury-card group cursor-pointer relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] bg-[#0e0a06]/85 border border-white/5 shadow-2xl p-5 transition-all duration-500 hover:-translate-y-2 hover:border-bhavaccent/30 hover:shadow-[0_20px_50px_rgba(197,160,89,0.15)]"
                      [routerLink]="['/product', product.slug || product.id]">

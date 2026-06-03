@@ -114,7 +114,7 @@
     </div>
 
     <!-- Grid Container -->
-    <div *ngIf="!loading && filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 animate-fade-in">
+    <div *ngIf="!loading && filteredProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8 animate-fade-in">
       <div *ngFor="let product of filteredProducts" 
            class="glass-card rounded-[2rem] overflow-hidden border border-bhavtext/5 group hover:border-bhavaccent/30 transition-all duration-700 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl hover:shadow-bhavaccent/5">
         
