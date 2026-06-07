@@ -280,8 +280,8 @@ select option {
   }
   
   h1 {
-    font-size: 3rem !important;
-    line-height: 1.1 !important;
+    font-size: 3rem;
+    line-height: 1.1;
   }
 }
 
@@ -460,12 +460,12 @@ select option {
 @media (max-width: 1023px) {
   /* Headings & Typography */
   h1 {
-    font-size: 4rem !important;
-    line-height: 1.1 !important;
+    font-size: 4rem;
+    line-height: 1.1;
   }
   h2 {
-    font-size: 2.5rem !important;
-    line-height: 1.2 !important;
+    font-size: 2.5rem;
+    line-height: 1.2;
   }
   
   /* Layout Spacing */
@@ -500,15 +500,15 @@ select option {
 @media (max-width: 767px) {
   /* Typography Scale */
   h1 {
-    font-size: 2.75rem !important;
-    line-height: 1.15 !important;
+    font-size: 2.75rem;
+    line-height: 1.15;
   }
   h2 {
-    font-size: 2rem !important;
-    line-height: 1.25 !important;
+    font-size: 2rem;
+    line-height: 1.25;
   }
   h3 {
-    font-size: 1.5rem !important;
+    font-size: 1.5rem;
   }
   
   /* Container Breathing Space */
@@ -543,7 +543,7 @@ select option {
   }
   
   /* Stack Grids to single column on mobile */
-  .grid-cols-1, .sm\:grid-cols-2, .lg\:grid-cols-4, .xl\:grid-cols-3 {
+  .grid-cols-1, .lg\:grid-cols-4 {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
   
@@ -566,7 +566,7 @@ select option {
 /* --- 📱 SMALL SCREEN POLISH (down to 320px) --- */
 @media (max-width: 375px) {
   h1 {
-    font-size: 2.25rem !important;
+    font-size: 2.25rem;
   }
   .px-6 {
     padding-left: 1rem !important;
